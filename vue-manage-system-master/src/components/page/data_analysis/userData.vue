@@ -1,0 +1,302 @@
+<template>
+    <div>
+        <div class="crumbs">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item style="font-size: 24px;margin-left: 20px;">用户数据</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
+        <div class="ms-doc">
+            <p class="m_title">新增用户</p>
+            <div class="ms-doc_main">
+                <div class="date_select">
+                    <el-date-picker
+                        v-model="dateValue1"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
+                    <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                </div>
+                <div class="ms-doc_chart" style="font-size: 0;">
+                    <p class="title">趋势图</p>
+                    <div class="CTwoLeft" id="broken1">
+
+                    </div>
+                    <p class="pie_title" ><i style="background-color: #55ce63;"></i>新增用户数量</p>
+                </div>
+            </div>
+        </div>
+        <div class="sort">
+            <p class="m_title">访客占比</p>
+            <div class="ms-doc_main">
+                <div class="date_select">
+                    <el-date-picker
+                        v-model="dateValue2"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                    </el-date-picker>
+                    <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                </div>
+                <div class="ms-doc_chart" style="font-size: 0;">
+                    <p class="title">趋势图</p>
+                    <div class="CTwoLeft" id="broken2">
+
+                    </div>
+                    <p class="pie_title"><i style="background-color: #0f8edd;"></i>访客占比</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    let echarts = require('echarts');
+    export default {
+        components: {},
+        data() {
+            return {
+                dateValue1: '',
+                dateValue2: '',
+                goodsDataList: []
+            }
+        },
+        methods: {
+//            //      获取商品类目数据
+//            getGoodsList: function () {
+//                this.$ajax({
+//                    method: 'POST',
+//                    url: '/api/Goodsdata/productTypeData'
+//                }).then((res) => {
+//                    if (res.data.code == '200') {
+//                        this.goodsDataList = res.data.data.more_data
+//                        console.log(this.goodsDataList)
+////          console.log(imgList)
+//                    }
+//                }, (err) => {
+//                    console.log(err)
+//                })
+//            },
+        },
+        mounted() {
+            var Broken1 = echarts.init(document.getElementById('broken1'));
+            Broken1.setOption({
+                backgroundColor: '#fff',
+                tooltip: {
+                    trigger: 'axis'
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
+                        axisLine:{
+                            //横坐标横线样式
+                            lineStyle:{
+                                type:'dotted',
+                                color:'#bac7cd'
+                            }
+                        },
+                        axisLabel:{
+                            textStyle:{
+                                color:'#bac7cd' //横坐标字体颜色
+                            }
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLine:{
+                            //横坐标横线样式
+                            lineStyle:{
+                                type:'dotted',
+                                color:'#bac7cd'
+                            }
+                        },
+                        axisLabel:{
+                            formatter: '{value}',
+                            textStyle:{
+                                color:'#bac7cd' //横坐标字体颜色
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        smooth:false,
+                        name: '收入',
+                        type: 'line',
+                        data: ['111','11', '12', '13', '14', '15', '16', '17', '18', '519', '320', '21', '122', '23', '224', '25', '26'],
+//                        markPoint: {
+//                            data: [
+//                                { type: 'max', name: '最大值' },
+//                                { type: 'min', name: '最小值' }
+//                            ]
+//                        },
+//                        markLine: {
+//                            data: [
+//                                { type: 'average', name: '平均值' }
+//                            ]
+//                        },
+                        itemStyle:{
+                            normal:{
+                                color:'#55ce63',//图标颜色
+                                lineStyle:{
+                                    color:'#55ce63'//连线颜色
+                                }
+                            }
+                        }
+                    }
+                ]
+            });
+            var Broken2 = echarts.init(document.getElementById('broken2'));
+            Broken2.setOption({
+                backgroundColor: '#fff',
+                tooltip: {
+                    trigger: 'axis'
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
+                        axisLine:{
+                            //横坐标横线样式
+                            lineStyle:{
+                                type:'dotted',
+                                color:'#bac7cd'
+                            }
+                        },
+                        axisLabel:{
+                            textStyle:{
+                                color:'#bac7cd' //横坐标字体颜色
+                            }
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLine:{
+                            //横坐标横线样式
+                            lineStyle:{
+                                type:'dotted',
+                                color:'#bac7cd'
+                            }
+                        },
+                        axisLabel:{
+                            formatter: '{value}',
+                            textStyle:{
+                                color:'#bac7cd' //横坐标字体颜色
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        smooth:false,
+                        name: '收入',
+                        type: 'line',
+                        data: ['111','11', '12', '13', '14', '15', '16', '17', '18', '519', '320', '21', '122', '23', '224', '25', '26'],
+//                        markPoint: {
+//                            data: [
+//                                { type: 'max', name: '最大值' },
+//                                { type: 'min', name: '最小值' }
+//                            ]
+//                        },
+//                        markLine: {
+//                            data: [
+//                                { type: 'average', name: '平均值' }
+//                            ]
+//                        },
+                        itemStyle:{
+                            normal:{
+                                color:'#0f8edd',//图标颜色
+                                lineStyle:{
+                                    color:'#0f8edd'//连线颜色
+                                }
+                            }
+                        }
+                    }
+                ]
+            });
+            // 自适应
+            window.onresize = function () {
+                Broken1.resize();
+                Broken2.resize();
+            }
+        },
+        created: function () {
+
+        }
+    }
+</script>
+
+<style scoped>
+    .CTwoLeft {
+        width: 100%;
+        height: 400px;
+        background-color: white;
+        overflow: hidden;
+    }
+
+    .ms-doc, .sort {
+        width: 100%;
+        /*max-width: 980px;*/
+        max-width: 1300px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        background-color: white;
+        padding: 0 40px;
+        color: #54667a;
+    }
+
+    .sort {
+        margin: 20px 0 54px;
+    }
+
+    .m_title {
+        font-size: 20px;
+        color: #54667a;
+        line-height: 60px;
+        border-bottom: 1px solid #e9f1f3;
+    }
+
+    .ms-doc_main {
+        padding: 20px;
+    }
+
+    .ms-doc_chart {
+        border: 1px solid #e9f1f3;
+        margin: 16px 0;
+    }
+
+    .title {
+        font-size: 18px;
+        border-left: 4px solid #abbbc2;
+        padding-left: 20px;
+        margin-left: 24px;
+        margin-top: 22px;
+        line-height: 18px;
+    }
+
+    .date_select{
+        position: relative;
+    }
+    .lead_out{
+        position: absolute;right: 50px;top: 6px;font-size: 14px;color: #54667a;
+    }
+    .lead_out img{
+        margin:0 10px -3px 0;width: 16px;height: 18px;
+    }
+    .pie_title{
+        text-align: center;font-size: 18px;margin-bottom: 30px;
+    }
+    .pie_title i{
+        margin-right: 20px; display: inline-block;width: 10px;height: 10px;border-radius: 50%;
+    }
+</style>
