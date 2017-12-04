@@ -14,7 +14,7 @@ export default new Router({
             component: resolve => require(['../components/common/Home.vue'], resolve),
             children:[
                 {
-                    path: '/333',
+                    path: '/home',
                     component: resolve => require(['../components/page/home/HomePage.vue'], resolve)
                 },
                 {

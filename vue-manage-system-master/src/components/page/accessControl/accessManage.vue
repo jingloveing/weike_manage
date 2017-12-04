@@ -20,7 +20,7 @@
                     node-key="id"
                     default-expand-all
                     :expand-on-click-node="false"
-                    :render-content="renderContent">
+                    :render-content="renderContent" style="font-size: 14px;">
                 </el-tree>
 
 
@@ -36,7 +36,7 @@
             :before-close="handleClose" style="width: 1000px;margin: 100px auto;">
            <div>
                <p><span  class="model_name" >权限名:</span><el-input v-model="rule_name" style="width: 150px;margin: 10px 0 20px;"></el-input></p>
-               <p><span  class="model_name" >链接:</span><el-input v-model="rule_mca" style="width: 150px;margin: 10px 0 20px;"></el-input> <span style="color: #a6afbb;margin-left: 10px;">输入模块/控制器/方法即可</span></p>
+               <p><span  class="model_name" >连接:</span><el-input v-model="rule_mca" style="width: 150px;margin: 10px 0 20px;"></el-input> <span style="color: #a6afbb;margin-left: 10px;">输入模块/控制器/方法即可</span></p>
            </div>
             <span slot="footer" class="dialog-footer">
     <el-button @click="close1()">取 消</el-button>
@@ -50,7 +50,7 @@
             :before-close="handleClose" style="width: 1000px;margin: 100px auto;">
             <div>
                 <p><span  class="model_name" >权限名:</span><el-input v-model="name" style="width: 150px;margin: 10px 0 20px;"></el-input></p>
-                <p><span  class="model_name" >链接:</span><el-input v-model="mca" style="width: 150px;margin: 10px 0 20px;"></el-input> <span style="color: #a6afbb;margin-left: 10px;">输入模块/控制器/方法即可</span></p>
+                <p><span  class="model_name" >连接:</span><el-input v-model="mca" style="width: 150px;margin: 10px 0 20px;"></el-input> <span style="color: #a6afbb;margin-left: 10px;">输入模块/控制器/方法即可</span></p>
             </div>
             <span slot="footer" class="dialog-footer">
     <el-button @click="close2()">取 消</el-button>
@@ -159,20 +159,20 @@
             modify() {
                 this.dialogVisible = true
             },
-            append(data) {
-                const newChild = { id: id++, label: 'testtest', children: [] };
-                if (!data.children) {
-                    this.$set(data, 'children', []);
-                }
-                data.children.push(newChild);
-            },
+//            append(data) {
+//                const newChild = { id: id++, label: 'testtest', children: [] };
+//                if (!data.children) {
+//                    this.$set(data, 'children', []);
+//                }
+//                data.children.push(newChild);
+//            },
 
-            remove(node, data) {
-                const parent = node.parent;
-                const children = parent.data.children || parent.data;
-                const index = children.findIndex(d => d.id === data.id);
-                children.splice(index, 1);
-            },
+//            remove(node, data) {
+//                const parent = node.parent;
+//                const children = parent.data.children || parent.data;
+//                const index = children.findIndex(d => d.id === data.id);
+//                children.splice(index, 1);
+//            },
 
             renderContent:function(createElement, { node, data, store }) {
                 var self = this;
@@ -193,23 +193,36 @@
                             size:"mini"
                         },on:{
                             click:function() {
-                                self.$ajax.post('/api/Rule/delRule',{rule_id:data.id}).then((res) => {
-                                    if (res.data.code == '200') {
-                                        self.dialogVisible2 = false
-                                        self.$message({
-                                            message: res.data.data.message,
-                                            type: 'success'
-                                        });
-                                        self.getList()
-                                    }else{
-                                        self.$message({
-                                            message: res.data.error,
-                                            type: 'error'
-                                        });
-                                    }
-                                }, (err) => {
-                                    console.log(err)
-                                })
+                                self.$confirm('此操作将永久删除该权限, 是否继续?', '提示', {
+                                    confirmButtonText: '确定',
+                                    cancelButtonText: '取消',
+                                    type: 'warning'
+                                }).then(() => {
+                                    self.$ajax.post('/api/Rule/delRule',{rule_id:data.id}).then((res) => {
+                                        if (res.data.code == '200') {
+                                            self.dialogVisible2 = false
+                                            self.$message({
+                                                message: res.data.data.message,
+                                                type: 'success'
+                                            });
+                                            self.getList()
+                                        }else{
+                                            self.$message({
+                                                message: res.data.error,
+                                                type: 'error'
+                                            });
+                                        }
+                                    }, (err) => {
+                                        console.log(err)
+                                    })
+                                }).catch(() => {
+                                    this.$message({
+                                        type: 'info',
+                                        message: '已取消删除'
+                                    });
+                                });
+
+
                             }
                         }},"删除"),
                         createElement('el-button',{attrs:{
@@ -233,7 +246,7 @@
                 this.rule_mca=''
             },
             close2(){
-                this.dialogVisible = false
+                this.dialogVisible2 = false
                 this.name=''
                 this.mca=''
                 this.father_id=''

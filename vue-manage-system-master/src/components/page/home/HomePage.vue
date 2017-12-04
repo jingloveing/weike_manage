@@ -5,16 +5,11 @@
                 <el-breadcrumb-item style="font-size: 24px;margin-left: 20px;">首页</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="notice" v-show="isShow">
-            <img src="/static/img/top_triangle.png" alt="" style="position: absolute;top: -7px;right: 38px;">
-            <p><i class="round"></i> 兑换商城有一份新订单等待发货哈哈哈哈哈啊哈哈哈哈哈</p>
-            <img src="/static/img/close_btn.png" alt="" style="width: 10px;height: 10px;position: absolute;top:5px;right: 5px;" @click="close()">
-        </div>
         <div class="ms-doc">
            <p>总数据</p>
             <div class="ms-doc_main">
                 <ul class="tab">
-                    <li>访问数据</li>
+                    <li class="active">访问数据</li>
                     <li>用户数据</li>
                     <li>搜索数据</li>
                     <li>元宝消耗</li>
@@ -129,7 +124,8 @@
         data(){
             return{
                 isShow:true,
-                tableData1: [{
+                tableData1: [
+                    {
                     image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
                     name: '王小虎',
                     address: '上海市普陀区金沙江路 1518 弄'
@@ -158,7 +154,8 @@
                     name: '王小虎',
                     address: '上海市普陀区金沙江路 1518 弄'
                 }],
-                tableData2: [{
+                tableData2: [
+                    {
                     image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
                     name: '王小虎',
                     address: '上海市普陀区金沙江路 1518 弄'
@@ -187,7 +184,8 @@
                     name: '王小虎',
                     address: '上海市普陀区金沙江路 1518 弄'
                 }],
-                tableData3: [{
+                tableData3: [
+                    {
                     date: '2016-05-03',
                     name: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
                     address: '上海市普陀区金沙江路 1518 弄'
@@ -379,8 +377,8 @@
     /*}*/
     .ms-doc,.sort{
         width:100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        max-width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;
@@ -446,30 +444,7 @@
         border:1px solid #e9f1f3;
         margin:16px 0;
     }
-    .round{
-        margin:0 10px;
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        background: #fc4b6c;
-        border-radius: 50%;
-    }
-    .notice{
-        width: 300px;
-        line-height: 60px;
-        padding:0px 20px;
-        right: 180px;
-        position: fixed;
-        top:72px;
-        background-color: white;
-        border: 1px solid #e9f1f3;
-        z-index: 10000;
-        font-size: 12px;
-    }
-    .notice p{
-        color: #54667a;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+    .active{
+        background-color: #f2f7f8;
     }
 </style>

@@ -21,6 +21,6 @@
 </script>
 <style>
     .content{
-        margin-bottom: 30px;
+        margin-bottom: 100px;
     }
 </style>

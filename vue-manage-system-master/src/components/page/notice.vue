@@ -8,36 +8,21 @@
         <div class="ms-doc">
             <div class="ms-doc_main">
                 <el-collapse accordion>
-                    <el-collapse-item>
-                        <template slot="title">
-                            一致性 Consistency <span class="date">2017-10-20 <i class="round"></i></span>
-                        </template>
-                        <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-                        <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
-                    </el-collapse-item>
-                    <el-collapse-item>
-                        <template slot="title">
-                            一致性 Consistency <span class="date">2017-10-20</span>
-                        </template>
-                        <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-                        <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
-                    </el-collapse-item>
-                    <el-collapse-item>
-                        <template slot="title">
-                            一致性 Consistency <span class="date">2017-10-20</span>
-                        </template>
-                        <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-                        <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
-                    </el-collapse-item>
+                    <div v-for="list in messageList.data" @click="change(list.id)">
+                        <el-collapse-item>
+                            <template slot="title">
+                                {{list.title}} <span class="date">{{list.add_time}} <i class="round" v-show="list.status==1?'1':''"></i></span>
+                            </template>
+                            <p>{{list.msg}}</p>
+                        </el-collapse-item>
+                    </div>
                 </el-collapse>
                 <div class="block">
                     <el-pagination
-                        @size-change="handleSizeChange"
                         @current-change="handleCurrentChange"
-                        :current-page.sync="currentPage3"
-                        :page-size="100"
+                        :page-size=per_page
                         layout="prev, pager, next, jumper"
-                        :total="1000">
+                        :total=messageList.total>
                     </el-pagination>
                 </div>
             </div>
@@ -52,43 +37,51 @@
             return {
                 title:'',
                 content:'',
-                isShow: false,
-                currentPage1: 5,
-                currentPage2: 5,
-                currentPage3: 5,
-                currentPage4: 4
+                page:1,
+                per_page:15,
+                messageList:{
+                    data:[]
+                }
             }
         },
         methods: {
-//            //      获取商品类目数据
-//            getGoodsList: function () {
-//                this.$ajax({
-//                    method: 'POST',
-//                    url: '/api/Goodsdata/productTypeData'
-//                }).then((res) => {
-//                    if (res.data.code == '200') {
-//                        this.goodsDataList = res.data.data.more_data
-//                        console.log(this.goodsDataList)
-////          console.log(imgList)
-//                    }
-//                }, (err) => {
-//                    console.log(err)
-//                })
+            //      获取通知中心消息列表
+            getMessageList: function (val) {
+                console.log('aaaa')
+                this.page=val
+                this.$ajax.get('/api/Message/messageList',{params:{page:this.page,per_page:this.per_page}}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.messageList = res.data.data.message_list
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+//            toShow(){
+//                this.isShow=true
 //            },
-            toShow(){
-                this.isShow=true
-            },
-            handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
-            },
+//            handleSizeChange(val) {
+//                console.log(`每页 ${val} 条`);
+//            },
             handleCurrentChange(val) {
-                console.log(`当前页: ${val}`);
+//                获取当前页数的消息
+                this.getMessageList(val)
+            },
+            change(e){
+//                更改已读消息的状态
+                this.$ajax.post('/api/Message/setStatus',{message_id:e}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.getMessageList()
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
             }
         },
         mounted() {
         },
         created: function () {
-
+               this.getMessageList()
         }
     }
 </script>
@@ -96,8 +89,8 @@
 <style scoped>
     .ms-doc {
         width: 100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        max-width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 40px;
@@ -136,5 +129,8 @@
     .el-pager li.active {
         border-color: #0f8edd;
         background-color: #0f8edd;
+    }
+    .el-icon-arrow-right:before {
+        content: "\E606";
     }
 </style>

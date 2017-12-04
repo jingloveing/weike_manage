@@ -68,7 +68,15 @@
                 }).then((res) => {
                     if (res.data.code == '200') {
                         localStorage.setItem('ms_username',self.ruleForm.username);
+                        localStorage.setItem('ms_password',self.ruleForm.password);
+                        localStorage.setItem('ms_nickname',res.data.data.user_info.nickname);
+                        localStorage.setItem('ms_userPhoto',res.data.data.user_info.head_image);
                         self.$router.push('/home');
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
                     }
                 }, (err) => {
                     console.log(err)

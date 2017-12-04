@@ -8,23 +8,28 @@
         <div class="ms-doc">
             <div class="ms-doc_main">
                 <p><span class="title">登录账号：</span>{{username}}</p>
-                <p><span class="title" style="float: left;margin-top: 20px;">头像：</span><img src="/static/img/default_img.png" alt="" class="photo">
+                <p><span class="title" style="float: left;margin-top: 20px;">头像：</span><img :src="userPhoto" alt="" class="photo" :onerror="defaultImg" id="photo">
                     <input id="file" type="file"  style="display: none" @change="uploadImg($event)" multiple accept="image/*">
                     <label class="operate" for="file">上传头像</label></p>
-                <p><span class="title">昵称：</span><el-input v-model="title" style="width: 300px;margin: 20px 0;"></el-input>
+                <p><span class="title">昵称：</span><el-input v-model="nickname" style="width: 300px;margin: 20px 0;"></el-input>
                     <label class="operate">修改昵称</label></p>
-                <p><span class="title">密码：</span><el-input v-model="title" style="width: 300px;margin: 20px 0;"  type="keywords"></el-input>
+                <div style="text-align: center;">
+                    <el-button type="primary" round
+                               style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;" @click="saveUserInfo()">保存
+                    </el-button>
+                </div>
+                <p><span class="title">密码：</span><el-input  style="width: 300px;margin: 20px 0;"  type="password" v-model="password" disabled></el-input>
                     <label class="operate" v-on:click="toShow()">修改密码</label></p>
                 <div v-show="isShow">
-                    <p><span class="title">当前密码：</span><el-input v-model="title" style="width: 300px;margin: 20px 0;" placeholder="6-14个英文和数字组合" type="keywords"></el-input></p>
-                    <p><span class="title">新密码：</span><el-input v-model="title" style="width: 300px;margin: 20px 0;" placeholder="6-14个英文和数字组合" type="keywords"></el-input></p>
-                    <p><span class="title">确认新密码：</span><el-input v-model="title" style="width: 300px;margin: 20px 0;" placeholder="请再次输入新密码" type="keywords"></el-input></p>
+                    <p><span class="title">当前密码：</span><el-input minlenght="6" maxlenght="14" v-model="data.old_password" style="width: 300px;margin: 20px 0;" placeholder="6-14个英文和数字组合" type="password"></el-input></p>
+                    <p><span class="title">新密码：</span><el-input minlenght="6" maxlenght="14" v-model="data.new_password" style="width: 300px;margin: 20px 0;" placeholder="6-14个英文和数字组合" type="password"></el-input></p>
+                    <p><span class="title">确认新密码：</span><el-input minlenght="6" maxlenght="14" v-model="data.sure_password" style="width: 300px;margin: 20px 0;" placeholder="请再次输入新密码" type="password"></el-input></p>
 
                 </div>
             </div>
             <div style="text-align: center;">
                 <el-button type="primary" round
-                           style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;">保存
+                           style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;" @click="savePassword()">保存
                 </el-button>
             </div>
         </div>
@@ -39,7 +44,17 @@
                 title:'',
                 content:'',
                 isShow: false,
-                name:''
+                username:'',
+                keys:'',
+                nickname:'',
+                userPhoto:'',
+                img:'',
+                defaultImg:'this.src="'+require('../../../static/img/default_img.png')+'"',
+                data:{
+                    old_password:'',
+                    new_password:'',
+                    sure_password:''
+                }
             }
         },
         methods: {
@@ -58,20 +73,97 @@
 //                    console.log(err)
 //                })
 //            },
+            uploadImg:function(e){
+                const formData = new FormData();
+                formData.append('images',e.target.files[0]);
+                let config ={
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+                this.$ajax.post('api/Index/upload', formData, config).then((res)=>{
+                    if(res.data.code=='200'){
+//                        let el = document.getElementById('file');
+//                        el.previousElementSibling; // 这就是元素的前一个兄弟节点
+                        this.userPhoto = res.data.data.image_url
+                        console.log(this.userPhoto)
+                    }
+                },(err)=>{})
+            },
            toShow(){
                this.isShow=true
-           }
+           },
+//           保存修改用户密码
+            savePassword:function(){
+//                {old_password:this.old_password,new_password:this.new_password,sure_password:this.sure_password}
+                if(this.data.sure_password!==this.data.new_password){
+                    this.$message({
+                        message: '修改密码不一致，请重新输入',
+                        type: 'error'
+                    });
+                    return
+                }else{
+                    this.$ajax.post('/api/User/changePassword',this.data).then((res) => {
+                        if (res.data.code == '200') {
+                            localStorage.setItem('ms_password',this.data.new_password);
+                            this.$message({
+                                message: res.data.data.message,
+                                type: 'success'
+                            });
+                        }else{
+                            this.$message({
+                                message: res.data.error,
+                                type: 'error'
+                            });
+                        }
+                    }, (err) => {
+                        console.log(err)
+                    })
+                }
+
+            },
+//            保存修改用户头像和昵称
+            saveUserInfo(){
+                this.$ajax.post('/api/User/editNickName',{nickname:this.nickname,head_image:this.userPhoto}).then((res) => {
+                    if (res.data.code == '200') {
+                        localStorage.setItem('ms_nickname',this.nickname);
+                        localStorage.setItem('ms_userPhoto',this.userPhoto);
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            }
         },
         mounted() {
         },
         created: function () {
-
+            this.userPhoto = localStorage.getItem('ms_userPhoto');
+            this.username= localStorage.getItem('ms_username');
+            this.nickname = localStorage.getItem('ms_nickname');
+            this.password = localStorage.getItem('ms_password');
         },
         computed:{
-            username(){
-                let username = localStorage.getItem('ms_username');
-                return username ? username : this.name;
-            }
+//            username(){
+//                let username =
+//                return username ? username : this.name;
+//            },
+//            password(){
+//                let password = localStorage.getItem('ms_password');
+//                return password ? password : this.keys;
+//            },
+//            nickname(){
+//                let nickname = localStorage.getItem('ms_nickname');
+//                return nickname ? nickname : this.nickName;
+//            },
         },
     }
 </script>
