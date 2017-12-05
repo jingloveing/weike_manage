@@ -202,7 +202,6 @@
                     this.group_name = ''
                     this.dialogVisible = true
                 }
-
             },
 //            删除分组
             del(id) {

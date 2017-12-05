@@ -8,7 +8,7 @@
         <div class="ms-doc">
            <p>总数据</p>
             <div class="ms-doc_main">
-                <ul class="tab">
+                <ul class="tab" id="tab1">
                     <li class="active">访问数据</li>
                     <li>用户数据</li>
                     <li>搜索数据</li>
@@ -16,8 +16,8 @@
                 </ul>
                 <div class="ms-doc_chart" style="font-size: 0;">
                        <div style="width: 70%;display: inline-block;">
-                           <ul class="schart_tab schart_tab1">
-                               <li>昨日</li>
+                           <ul class="schart_tab schart_tab1" id="tab2">
+                               <li class="active">昨日</li>
                                <li>周</li>
                                <li>月</li>
                            </ul>
@@ -25,11 +25,7 @@
 
                            </div>
                        </div>
-                    <div style="float: right;width: 30%;">
-                        <ul class="schart_tab schart_tab2">
-                            <li>周</li>
-                            <li>月</li>
-                        </ul>
+                    <div style="float: right;width: 30%;" v-show="isShow">
                             <div id="roundOne">
                             </div>
                     </div>
@@ -42,7 +38,7 @@
                 <div style="width: 30%;">
                     <p style="text-align: center;font-size: 18px;color: #54667a;">热门商品TOP30</p>
                     <el-table
-                        :data="tableData1"
+                        :data="list1"
                         height="520"
                         border
                         style="width: 100%">
@@ -50,15 +46,15 @@
                             label="商品">
                             <template scope="scope">
                                 <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index+1}}</span>
-                                <img :src="scope.row.image" width="36" height="36" style="vertical-align: middle;"/>
+                                <img :src="scope.row.pict_url" width="36" height="36" style="vertical-align: middle;"/>
                             </template>
                         </el-table-column>
                         <el-table-column
-                            prop="name"
+                            prop="number"
                             label="点击量">
                         </el-table-column>
                         <el-table-column
-                            prop="address"
+                            prop="title"
                             label="标题" show-overflow-tooltip>
                         </el-table-column>
                     </el-table>
@@ -66,7 +62,7 @@
                 <div style="width: 30%;">
                     <p style="text-align: center;font-size: 18px;color: #54667a;">新增用户TOP20</p>
                     <el-table
-                        :data="tableData2"
+                        :data="list2"
                         height="520"
                         border
                         style="width: 100%">
@@ -75,15 +71,15 @@
                             label="头像">
                             <template scope="scope">
                                 <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index+1}}</span>
-                                <img :src="scope.row.image" width="36" height="36" style="vertical-align: middle;"/>
+                                <img :src="scope.row.wechat_head_image" width="36" height="36" style="vertical-align: middle;"/>
                             </template>
                         </el-table-column>
                         <el-table-column
-                            prop="name"
+                            prop="wechat_nickname"
                             label="昵称" show-overflow-tooltip>
                         </el-table-column>
                         <el-table-column
-                            prop="address"
+                            prop="create_time"
                             label="加入时间" show-overflow-tooltip>
                         </el-table-column>
                     </el-table>
@@ -91,7 +87,7 @@
                 <div style="width: 30%;">
                     <p style="text-align: center;font-size: 18px;color: #54667a;">热搜词TOP20</p>
                     <el-table
-                        :data="tableData3"
+                        :data="list3"
                         height="520"
                         border
                         style="width: 100%">
@@ -100,11 +96,11 @@
                             <!--<span style="margin-right: 5px;">1</span>-->
                             <template scope="scope">
                                 <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index+1}}</span>
-                                <span>{{scope.row.name}}</span>
+                                <span>{{scope.row.keywords}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
-                            prop="address"
+                            prop="number"
                             label="搜索量" show-overflow-tooltip>
                         </el-table-column>
                     </el-table>
@@ -115,234 +111,58 @@
 </template>
 
 <script>
-    import Schart from 'vue-schart';
     let echarts = require('echarts');
     export default {
         components: {
-            Schart
         },
         data(){
             return{
-                isShow:true,
-                tableData1: [
-                    {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }],
-                tableData2: [
-                    {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }],
-                tableData3: [
-                    {
-                    date: '2016-05-03',
-                    name: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-08',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-06',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-07',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }]
+                list1: [],
+                list2:[],
+                list3: [],
+                type:'1',
+                date_type:'1',
+                title:'',
+                isShow:false,
+                arr:[],
+                total_count:'',
+                time:[],
+                counts:[]
             }
         },
         mounted(){
-            var Broken = echarts.init(document.getElementById('broken'));
-            Broken.setOption({
-                backgroundColor: '#fff',
-                tooltip: {
-                    trigger: 'axis'
-                },
-                calculable: true,
-                xAxis: [
-                    {
-                        type: 'category',
-                        boundaryGap: false,
-                        data: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
-                        axisLine:{
-                            //横坐标横线样式
-                            lineStyle:{
-                                type:'dotted',
-                                color:'#bac7cd'
-                            }
-                        },
-                        axisLabel:{
-                            textStyle:{
-                                color:'#bac7cd' //横坐标字体颜色
-                            }
-                        }
+//            js  Tab选项卡
+            var tab1 = document.getElementById("tab1").getElementsByTagName("li")
+            var tab2 = document.getElementById("tab2").getElementsByTagName("li")
+            for (var i = 0; i < tab1.length; i++) {
+                let self = this
+                tab1[i].index=i
+                tab1[i].onclick = function () {
+                    for(var j=0;j<tab1.length;j++){
+                        tab1[j].className=''
                     }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        axisLine:{
-                            //横坐标横线样式
-                            lineStyle:{
-                                type:'dotted',
-                                color:'#bac7cd'
-                            }
-                        },
-                        axisLabel:{
-                            formatter: '{value}',
-                            textStyle:{
-                                color:'#bac7cd' //横坐标字体颜色
-                            }
-                        }
+                    tab1[this.index].className='active'
+                    self.type=this.index+1
+                    self.getData()
+                }
+            }
+            for (var i = 0; i < tab2.length; i++) {
+                let self = this
+                tab2[i].index=i
+                tab2[i].onclick = function () {
+                    for(var j=0;j<tab2.length;j++){
+                        tab2[j].className=''
                     }
-                ],
-                series: [
-                    {
-                        smooth:false,
-                        name: '收入',
-                        type: 'line',
-                        data: ['111','11', '12', '13', '14', '15', '16', '17', '18', '519', '320', '21', '122', '23', '224', '25', '26'],
-//                        markPoint: {
-//                            data: [
-//                                { type: 'max', name: '最大值' },
-//                                { type: 'min', name: '最小值' }
-//                            ]
-//                        },
-//                        markLine: {
-//                            data: [
-//                                { type: 'average', name: '平均值' }
-//                            ]
-//                        },
-                        itemStyle:{
-                          normal:{
-                              color:'#55ce63',//图标颜色
-                              lineStyle:{
-                                  color:'#55ce63'//连线颜色
-                              }
-                          }
-                        }
+                    tab2[this.index].className='active'
+                    self.date_type=this.index+1
+                    if(self.date_type==1){
+                        self.isShow=false
+                    }else{
+                        self.isShow=true
                     }
-                ]
-            });
-            var RoundOne = echarts.init(document.getElementById('roundOne'));
-            RoundOne.setOption({
-                tooltip: {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                color:['#009efb', '#ff5b6d','#ffa55c','#fff45c','#55ce63','#6a5bff','#1badcb'],
-                graphic:{
-                    type:'text',
-                    left:'center',
-                    top:'center',
-                    style:{
-                        text:"总计\n8888",
-                        textAlign:'center',
-                        fill:'#000',
-                        width:30,
-                        height:30,
-                        fontSize:'18'
-                    }
-                },
-                calculable: true,
-                series: [
-                    {
-                        name: '访问来源',
-                        type: 'pie',
-                        radius: ['100', '50',],
-                        itemStyle: {
-                            normal: {
-                                label: {
-                                    show: false
-                                },
-                                labelLine: {
-                                    show: false
-                                }
-                            },
-                            emphasis: {
-                                label: {
-                                    show: false,
-                                }
-                            }
-                        },
-                        data: [
-                            { value: 335, name: '第一周' },
-                            { value: 1310, name: '第二周' },
-                            { value: 1310, name: '第三周' },
-                            { value: 335, name: '第四周' },
-                            { value: 1310, name: '第五周' },
-                            { value: 1310, name: '第六周' },
-                            { value: 1310, name: '第七周' }
-
-                        ]
-                    }
-                ]
-            });
+                    self.getData()
+                }
+            }
             // 自适应
             window.onresize = function () {
                 Broken.resize();
@@ -350,11 +170,186 @@
             }
         },
         methods:{
-            close(){
-                this.isShow=false
-            }
+            //      首页数据
+            getData:function(){
+                if(this.type=='1'){
+                    this.title='访问人数'
+                }else if(this.type=='2'){
+                    this.title='新增用户'
+                }else if(this.type=='3'){
+                    this.title='搜索次数'
+                }else{
+                    this.title='元宝消耗量'
+                }
+                this.$ajax.post('/api/Summarydata/summaryData',{type:this.type,date_type:this.date_type}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.time = res.data.data.time;
+                        this.counts = res.data.data.count;
+                        console.log(this.counts)
+                        this.total_count=res.data.data.total_count;
+                        var arr=[]
+                        for(var i= 0;i<this.time.length;i++){
+                            arr.push({value:this.time[i],name:this.counts[i]});
+                        }
+//                        this.arr = JSON.stringify(arr)
+                        this.arr = arr
+                        console.log(this.arr)
+                        var Broken = echarts.init(document.getElementById('broken'));
+                        Broken.setOption({
+                            backgroundColor: '#fff',
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            calculable: true,
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    boundaryGap: false,
+                                    data: this.counts,
+                                    axisLine:{
+                                        //横坐标横线样式
+                                        lineStyle:{
+//                                type:'dotted',
+                                            color:'#bac7cd'
+                                        }
+                                    },
+                                    axisLabel:{
+                                        textStyle:{
+                                            color:'#bac7cd' //横坐标字体颜色
+                                        }
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    axisLine:{
+                                        //横坐标横线样式
+                                        lineStyle:{
+//                                type:'dotted',
+                                            color:'#bac7cd'
+                                        }
+                                    },
+                                    axisLabel:{
+                                        formatter: '{value}',
+                                        textStyle:{
+                                            color:'#bac7cd' //横坐标字体颜色
+                                        }
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    smooth:false,
+                                    name: this.title,
+                                    type: 'line',
+                                    data: this.time,
+                                    itemStyle:{
+                                        normal:{
+                                            color:'#55ce63',//图标颜色
+                                            lineStyle:{
+                                                color:'#55ce63'//连线颜色
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        });
+                        if(this.date_type!==1){
+                            console.log('aaa')
+                            var RoundOne = echarts.init(document.getElementById('roundOne'));
+                            RoundOne.setOption({
+                                tooltip: {
+                                    trigger: 'item',
+                                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                                },
+                                color:['#009efb', '#ff5b6d','#ffa55c','#fff45c','#55ce63','#6a5bff','#1badcb'],
+                                graphic:{
+                                    type:'text',
+                                    left:'center',
+                                    top:'center',
+                                    style:{
+                                        text:"总计\n"+this.total_count,
+                                        textAlign:'center',
+                                        fill:'#000',
+                                        width:30,
+                                        height:30,
+                                        fontSize:'18'
+                                    }
+                                },
+                                calculable: true,
+                                series: [
+                                    {
+                                        name: '访问来源',
+                                        type: 'pie',
+                                        radius: ['100', '50',],
+                                        itemStyle: {
+                                            normal: {
+                                                label: {
+                                                    show: false
+                                                },
+                                                labelLine: {
+
+                                                    show: false
+                                                }
+                                            },
+                                            emphasis: {
+                                                label: {
+                                                    show: false,
+                                                }
+                                            }
+                                        },
+                                        data: this.arr
+                                    }
+                                ]
+                            });
+                        }else{
+
+                        }
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      获取热门商品top30
+            getList1:function(){
+                this.$ajax.post('/api/Summarydata/productTop30').then((res) => {
+                    if (res.data.code == '200') {
+                        this.list1 = res.data.data.product_list
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      新增用户top20
+            getList2:function(){
+                this.$ajax.post('/api/Summarydata/newMemberTop20').then((res) => {
+                    if (res.data.code == '200') {
+                        this.list2 = res.data.data.member_list
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      热搜词top20
+            getList3:function(){
+                this.$ajax.post('/api/Summarydata/hotWordsTop20').then((res) => {
+                    if (res.data.code == '200') {
+                        this.list3 = res.data.data.words_list
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+        },
+        created:function(){
+           this.getList1()
+            this.getList2()
+            this.getList3()
+            this.getData()
         }
     }
+
 </script>
 
 <style scoped>

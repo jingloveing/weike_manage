@@ -11,7 +11,7 @@
                 <el-date-picker
                     v-model="dateValue1"
                     type="month"
-                    placeholder="选择月">
+                    placeholder="选择月" @change="changeDate1" value-format="yyyy-MM-dd">
                 </el-date-picker>
                 <div class="ms-doc_chart" style="font-size: 0;">
                     <p class="title">每月商品类目浏览量TOP10</p>
@@ -22,18 +22,18 @@
                         <p style="font-size: 18px;color: #54667a;border-bottom: 1px solid #e9f1f3;display: block;width: 110px;margin: 0 auto 10px;padding-bottom: 10px;">
                             详细数据</p>
                         <el-table
-                            :data="tableData3"
+                            :data="right"
                             border
-                            style="width: 250px;margin: 0 auto 30px;">
+                            style="width: 250px;margin: 0 auto 30px;" height="400">
                             <el-table-column
                                 label="名称" show-overflow-tooltip style="width: 200px;">
                                 <template scope="scope">
                                     <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index + 1}}</span>
-                                    <span>{{scope.row.title}}</span>
+                                    <span>{{scope.row.cate_name}}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="number"
+                                prop="total_number"
                                 label="浏览量" show-overflow-tooltip>
                             </el-table-column>
                         </el-table>
@@ -45,11 +45,16 @@
             <p class="m_title">商品取调量统计</p>
             <div class="ms-doc_main">
                 <el-date-picker
-                    v-model="dateValue2"
-                    type="daterange"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期">
+                    v-model="start"
+                    type="date"
+                    placeholder="开始日期"
+                    :picker-options="pickerOptions0" @change="changeDate2" value-format="yyyy-MM-dd">
+                </el-date-picker>
+                <el-date-picker
+                    v-model="end"
+                    type="date"
+                    placeholder="结束日期"
+                    :picker-options="pickerOptions1" @change="changeDate3" value-format="yyyy-MM-dd">
                 </el-date-picker>
                 <div class="ms-doc_chart" style="width: 100%;font-size: 0;">
                     <p class="title">TOP10商品取调统计分析</p>
@@ -59,9 +64,9 @@
                         <p style="font-size: 18px;color: #54667a;border-bottom: 1px solid #e9f1f3;display: block;width: 110px;margin: 0 auto 10px;padding-bottom: 10px;">
                             详细数据</p>
                         <el-table
-                            :data="tableData3"
+                            :data="list"
                             border
-                            style="width: 358px;margin: 0 auto;">
+                            style="width: 358px;margin: 0 auto;" height="400">
                             <el-table-column
                                 label="类别" show-overflow-tooltip>
                                 <template scope="scope">
@@ -92,153 +97,158 @@
         data() {
             return {
                 dateValue1: '',
-                dateValue2: '',
-                goodsDataList: [],
-                tableData3: [
-                    {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }, {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }, {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }, {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }, {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }, {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }, {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }, {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }, {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }, {
-                        number: '200',
-                        title: '王小虎哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        percent: '0.3'
-                    }]
+                start:'',
+                end:'',
+               type_data:[],
+                right:[],
+                list:[],
+                total_number:'',
+                data:[],
+                value1:'',
+                pickerOptions0: {
+                    disabledDate: (time) => {
+                        if (this.value2 != "") {
+                            return time.getTime() > Date.now() || time.getTime() > this.value2;
+                        } else {
+                            return time.getTime() > Date.now();
+                        }
+
+                    }
+                },
+                pickerOptions1: {
+                    disabledDate: (time) => {
+                        return time.getTime() < this.value1 || time.getTime() > Date.now();
+                    }
+                },
             }
         },
         methods: {
             //      获取商品类目数据
-            getGoodsList: function () {
-                this.$ajax({
-                    method: 'POST',
-                    url: '/api/Goodsdata/productTypeData'
-                }).then((res) => {
+            getGoodsList: function (e) {
+                this.$ajax.post('/api/Goodsdata/productTypeData',{ month:e}).then((res) => {
                     if (res.data.code == '200') {
-                        this.goodsDataList = res.data.data.more_data
-                        console.log(this.goodsDataList)
-//          console.log(imgList)
+                        this.cate_name=res.data.data.left.cate_name
+                        this.total_number = res.data.data.left.total_number
+                        this.right=res.data.data.right
+                        var myChart = echarts.init(document.getElementById('main'));
+                        // 绘制图表
+                        myChart.setOption({
+                            title: {text: ''},
+                            tooltip: {},
+                            xAxis: {
+                                data: this.cate_name
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '',
+                                type: 'bar',
+                                data: this.total_number,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#ff5d6d',
+                                    }
+                                },
+                                barWidth: '40',
+                            }]
+                        });
                     }
                 }, (err) => {
                     console.log(err)
                 })
             },
-        },
-        mounted() {
-            var myChart = echarts.init(document.getElementById('main'));
-            // 绘制图表
-            myChart.setOption({
-                title: {text: ''},
-                tooltip: {},
-                xAxis: {
-                    data: ["七日下单数", "待付款", "待发货", "维权订单", "七日收入", "衣服", "鞋子", "包包", "手机", "玩具用品"]
-                },
-                yAxis: {},
-                series: [{
-                    name: '',
-                    type: 'bar',
-                    data: [5, 20, 36, 10, 11, 30, 30, 23, 45, 345],
-                    itemStyle: {
-                        normal: {
-                            color: '#ff5d6d',
+            //      获取商品数据
+            getGoodsList2: function (e) {
+                this.$ajax.post('/api/Goodsdata/productData',{ start:this.start,end:this.end}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.list = res.data.data.list
+                        this.total_number=res.data.data.total_number
+                        var data=[]
+                        for(var i= 0;i<this.list.length;i++){
+                            data.push({value:this.list[i].number,name:this.list[i].title});
                         }
-                    },
-                    barWidth: '40',
-                }]
-            });
-            var RoundOne = echarts.init(document.getElementById('roundOne'));
-            RoundOne.setOption({
-                tooltip: {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                color: ['#009efb', '#ff5b6d', '#ffa55c', '#fff45c', '#55ce63', '#6a5bff', '#1badcb', '#ff8994', '#272828', '#afbec5', '#efbec5', '#eff3f6', '#0f8edd'],
-                graphic: {
-                    type: 'text',
-                    left: 'center',
-                    top: 'center',
-                    style: {
-                        text: "总计/次\n8888",
-                        textAlign: 'center',
-                        fill: '#000',
-                        width: 30,
-                        height: 30,
-                        fontSize: '18'
-                    }
-                },
-                calculable: true,
-                series: [
-                    {
-                        name: '访问来源',
-                        type: 'pie',
-                        radius: ['150', '120',],
-                        itemStyle: {
-                            normal: {
-                                label: {
-                                    show: false
-                                },
-                                labelLine: {
-                                    show: false
+                        this.data=data
+                        var RoundOne = echarts.init(document.getElementById('roundOne'));
+                        RoundOne.setOption({
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            color: ['#009efb', '#ff5b6d', '#ffa55c', '#fff45c', '#55ce63', '#6a5bff', '#1badcb', '#ff8994', '#272828', '#afbec5', '#efbec5', '#eff3f6', '#0f8edd'],
+                            graphic: {
+                                type: 'text',
+                                left: 'center',
+                                top: 'center',
+                                style: {
+                                    text: "总计/次\n"+this.total_number,
+                                    textAlign: 'center',
+                                    fill: '#000',
+                                    width: 30,
+                                    height: 30,
+                                    fontSize: '18'
                                 }
                             },
-                            emphasis: {
-                                label: {
-                                    show: false,
+                            calculable: true,
+                            series: [
+                                {
+                                    name: '访问来源',
+                                    type: 'pie',
+                                    radius: ['150', '100',],
+                                    itemStyle: {
+                                        normal: {
+                                            label: {
+                                                show: false
+                                            },
+                                            labelLine: {
+                                                show: false
+                                            }
+                                        },
+                                        emphasis: {
+                                            label: {
+                                                show: false,
+                                            }
+                                        }
+                                    },
+                                    data: this.data
                                 }
-                            }
-                        },
-                        data: [
-                            {value: 335, name: '第一周'},
-                            {value: 1310, name: '第二周'},
-                            {value: 1310, name: '第三周'},
-                            {value: 335, name: '第四周'},
-                            {value: 1310, name: '第五周'},
-                            {value: 1310, name: '第六周'},
-                            {value: 1310, name: '第七周'}
+                            ]
+                        });
 
-                        ]
                     }
-                ]
-            });
-            // 自适应
-            window.onresize = function () {
-                myChart.resize();
-                RoundOne.resize();
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            changeDate1(e){
+               this.getGoodsList(e)
+                console.log(e)
+            },
+            changeDate2(e){
+                this.start=e
+                this.getGoodsList2()
+            },
+            changeDate3(e){
+                this.end=e
+                this.getGoodsList2()
             }
         },
+        mounted() {
+//            // 自适应
+//            window.onresize = function () {
+//                myChart.resize();
+//                RoundOne.resize();
+//            }
+        },
         created: function () {
-            this.getGoodsList()
+//            获取当前年月日
+            var date=new Date;
+            var year=date.getFullYear();
+            var month=date.getMonth()+1;
+            var day = date.getDate()
+            this.dateValue1=year+'-'+month
+            this.start=year+'-'+month+'-01'
+            this.end=year+'-'+month+'-'+day
+            this.getGoodsList(this.dateValue1)
+            this.getGoodsList2(this.start,this.end)
         }
     }
 </script>

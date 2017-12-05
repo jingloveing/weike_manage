@@ -125,7 +125,7 @@
                                 title: '粉丝福利管理'
                             },
                             {
-                                index: 'upload',
+                                index: 'superLineManage',
                                 title: '超值线报管理'
                             },
                             {

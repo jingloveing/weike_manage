@@ -94,7 +94,6 @@
                 this.$ajax.post('/api/Menu/totalMenu').then((res) => {
                     if (res.data.code == '200') {
                         this.list = res.data.data.menu
-                        console.log(this.list)
                     }
                 }, (err) => {
                     console.log(err)
@@ -181,8 +180,6 @@
 //            },
 
             renderContent:function(createElement, { node, data, store }) {
-                console.log(data)
-                console.log(node)
                 var self = this;
                 return createElement('span', [
                     createElement('span', node.label),

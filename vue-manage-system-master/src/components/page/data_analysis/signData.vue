@@ -343,7 +343,14 @@
             }
         },
         created: function () {
+            //            获取当前年月日
+            var date=new Date;
+            var year=date.getFullYear();
+            var month=date.getMonth()+1;
+            this.dateValue1=year+'-'+month
+            this.dateValue2=year+'-'+month
 //            this.getGoodsList()
+//            this.getGoodsList2(this.dateValue2)
         }
     }
 </script>
