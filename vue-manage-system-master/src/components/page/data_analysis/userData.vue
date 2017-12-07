@@ -10,11 +10,16 @@
             <div class="ms-doc_main">
                 <div class="date_select">
                     <el-date-picker
-                        v-model="dateValue1"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        v-model="start"
+                        type="date"
+                        placeholder="开始日期"
+                        :picker-options="pickerOptions0" @change="changeDate1" value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                    <el-date-picker
+                        v-model="end"
+                        type="date"
+                        placeholder="结束日期"
+                        :picker-options="pickerOptions1" @change="changeDate2" value-format="yyyy-MM-dd">
                     </el-date-picker>
                     <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
                 </div>
@@ -32,11 +37,16 @@
             <div class="ms-doc_main">
                 <div class="date_select">
                     <el-date-picker
-                        v-model="dateValue2"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        v-model="start2"
+                        type="date"
+                        placeholder="开始日期"
+                        :picker-options="pickerOptions0" @change="changeDate3" value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                    <el-date-picker
+                        v-model="end2"
+                        type="date"
+                        placeholder="结束日期"
+                        :picker-options="pickerOptions1" @change="changeDate4" value-format="yyyy-MM-dd">
                     </el-date-picker>
                     <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
                 </div>
@@ -58,27 +68,197 @@
         components: {},
         data() {
             return {
-                dateValue1: '',
-                dateValue2: '',
-                goodsDataList: []
+                start:'',
+                end:'',
+                start2:'',
+                end2:'',
+                date:[] ,
+                count:[],
+                time:[] ,
+                percent:[],
+                pickerOptions0: {
+                    disabledDate: (time) => {
+                        if (this.value2 != "") {
+                            return time.getTime() > Date.now() || time.getTime() > this.value2;
+                        } else {
+                            return time.getTime() > Date.now();
+                        }
+
+                    }
+                },
+                pickerOptions1: {
+                    disabledDate: (time) => {
+                        return time.getTime() < this.value1 || time.getTime() > Date.now();
+                    }
+                },
             }
         },
         methods: {
-//            //      获取商品类目数据
-//            getGoodsList: function () {
-//                this.$ajax({
-//                    method: 'POST',
-//                    url: '/api/Goodsdata/productTypeData'
-//                }).then((res) => {
-//                    if (res.data.code == '200') {
-//                        this.goodsDataList = res.data.data.more_data
-//                        console.log(this.goodsDataList)
-////          console.log(imgList)
-//                    }
-//                }, (err) => {
-//                    console.log(err)
-//                })
-//            },
+            //            //     用户数据---新增用户数据
+            getNewList: function () {
+                this.$ajax.post('/api/Memberdata/newInsertMember',{start:this.start,end:this.end}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.date=res.data.data.date
+                        this.count = res.data.data.count
+                        this.start =res.data.data.start
+                        this.end = res.data.data.end
+                        var Broken1 = echarts.init(document.getElementById('broken1'));
+                        Broken1.setOption({
+                            backgroundColor: '#fff',
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            calculable: true,
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    boundaryGap: false,
+                                    data: this.date,
+                                    axisLine:{
+                                        //横坐标横线样式
+                                        lineStyle:{
+                                            type:'dotted',
+                                            color:'#bac7cd'
+                                        }
+                                    },
+                                    axisLabel:{
+                                        textStyle:{
+                                            color:'#bac7cd' //横坐标字体颜色
+                                        }
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    axisLine:{
+                                        //横坐标横线样式
+                                        lineStyle:{
+                                            type:'dotted',
+                                            color:'#bac7cd'
+                                        }
+                                    },
+                                    axisLabel:{
+                                        formatter: '{value}',
+                                        textStyle:{
+                                            color:'#bac7cd' //横坐标字体颜色
+                                        }
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    smooth:false,
+                                    name: '新增用户数量',
+                                    type: 'line',
+                                    data: this.count,
+                                    itemStyle:{
+                                        normal:{
+                                            color:'#55ce63',//图标颜色
+                                            lineStyle:{
+                                                color:'#55ce63'//连线颜色
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //            //     用户数据---访客占比
+            getList: function () {
+                this.$ajax.post('/api/Memberdata/vistorPercent',{start:this.start2,end:this.end2}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.time=res.data.data.time
+                        this.percent = res.data.data.percent
+                        this.start2 =res.data.data.start
+                        this.end2 = res.data.data.end
+                        var Broken2 = echarts.init(document.getElementById('broken2'));
+                        Broken2.setOption({
+                            backgroundColor: '#fff',
+                            tooltip: {
+                                trigger: 'axis'
+                            },
+                            calculable: true,
+                            xAxis: [
+                                {
+                                    type: 'category',
+                                    boundaryGap: false,
+                                    data: this.time,
+                                    axisLine:{
+                                        //横坐标横线样式
+                                        lineStyle:{
+                                            type:'dotted',
+                                            color:'#bac7cd'
+                                        }
+                                    },
+                                    axisLabel:{
+                                        textStyle:{
+                                            color:'#bac7cd' //横坐标字体颜色
+                                        }
+                                    }
+                                }
+                            ],
+                            yAxis: [
+                                {
+                                    type: 'value',
+                                    axisLine:{
+                                        //横坐标横线样式
+                                        lineStyle:{
+                                            type:'dotted',
+                                            color:'#bac7cd'
+                                        }
+                                    },
+                                    axisLabel:{
+                                        formatter: '{value}',
+                                        textStyle:{
+                                            color:'#bac7cd' //横坐标字体颜色
+                                        }
+                                    }
+                                }
+                            ],
+                            series: [
+                                {
+                                    smooth:false,
+                                    name: '访客占比',
+                                    type: 'line',
+                                    data: this.percent,
+                                    itemStyle:{
+                                        normal:{
+                                            color:'#0f8edd',//图标颜色
+                                            lineStyle:{
+                                                color:'#0f8edd'//连线颜色
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            changeDate1(e){
+                this.start=e
+                this.getNewList()
+//                console.log(e)
+            },
+            changeDate2(e){
+                this.end=e
+                this.getNewList()
+            },
+            changeDate3(e){
+                this.start2=e
+                this.getList()
+            },
+            changeDate4(e){
+                this.end2=e
+                this.getList()
+            }
         },
         mounted() {
             var Broken1 = echarts.init(document.getElementById('broken1'));
@@ -92,7 +272,7 @@
                     {
                         type: 'category',
                         boundaryGap: false,
-                        data: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18'],
+                        data: this.date,
                         axisLine:{
                             //横坐标横线样式
                             lineStyle:{
@@ -128,20 +308,9 @@
                 series: [
                     {
                         smooth:false,
-                        name: '收入',
+                        name: '新增用户数量',
                         type: 'line',
-                        data: ['111','11', '12', '13', '14', '15', '16', '17', '18', '519', '320', '21', '122', '23', '224', '25', '26'],
-//                        markPoint: {
-//                            data: [
-//                                { type: 'max', name: '最大值' },
-//                                { type: 'min', name: '最小值' }
-//                            ]
-//                        },
-//                        markLine: {
-//                            data: [
-//                                { type: 'average', name: '平均值' }
-//                            ]
-//                        },
+                        data: this.date,
                         itemStyle:{
                             normal:{
                                 color:'#55ce63',//图标颜色
@@ -200,7 +369,7 @@
                 series: [
                     {
                         smooth:false,
-                        name: '收入',
+                        name: '访客占比',
                         type: 'line',
                         data: ['111','11', '12', '13', '14', '15', '16', '17', '18', '519', '320', '21', '122', '23', '224', '25', '26'],
 //                        markPoint: {
@@ -232,7 +401,8 @@
             }
         },
         created: function () {
-
+                this.getNewList()
+            this.getList()
         }
     }
 </script>

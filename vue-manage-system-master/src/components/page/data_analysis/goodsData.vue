@@ -8,18 +8,24 @@
         <div class="ms-doc">
             <p class="m_title">商品浏览量统计</p>
             <div class="ms-doc_main">
+                <div class="date_select">
                 <el-date-picker
                     v-model="dateValue1"
                     type="month"
                     placeholder="选择月" @change="changeDate1" value-format="yyyy-MM-dd">
                 </el-date-picker>
+                    <!--<router-link :to="{path:'api/Goodsdata/export1',params:{month:dateValue1}}">-->
+                        <!--<span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>-->
+                    <!--</router-link>-->
+                <a class="lead_out" :href="'/api/Goodsdata/export1?month='+dateValue1"><img src="/static/img/lead_out.png" alt="">导出当前结果</a>
+                </div>
                 <div class="ms-doc_chart" style="font-size: 0;">
                     <p class="title">每月商品类目浏览量TOP10</p>
                     <div class="TwoTab" id="main">
 
                     </div>
                     <div style="width: 30%;display: inline-block;">
-                        <p style="font-size: 18px;color: #54667a;border-bottom: 1px solid #e9f1f3;display: block;width: 110px;margin: 0 auto 10px;padding-bottom: 10px;">
+                        <p style="text-align:center;font-size: 18px;color: #54667a;border-bottom: 1px solid #e9f1f3;display: block;width: 110px;margin: 0 auto 10px;padding-bottom: 10px;">
                             详细数据</p>
                         <el-table
                             :data="right"
@@ -27,7 +33,7 @@
                             style="width: 250px;margin: 0 auto 30px;" height="400">
                             <el-table-column
                                 label="名称" show-overflow-tooltip style="width: 200px;">
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index + 1}}</span>
                                     <span>{{scope.row.cate_name}}</span>
                                 </template>
@@ -44,6 +50,7 @@
         <div class="sort">
             <p class="m_title">商品取调量统计</p>
             <div class="ms-doc_main">
+                <div class="date_select">
                 <el-date-picker
                     v-model="start"
                     type="date"
@@ -56,12 +63,14 @@
                     placeholder="结束日期"
                     :picker-options="pickerOptions1" @change="changeDate3" value-format="yyyy-MM-dd">
                 </el-date-picker>
+                <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                </div>
                 <div class="ms-doc_chart" style="width: 100%;font-size: 0;">
                     <p class="title">TOP10商品取调统计分析</p>
                     <div id="roundOne">
                     </div>
                     <div style="width: 40%;display: inline-block;height: 435px;">
-                        <p style="font-size: 18px;color: #54667a;border-bottom: 1px solid #e9f1f3;display: block;width: 110px;margin: 0 auto 10px;padding-bottom: 10px;">
+                        <p style="text-align:center;font-size: 18px;color: #54667a;border-bottom: 1px solid #e9f1f3;display: block;width: 110px;margin: 0 auto 10px;padding-bottom: 10px;">
                             详细数据</p>
                         <el-table
                             :data="list"
@@ -69,7 +78,7 @@
                             style="width: 358px;margin: 0 auto;" height="400">
                             <el-table-column
                                 label="类别" show-overflow-tooltip>
-                                <template scope="scope">
+                                <template slot-scope="scope">
                                     <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index + 1}}</span>
                                     <span>{{scope.row.title}}</span>
                                 </template>
@@ -136,9 +145,34 @@
                             title: {text: ''},
                             tooltip: {},
                             xAxis: {
-                                data: this.cate_name
+                                data: this.cate_name,
+                                axisLine:{
+                                    //横坐标横线样式
+                                    lineStyle:{
+                                        type:'dotted',
+                                        color:'#bac7cd'
+                                    }
+                                },
+                                axisLabel:{
+                                    textStyle:{
+                                        color:'#bac7cd' //横坐标字体颜色
+                                    }
+                                }
                             },
-                            yAxis: {},
+                            yAxis: {
+                                axisLine:{
+                                    //横坐标横线样式
+                                    lineStyle:{
+                                        type:'dotted',
+                                        color:'#bac7cd'
+                                    }
+                                },
+                                axisLabel:{
+                                    textStyle:{
+                                        color:'#bac7cd' //横坐标字体颜色
+                                    }
+                                }
+                            },
                             series: [{
                                 name: '',
                                 type: 'bar',
@@ -219,6 +253,7 @@
                 })
             },
             changeDate1(e){
+                this.dateValue1=e
                this.getGoodsList(e)
                 console.log(e)
             },
@@ -229,7 +264,14 @@
             changeDate3(e){
                 this.end=e
                 this.getGoodsList2()
-            }
+            },
+//            export1:function(){
+//                this.$ajax.get('api/Goodsdata/export1',{month:"2017-11"}).then((res)=>{
+//                    console.log(res.data)
+//                },(err)=>{
+//
+//                })
+//            }
         },
         mounted() {
 //            // 自适应

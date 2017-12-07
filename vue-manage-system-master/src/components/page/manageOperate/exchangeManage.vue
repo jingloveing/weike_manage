@@ -26,11 +26,11 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;">筛选</el-button>
+                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;" @click="getGoodsList()">筛选</el-button>
                 </div>
                 <el-table
                     ref="multipleTable"
-                    :data="tableData3"
+                    :data="goodsList"
                     tooltip-effect="dark"
                     style="width: 100%;text-align: center;margin: 20px 0;"
                     border
@@ -41,53 +41,58 @@
                         width="50" height="95">
                     </el-table-column>
                     <el-table-column
-                        label="商品" height="95">
-                        <template scope="scope">
+                        label="商品" height="95" width="110">
+                        <template slot-scope="scope">
                             <img :src="scope.row.product_image" alt="" style="width:76px;height:76px;margin-top: 5px;">
                         </template>
                     </el-table-column>
                     <el-table-column
                         label="标题"
-                        width="200"
+                        width="150"
                         show-overflow-tooltip>
                         <template slot-scope="scope">{{ scope.row.product_name }}</template>
                     </el-table-column>
                     <el-table-column
-                        prop="exchange_num"
-                        label="市场价/元">
+                        prop="market_price"
+                        label="市场价/元"  width="100">
                     </el-table-column>
                     <el-table-column
-                        prop="wechat_nickname"
+                        prop="exchange_acer"
                         label="元宝兑换价/个"
-                        show-overflow-tooltip>
+                        show-overflow-tooltip width="130">
                     </el-table-column>
                     <el-table-column
-                        prop="exchange_time"
+                        prop="stock"
                         label="库存量"
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
-                        prop="info"
+                        prop="type"
                         label="类型"
                         show-overflow-tooltip>
+                        <template slot-scope="scope">
+                            <span v-text="scope.row.product_type==1?'虚拟':'实物'"></span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="express_status"
                         label="状态"
                         show-overflow-tooltip>
+                        <template slot-scope="scope">
+                            <span v-text="scope.row.is_sale==1?'上架':'未上架'"></span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        label="操作" inline-template width="180">
+                        label="操作" width="140">
                         <!--上架---下架-->
-                        <template>
-                            <span style="display: inline-block;background-color: rgb(223, 236, 235); padding: 0 10px;">编辑</span>
-                            <span style="display: inline-block;background-color: rgb(223, 236, 235); padding: 0 10px;">上架</span>
+                        <template slot-scope="scope">
+                            <el-button @click="edit(scope.row.product_id)" type="text" size="small" class="pros">编辑</el-button>
+                            <el-button @click="change(scope.row.product_id,scope.row.is_sale)" type="text" size="small" class="pros" v-text="scope.row.is_sale==1?'下架':'上架'">上架</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
-                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;">一键上架</el-button>
-                    <el-button type="danger" round>一键下架</el-button>
+                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;" @click="changeAll(1)">一键上架</el-button>
+                    <el-button type="danger" round @click="changeAll(2)">一键下架</el-button>
                 </div>
             </div>
         </div>
@@ -99,14 +104,14 @@
                     type="textarea"
                     :rows="6"
                     placeholder="请输入说明内容"
-                    v-model="textarea" style="width: 488px;margin: 20px 20px 20px 0;">
+                    v-model="exchangeBrief" style="width: 488px;margin: 20px 20px 20px 0;">
                 </el-input>
                 <pre style="font-size: 14px;color: #a6b7bf;display: inline-block;padding-bottom: 50px;">例如：
     成功提交后奖品将在1~3个工作日内发送至提交账户内。
     实物奖品将在1~3个工作日内发货。请耐心等待并在我的兑换内查看。
                 </pre>
                 <div style="text-align: center;">
-                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">保存</el-button>
+                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;" @click="saveBrief()">保存</el-button>
 
                 </div>
             </div>
@@ -121,15 +126,15 @@
                 <div class="imgList">
                     <div class="tab">
                         <input id="file1" type="file"  style="display: none" @change="uploadImg1($event)" multiple accept="image/*">
-                        <label for="file1" style="display: inline-block;"><img :src="imgUrl1" alt="" style=" width: 130px;height: 132px;"></label>
+                        <label for="file1" style="display: inline-block;"><img :src="imgUrl1" alt="" style=" width: 128px;height: 130px;"></label>
                     </div>
                     <el-upload
                         name="images"
                         :action="upload()"
                         list-type="picture-card"
                         :on-preview="handlePictureCardPreview"
-                        :on-remove="handleRemove">
-                        <img src="/static/img/exchange_add_img2.png" alt="" style=" width: 130px;height: 132px;">
+                        :on-remove="handleRemove" style="float: left;">
+                        <img src="/static/img/exchange_add_img2.png" alt="" style=" width: 128px;height: 130px;">
                     </el-upload>
                 </div>
                <div style="font-size: 0;overflow: hidden;">
@@ -182,99 +187,43 @@
         components: {},
         data() {
             return {
+                goodsList:[],
+                exchangeBrief:'',
                 dialogImageUrl: '',
                 dialogVisible:false,
                 input:'',
-                goodsDataList: [],
-                options1: [{
-                    value: '选项1',
+                options1: [
+                    {
+                    value: '0',
                     label: '全部'
                 },
                     {
-                        value: '选项2',
+                        value: '1',
                         label: '虚拟'
                     },{
-                        value: '选项3',
+                        value: '2',
                         label: '实物'
                     }
                 ],
-                value1:'',
-                options2: [{
-                    value: '选项1',
+                value1:'0',
+                options2: [
+                    {
+                    value: '0',
                     label: '全部'
                 },{
-                    value: '选项3',
+                    value: '1',
                     label: '上架'
                 }, {
                     value: '选项3',
-                    label: '下架'
-                }, {
-                    value: '选项3',
-                    label: '维护'
+                    label: '未上架'
                 }
                 ],
-                value2:'',
+                value2:'0',
                 dateValue1:'',
-                tableData3: [
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num:'10',
-                        wechat_nickname:'200',
-                        exchange_time:'2013-01-22',
-                        info:'5',
-                        express_status:'0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num:'10',
-                        wechat_nickname:'200',
-                        exchange_time:'2013-01-22',
-                        info:'5',
-                        express_status:'0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num:'10',
-                        wechat_nickname:'200',
-                        exchange_time:'2013-01-22',
-                        info:'5',
-                        express_status:'0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num:'10',
-                        wechat_nickname:'200',
-                        exchange_time:'2013-01-22',
-                        info:'5',
-                        express_status:'0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num:'10',
-                        wechat_nickname:'200',
-                        exchange_time:'2013-01-22',
-                        info:'5',
-                        express_status:'0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num:'10',
-                        wechat_nickname:'200',
-                        exchange_time:'2013-01-22',
-                        info:'5',
-                        express_status:'0.9',
-                    }
-                ],
-                multipleSelection: [],
-                textarea:'',
+                product_id: [],
                 des:'',
-                options3: [{
+                options3: [
+                    {
                  value: '选项1',
                  label: '选择类型'
              }, {
@@ -293,21 +242,87 @@
             }
         },
         methods: {
-//            //      获取商品类目数据
-//            getGoodsList: function () {
-//                this.$ajax({
-//                    method: 'POST',
-//                    url: '/api/Goodsdata/productTypeData'
-//                }).then((res) => {
-//                    if (res.data.code == '200') {
-//                        this.goodsDataList = res.data.data.more_data
-//                        console.log(this.goodsDataList)
-////          console.log(imgList)
-//                    }
-//                }, (err) => {
-//                    console.log(err)
-//                })
-//            },
+            //      获取商品列表列表
+            getGoodsList: function () {
+                this.$ajax.post('/api/Acerstore/acerList',{product_type:this.value1,is_sale:this.value2}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.goodsList = res.data.data.acer_list.data
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //     兑换商城兑换说明
+            getExchangeBrief: function () {
+                this.$ajax.get('/api/Acerstore/exchangeBrief').then((res) => {
+                    if (res.data.code == '200') {
+                        this.exchangeBrief = res.data.data.brief
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+//            修改兑换商城说明
+            saveBrief(){
+                this.$ajax.post('/api/Acerstore/exchangeBrief',{brief:this.exchangeBrief}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //            上下架商品
+            change(id,status){
+                if(status==1){
+                    status=2
+                }else{
+                    status=1
+                }
+                this.$ajax.post('/api/Acerstore/changeSale',{product_id:id,is_sale:status}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getGoodsList()
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //            一键上下键
+            changeAll:function(e){
+                this.$ajax.post('/api/Acerstore/changeSale',{product_id:this.product_id,is_sale:e}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getGoodsList()
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
             uploadImg1:function(e){
                 const formData = new FormData();
                 formData.append('images',e.target.files[0]);
@@ -325,7 +340,11 @@
                 },(err)=>{})
             },
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                var data=[]
+                for(var i= 0;i<val.length;i++){
+                    data.push(val[i].product_id);
+                }
+                this.product_id = data;
             },
             handleClose(done) {
                 this.$confirm('确认关闭？')
@@ -350,7 +369,8 @@
 
         },
         created: function () {
-
+             this.getGoodsList()
+            this.getExchangeBrief()
         }
     }
 </script>
@@ -358,8 +378,8 @@
 <style scoped>
     .ms-doc {
         width: 100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        max-width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;
@@ -389,7 +409,7 @@
         margin: 5px 3px;
         border: 1px solid #e9f1f3;
         text-align: center;
-        display: inline-block;
+        float: left;
         box-sizing: border-box;
         position: relative;
     }
@@ -406,6 +426,9 @@
     .model_name{
         font-size: 14px;
         color: #54667a;
+    }
+    .pros{
+        background-color: rgb(223, 236, 235); padding: 0 10px;cursor: pointer;color: #54667a;line-height: 24px;
     }
 </style>
 <style>

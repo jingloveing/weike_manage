@@ -121,7 +121,7 @@ a{text-decoration: none}
 .el-dialog__body{
     margin: 20px;
     border-top: 1px solid #e9f1f3;
-    max-height: 540px;
+    max-height: 400px;
     overflow-y: scroll;
 }
 .el-dialog__title{
@@ -137,4 +137,16 @@ a{text-decoration: none}
 }
 .el-radio__input.is-checked .el-radio__inner {
     background-color: #0f8edd!important;border-color: #0f8edd!important;
+}
+.date_select{
+    position: relative;
+}
+.lead_out{
+    position: absolute;right: 50px;top: 6px;font-size: 14px;color: #54667a;
+}
+.lead_out img{
+    margin:0 10px -3px 0;width: 16px;height: 18px;
+}
+.el-table th>.cell {
+    text-align: center;
 }

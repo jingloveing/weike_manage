@@ -6,42 +6,24 @@
             </el-breadcrumb>
         </div>
         <div class="ms-doc">
-            <p class="m_title">本周签到</p>
-            <div class="ms-doc_main">
-                <div class="date_select">
-                    <el-date-picker
-                        v-model="dateValue1"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                    </el-date-picker>
-                </div>
-                <div class="ms-doc_chart" style="font-size: 0;">
-                    <p class="title">本周签到趋势图</p>
-                    <div class="CTwoLeft" id="broken1">
-
-                    </div>
-                    <p class="pie_title" ><i style="background-color: #55ce63;"></i>每天签到次数</p>
-                </div>
-            </div>
-        </div>
-        <div class="ms-doc sort">
             <p class="m_title">签到积分设置</p>
             <div class="ms-doc_main">
                 <p> 用户单次签到奖励积分设置</p>
-                <el-input v-model="input" style="width: 200px;margin:20px 20px 20px 0;" placeholder="请输入最低积分"></el-input>
+                <el-input v-model="once_acer" style="width: 200px;margin:20px 20px 20px 0;" placeholder="请输入最低积分"></el-input>
                 <p>用户连续签到积分奖励提升区间设置</p>
-                <el-input v-model="input" style="width: 180px;margin:20px 50px 0 0;" placeholder="请输入首次奖励数"></el-input>
-                <el-input v-model="input" style="width: 180px;margin:20px 50px 0 0;" placeholder="请输入第二次奖励数"></el-input>
-                <el-input v-model="input" style="width: 180px;margin:20px 50px 0 0;" placeholder="请输入第三次奖励数"></el-input>
-                <el-input v-model="input" style="width: 180px;margin:20px 50px 0 0;" placeholder="请输入第四次奖励数"></el-input>
-                <el-input v-model="input" style="width: 180px;margin:20px 50px 0 0;" placeholder="请输入第五次奖励数"></el-input>
-                <el-input v-model="input" style="width: 180px;margin:20px 50px 0 0;" placeholder="请输入第六次奖励数"></el-input>
-                <el-input v-model="input" style="width: 180px;margin:20px 50px 0 0;" placeholder="请输入第七次奖励数"></el-input>
+                <el-input v-model="week_reward.sign_day1.reward_num" class="input" placeholder="请输入首次奖励数"></el-input>
+                <el-input v-model="week_reward.sign_day2.reward_num" class="input"  placeholder="请输入第二次奖励数"></el-input>
+                <el-input v-model="week_reward.sign_day3.reward_num" class="input" placeholder="请输入第三次奖励数"></el-input>
+                <el-input v-model="week_reward.sign_day4.reward_num" class="input" placeholder="请输入第四次奖励数"></el-input>
+                <el-input v-model="week_reward.sign_day5.reward_num" class="input" placeholder="请输入第五次奖励数"></el-input>
+                <el-input v-model="week_reward.sign_day6.reward_num" class="input" placeholder="请输入第六次奖励数"></el-input>
+                <el-input v-model="week_reward.sign_day7.reward_num" class="input" placeholder="请输入第七次奖励数"></el-input>
+                <p style="margin: 20px 0;">
+                    <input type="checkbox" style="vertical-align: middle;width: 15px;height: 15px;" id="rememberMe"><span style="margin-left: 10px;font-size: 14px;">断签后是否重新以首次计算(勾选表示重新计算)</span>
+                </p>
             </div>
             <div style="text-align: center;">
-                <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;">确认</el-button>
+                <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;" @click="saveSignReward()">确认</el-button>
             </div>
         </div>
     </div>
@@ -53,134 +35,100 @@
         components: {},
         data() {
             return {
-                dateValue1: '',
-                dateValue2: '',
-                goodsDataList: []
+                input:'',
+                once_acer:'',
+                week_reward:{
+                    sign_day1:{
+                        reward_num:''
+                    },
+                    sign_day2:{
+                        reward_num:''
+                    },
+                    sign_day3:{
+                        reward_num:''
+                    },
+                    sign_day4:{
+                        reward_num:''
+                    },
+                    sign_day5:{
+                        reward_num:''
+                    },
+                    sign_day6:{
+                        reward_num:''
+                    },
+                    sign_day7:{
+                        reward_num:''
+                    }
+                },
+                is_stop:'',
             }
         },
         methods: {
-//            //      获取商品类目数据
-//            getGoodsList: function () {
-//                this.$ajax({
-//                    method: 'POST',
-//                    url: '/api/Goodsdata/productTypeData'
-//                }).then((res) => {
-//                    if (res.data.code == '200') {
-//                        this.goodsDataList = res.data.data.more_data
-//                        console.log(this.goodsDataList)
-////          console.log(imgList)
-//                    }
-//                }, (err) => {
-//                    console.log(err)
-//                })
-//            },
+            //      获取签到奖励初始设置
+//            is_stop  1:重记    2：不重记
+            getSignReward: function () {
+                this.$ajax.get('/api/Sign/onceSignReward').then((res) => {
+                    if (res.data.code == '200') {
+                        this.once_acer = res.data.data.once_acer
+                        this.week_reward=res.data.data.week_reward
+                        this.is_stop=res.data.data.is_stop
+
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+//            保存设置
+            saveSignReward: function () {
+                var data=[
+                    {id:this.week_reward.sign_day1.id,reward_num:this.week_reward.sign_day1.reward_num},
+                    {id:this.week_reward.sign_day2.id,reward_num:this.week_reward.sign_day2.reward_num},
+                    {id:this.week_reward.sign_day3.id,reward_num:this.week_reward.sign_day3.reward_num},
+                    {id:this.week_reward.sign_day4.id,reward_num:this.week_reward.sign_day4.reward_num},
+                    {id:this.week_reward.sign_day5.id,reward_num:this.week_reward.sign_day5.reward_num},
+                    {id:this.week_reward.sign_day6.id,reward_num:this.week_reward.sign_day6.reward_num},
+                    {id:this.week_reward.sign_day7.id,reward_num:this.week_reward.sign_day7.reward_num},
+                ]
+                if (document.getElementById("rememberMe").checked) {
+                    this.is_stop = '1'
+                } else {
+                    this.is_stop = '2'
+                }
+                this.$ajax.post('/api/Sign/onceSignReward',{once_acer:this.once_acer,week_reward:data,is_stop:this.is_stop}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
         },
         mounted() {
-            var Broken1 = echarts.init(document.getElementById('broken1'));
-            Broken1.setOption({
-                backgroundColor: '#fff',
-                tooltip: {
-                    trigger: 'axis'
-                },
-                calculable: true,
-                xAxis: [
-                    {
-                        type: 'category',
-                        boundaryGap: false,
-                        data: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-                        axisLine:{
-                            //横坐标横线样式
-                            lineStyle:{
-                                type:'dotted',
-                                color:'#bac7cd'
-                            }
-                        },
-                        axisLabel:{
-                            textStyle:{
-                                color:'#bac7cd' //横坐标字体颜色
-                            }
-                        }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        axisLine:{
-                            //横坐标横线样式
-                            lineStyle:{
-                                type:'dotted',
-                                color:'#bac7cd'
-                            }
-                        },
-                        axisLabel:{
-                            formatter: '{value}',
-                            textStyle:{
-                                color:'#bac7cd' //横坐标字体颜色
-                            }
-                        }
-                    }
-                ],
-                series: [
-                    {
-                        smooth:false,
-                        name: '收入',
-                        type: 'line',
-                        data: ['111','11', '12', '13', '14', '15','20'],
-//                        markPoint: {
-//                            data: [
-//                                { type: 'max', name: '最大值' },
-//                                { type: 'min', name: '最小值' }
-//                            ]
-//                        },
-//                        markLine: {
-//                            data: [
-//                                { type: 'average', name: '平均值' }
-//                            ]
-//                        },
-                        itemStyle:{
-                            normal:{
-                                color:'#55ce63',//图标颜色
-                                lineStyle:{
-                                    color:'#55ce63'//连线颜色
-                                }
-                            }
-                        }
-                    }
-                ]
-            });
-            // 自适应
-            window.onresize = function () {
-                Broken1.resize();
-            }
         },
         created: function () {
-
+             this.getSignReward()
         }
     }
 </script>
 
 <style scoped>
-    .CTwoLeft {
+    .ms-doc{
         width: 100%;
-        height: 400px;
-        background-color: white;
-        overflow: hidden;
-    }
-
-    .ms-doc, .sort {
-        width: 100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        max-width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;
         color: #54667a;
     }
-
-    .sort {
-        margin: 20px 0 54px;
-    }
-
     .m_title {
         font-size: 20px;
         color: #54667a;
@@ -191,27 +139,7 @@
     .ms-doc_main {
         padding: 20px;
     }
-
-    .ms-doc_chart {
-        border: 1px solid #e9f1f3;
-        margin: 16px 0;
-    }
-
-    .title {
-        font-size: 18px;
-        border-left: 4px solid #abbbc2;
-        padding-left: 20px;
-        margin-left: 24px;
-        margin-top: 22px;
-        line-height: 18px;
-    }
-    .date_select{
-        position: relative;
-    }
-    .pie_title{
-        text-align: center;font-size: 18px;margin-bottom: 30px;
-    }
-    .pie_title i{
-        margin-right: 20px; display: inline-block;width: 10px;height: 10px;border-radius: 50%;
+    .input{
+        width: 200px;margin:20px 40px 0 0;
     }
 </style>

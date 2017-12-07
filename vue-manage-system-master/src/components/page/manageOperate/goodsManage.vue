@@ -65,7 +65,7 @@
                     </el-table-column>
                     <el-table-column
                         label="商品" height="95">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <img :src="scope.row.pict_url" alt="" style="width:76px;height:76px;margin-top: 5px;">
                         </template>
                     </el-table-column>

@@ -8,6 +8,7 @@
         <div class="ms-doc">
             <p class="m_title">搜索关键词统计</p>
             <div class="ms-doc_main">
+                <div class="date_select">
                 <el-date-picker
                     v-model="start"
                     type="date"
@@ -20,13 +21,15 @@
                     placeholder="结束日期"
                     :picker-options="pickerOptions1" @change="changeDate3" value-format="yyyy-MM-dd">
                 </el-date-picker>
+                    <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                </div>
                 <div class="ms-doc_chart" style="font-size: 0;">
                     <p class="title">一周搜索关键词TOP10</p>
                     <div class="TwoTab" id="main">
 
                     </div>
                     <div style="width: 30%;display: inline-block;">
-                        <p style="font-size: 18px;color: #54667a;border-bottom: 1px solid #e9f1f3;display: block;width: 110px;margin: 0 auto 10px;padding-bottom: 10px;">
+                        <p style="text-align:center;font-size: 18px;color: #54667a;border-bottom: 1px solid #e9f1f3;display: block;width: 110px;margin: 0 auto 10px;padding-bottom: 10px;">
                             详细数据</p>
                         <el-table
                             :data="right"
@@ -34,8 +37,8 @@
                             style="width: 250px;margin: 0 auto 30px;" height="400">
                             <el-table-column
                                 label="搜索词" show-overflow-tooltip style="width: 200px;">
-                                <template scope="scope">
-                                    <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index + 1}}</span>
+                                <template slot-scope="scope">
+                                    <span style="margin-right: 5px;">{{scope.$index + 1}}.</span>
                                     <span>{{scope.row.keywords}}</span>
                                 </template>
                             </el-table-column>
@@ -51,11 +54,14 @@
         <div class="sort">
             <p class="m_title">搜索调用同价</p>
             <div class="ms-doc_main">
+                <div class="date_select">
                 <el-date-picker
                     v-model="dateValue2"
                     type="month"
                     placeholder="选择月" @change="changeDate1" value-format="yyyy-MM-dd">
                 </el-date-picker>
+                    <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                </div>
                 <div class="ms-doc_chart" style="width: 100%;font-size: 0;">
                     <p class="title">月搜索调用统计分布</p>
                     <div id="roundOne">
@@ -124,9 +130,34 @@
                             title: {text: ''},
                             tooltip: {},
                             xAxis: {
-                                data: this.keywords
+                                data: this.keywords,
+                                axisLine:{
+                                    //横坐标横线样式
+                                    lineStyle:{
+                                        type:'dotted',
+                                        color:'#bac7cd'
+                                    }
+                                },
+                                axisLabel:{
+                                    textStyle:{
+                                        color:'#bac7cd' //横坐标字体颜色
+                                    }
+                                }
                             },
-                            yAxis: {},
+                            yAxis: {
+                                axisLine:{
+                                    //横坐标横线样式
+                                    lineStyle:{
+                                        type:'dotted',
+                                        color:'#bac7cd'
+                                    }
+                                },
+                                axisLabel:{
+                                    textStyle:{
+                                        color:'#bac7cd' //横坐标字体颜色
+                                    }
+                                }
+                            },
                             series: [{
                                 name: '',
                                 type: 'bar',
@@ -145,8 +176,8 @@
                 })
             },
             //      获取一个月数据
-            getGoodsList2: function (e) {
-                this.$ajax.post('/api/Searchdata/monthData',{month:e}).then((res) => {
+            getGoodsList2: function () {
+                this.$ajax.post('/api/Searchdata/monthData',{month:this.dateValue2}).then((res) => {
                     if (res.data.code == '200') {
                         this.list = res.data.data.month_list
                         this.total_count=res.data.data.total_count
@@ -155,6 +186,7 @@
                             data.push({value:this.list[i].count,name:this.list[i].week});
                         }
                         this.data=data
+                        console.log(this.data)
                         var RoundOne = echarts.init(document.getElementById('roundOne'));
                         RoundOne.setOption({
                             tooltip: {
@@ -206,8 +238,8 @@
                 })
             },
             changeDate1(e){
-                this.getGoodsList2(e)
-                console.log(e)
+                this.dateValue2=e
+                this.getGoodsList2()
             },
             changeDate2(e){
                 this.start=e
@@ -232,7 +264,7 @@
             var month=date.getMonth()+1;
             this.dateValue2=year+'-'+month
             this.getGoodsList()
-            this.getGoodsList2(this.dateValue2)
+            this.getGoodsList2()
         }
     }
 </script>

@@ -46,147 +46,148 @@
     export default {
         data() {
             return {
-                items: [
-                    {
-                       icon:'el-icon-date',
-                        index: 'home',
-                        title: '首页'
-                    },
-                    {
-                        icon: 'el-icon-date',
-                        index: '2',
-                        title: '数据分析',
-                        subs: [
-                            {
-                                index: 'goodsData',
-                                title: '商品数据'
-                            },
-                            {
-                                index: 'userData',
-                                title: '用户数据'
-                            },
-                            {
-                                index: 'shareListData',
-                                title: '晒单数据'
-                            },
-                            {
-                                index: 'signData',
-                                title: '签到数据'
-                            },
-                            {
-                                index: 'searchData',
-                                title: '搜索数据'
-                            },
-                            {
-                                index: 'vuetable',
-                                title: '分销数据'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-date',
-                        index: '3',
-                        title: '管理操作',
-                        subs: [
-                            {
-                                index: 'goodsManage',
-                                title: '商品管理 '
-                            },
-                            {
-                                index: 'orderManage',
-                                title: '订单管理'
-                            },
-                            {
-                                index: 'shareListManage',
-                                title: '晒单管理'
-                            },
-                            {
-                                index: 'subjectManage',
-                                title: '专场页管理'
-                            },
-                            {
-                                index: 'indexManage',
-                                title: '首页管理'
-                            },
-                            {
-                                index: 'exchangeManage',
-                                title: '兑换商城管理'
-                            },
-                            {
-                                index: 'signManage',
-                                title: '签到管理'
-                            },
-                            {
-                                index: 'integralManage',
-                                title: '积分管理'
-                            },
-                            {
-                                index: 'fansWelfareManage',
-                                title: '粉丝福利管理'
-                            },
-                            {
-                                index: 'superLineManage',
-                                title: '超值线报管理'
-                            },
-                            {
-                                index: 'upload',
-                                title: '分销管理'
-                            },
-                            {
-                                index: 'upload',
-                                title: '推广管理'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-star-on',
-                        index: 'basecharts',
-                        title: '插件功能'
-                    },
-                    {
-                        icon: 'el-icon-menu',
-                        index: '4',
-                        title: '权限控制',
-                        subs: [
-                            {
-                                index: 'accessManage',
-                                title: '权限管理'
-                            },
-                            {
-                                index: 'userManage',
-                                title: '用户组管理'
-                            },
-                            {
-                                index: 'manager',
-                                title: '管理员列表'
-                            }
-                        ]
-                    },{
-                        icon: 'el-icon-menu',
-                        index: '5',
-                        title: '菜单管理',
-                        subs: [
-                            {
-                                index: 'menuSort',
-                                title: '菜单排序'
-                            },
-                            {
-                                index: 'menuSetting',
-                                title: '菜单设置'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-upload2',
-                        index: 'releaseNotes',
-                        title: '发布消息'
-                    }
-                ],
+//                items: [
+//                    {
+//                       icon:'el-icon-date',
+//                        index: 'home',
+//                        title: '首页'
+//                    },
+//                    {
+//                        icon: 'el-icon-date',
+//                        index: '2',
+//                        title: '数据分析',
+//                        subs: [
+//                            {
+//                                index: 'goodsData',
+//                                title: '商品数据'
+//                            },
+//                            {
+//                                index: 'userData',
+//                                title: '用户数据'
+//                            },
+//                            {
+//                                index: 'shareListData',
+//                                title: '晒单数据'
+//                            },
+//                            {
+//                                index: 'signData',
+//                                title: '签到数据'
+//                            },
+//                            {
+//                                index: 'searchData',
+//                                title: '搜索数据'
+//                            },
+//                            {
+//                                index: 'vuetable',
+//                                title: '分销数据'
+//                            }
+//                        ]
+//                    },
+//                    {
+//                        icon: 'el-icon-date',
+//                        index: '3',
+//                        title: '管理操作',
+//                        subs: [
+//                            {
+//                                index: 'goodsManage',
+//                                title: '商品管理 '
+//                            },
+//                            {
+//                                index: 'orderManage',
+//                                title: '订单管理'
+//                            },
+//                            {
+//                                index: 'shareListManage',
+//                                title: '晒单管理'
+//                            },
+//                            {
+//                                index: 'subjectManage',
+//                                title: '专场页管理'
+//                            },
+//                            {
+//                                index: 'indexManage',
+//                                title: '首页管理'
+//                            },
+//                            {
+//                                index: 'exchangeManage',
+//                                title: '兑换商城管理'
+//                            },
+//                            {
+//                                index: 'signManage',
+//                                title: '签到管理'
+//                            },
+//                            {
+//                                index: 'integralManage',
+//                                title: '积分管理'
+//                            },
+//                            {
+//                                index: 'fansWelfareManage',
+//                                title: '粉丝福利管理'
+//                            },
+//                            {
+//                                index: 'superLineManage',
+//                                title: '超值线报管理'
+//                            },
+//                            {
+//                                index: 'upload',
+//                                title: '分销管理'
+//                            },
+//                            {
+//                                index: 'upload',
+//                                title: '推广管理'
+//                            }
+//                        ]
+//                    },
+//                    {
+//                        icon: 'el-icon-star-on',
+//                        index: 'basecharts',
+//                        title: '插件功能'
+//                    },
+//                    {
+//                        icon: 'el-icon-menu',
+//                        index: '4',
+//                        title: '权限控制',
+//                        subs: [
+//                            {
+//                                index: 'accessManage',
+//                                title: '权限管理'
+//                            },
+//                            {
+//                                index: 'userManage',
+//                                title: '用户组管理'
+//                            },
+//                            {
+//                                index: 'manager',
+//                                title: '管理员列表'
+//                            }
+//                        ]
+//                    },{
+//                        icon: 'el-icon-menu',
+//                        index: '5',
+//                        title: '菜单管理',
+//                        subs: [
+//                            {
+//                                index: 'menuSort',
+//                                title: '菜单排序'
+//                            },
+//                            {
+//                                index: 'menuSetting',
+//                                title: '菜单设置'
+//                            }
+//                        ]
+//                    },
+//                    {
+//                        icon: 'el-icon-upload2',
+//                        index: 'releaseNotes',
+//                        title: '发布消息'
+//                    }
+//                ],
                 selected:false,
+                items:[],
             }
         },
         methods:{
-            getSiderbarList(){
+            getSiderbarList:function(){
                 this.$ajax.post('/api/Menu/index').then((res)=>{
                     if(res.data.code=='200'){
                         this.items = res.data.data.menu
@@ -200,16 +201,6 @@
 
                 })
             },
-//            handleOpen(key, keyPath) {
-//                console.log(key, keyPath);
-//            },
-//            handleClose(key, keyPath) {
-//                console.log(key, keyPath);
-//            },
-//            handleSelect(key, keyPath) {
-//                console.log(key, keyPath);
-//                console.log('111')
-//            }
         },
         computed:{
             onRoutes(){

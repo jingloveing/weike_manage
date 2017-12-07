@@ -2,13 +2,13 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item style="font-size: 24px;margin-left: 20px;">管理员列表</el-breadcrumb-item>
+                <el-breadcrumb-item style="font-size: 24px;margin-left: 20px;">发送通知</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="ms-doc">
-            <el-button type="primary" round
-                       style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 14px;">添加管理员
-            </el-button>
+            <!--<el-button type="primary" round-->
+                       <!--style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 14px;">添加管理员-->
+            <!--</el-button>-->
             <div class="ms-doc_main">
                <p>通知标题</p>
                 <el-input v-model="title" style="width: 500px;margin: 20px 0;"></el-input>
@@ -17,7 +17,7 @@
                     type="textarea"
                     :autosize="{ minRows: 12, maxRows: 12}"
                     placeholder="请输入内容"
-                    v-model="content" style="width: 500px;margin: 20px 0;">
+                    v-model="message" style="width: 500px;margin: 20px 0;">
                 </el-input>
                 <p>群发对象</p>
                 <el-select v-model="value" placeholder="请选择"  style="width: 160px;margin: 20px 0;" >
@@ -30,7 +30,7 @@
                 </el-select>
                 <div style="text-align: center;">
                     <el-button type="primary" round
-                               style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;">确认
+                               style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;" @click="save()">确认
                     </el-button>
                 </div>
             </div>
@@ -44,7 +44,7 @@
         data() {
             return {
               title:'',
-                content:'',
+                message:'',
                 options: [{
                     value: '选项1',
                     label: '全部'
@@ -54,21 +54,26 @@
             }
         },
         methods: {
-//            //      获取商品类目数据
-//            getGoodsList: function () {
-//                this.$ajax({
-//                    method: 'POST',
-//                    url: '/api/Goodsdata/productTypeData'
-//                }).then((res) => {
-//                    if (res.data.code == '200') {
-//                        this.goodsDataList = res.data.data.more_data
-//                        console.log(this.goodsDataList)
-////          console.log(imgList)
-//                    }
-//                }, (err) => {
-//                    console.log(err)
-//                })
-//            },
+            //      发送消息保存
+           save: function () {
+                this.$ajax.post('/api/Message/massMessage',{title:this.title,msg:this.message}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.title=''
+                        this.message=''
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
 
         },
         mounted() {

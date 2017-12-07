@@ -49,7 +49,7 @@
                     </el-table-column>
                     <el-table-column
                         label="晒单截图" height="95">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <img :src="scope.row.product_image" alt="" style="width:76px;height:76px;margin-top: 5px;">
                         </template>
                     </el-table-column>
@@ -298,21 +298,7 @@
             }
         },
         methods: {
-//            //      获取商品类目数据
-//            getGoodsList: function () {
-//                this.$ajax({
-//                    method: 'POST',
-//                    url: '/api/Goodsdata/productTypeData'
-//                }).then((res) => {
-//                    if (res.data.code == '200') {
-//                        this.goodsDataList = res.data.data.more_data
-//                        console.log(this.goodsDataList)
-////          console.log(imgList)
-//                    }
-//                }, (err) => {
-//                    console.log(err)
-//                })
-//            },
+
             handleSelectionChange(val) {
                 this.multipleSelection = val;
             },

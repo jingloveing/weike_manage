@@ -20,7 +20,7 @@
                     </el-table-column>
                     <el-table-column
                         label="用户组" show-overflow-tooltip>
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <span v-for="title in scope.row.group">{{title}}</span>
                         </template>
                     </el-table-column>
@@ -34,7 +34,7 @@
                     </el-table-column>
                     <el-table-column
                         label="操作"  width="200">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <!--<a href="" class="pro">修改权限或密码</a>-->
                             <el-button @click="handleClick(scope.row.id)" type="text" size="small" class="pro">修改权限或密码</el-button>
                         </template>

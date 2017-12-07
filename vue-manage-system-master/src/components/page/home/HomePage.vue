@@ -44,7 +44,7 @@
                         style="width: 100%">
                         <el-table-column
                             label="商品">
-                            <template scope="scope">
+                            <template slot-scope="scope">
                                 <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index+1}}</span>
                                 <img :src="scope.row.pict_url" width="36" height="36" style="vertical-align: middle;"/>
                             </template>
@@ -69,7 +69,7 @@
                         <el-table-column
                             prop="date"
                             label="头像">
-                            <template scope="scope">
+                            <template slot-scope="scope">
                                 <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index+1}}</span>
                                 <img :src="scope.row.wechat_head_image" width="36" height="36" style="vertical-align: middle;"/>
                             </template>
@@ -94,7 +94,7 @@
                         <el-table-column
                             label="关键词" show-overflow-tooltip>
                             <!--<span style="margin-right: 5px;">1</span>-->
-                            <template scope="scope">
+                            <template slot-scope="scope">
                                 <span style="vertical-align: middle;margin-right: 5px;">{{scope.$index+1}}</span>
                                 <span>{{scope.row.keywords}}</span>
                             </template>

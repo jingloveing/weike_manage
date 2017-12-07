@@ -20,7 +20,7 @@
                     </el-table-column>
                     <el-table-column
                         label="操作">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button @click="handleClick(scope.row.id,scope.row.title)" type="text" size="small"
                                        class="pro">修改
                             </el-button>
@@ -59,13 +59,21 @@
                 <ul class="model_ul">
                     <li v-for="item in allotRule">
                         <div class="model_ul_left">
-                                      {{item.title}}
+                                      <!--{{item.title}}-->
+                            <el-checkbox-group v-model="have_rule" style="display: inline-block;">
+                                <el-checkbox :label="item.id" :key="item.id">{{item.title}}
+                                </el-checkbox>
+                            </el-checkbox-group>
                         </div>
                         <div class="model_ul_right">
                             <ul style="padding: 5px;border: 1px solid #e9f1f3;margin: 10px 10px;" v-for="list in item._data">
                                 <li style="display: inline-block;font-size: 0px;">
                                    <div class="model_ul_left" style="border-right: 1px solid #e9f1f3;">
-                                           {{list.title}}
+                                           <!--{{list.title}}-->
+                                       <el-checkbox-group v-model="have_rule" style="display: inline-block;">
+                                           <el-checkbox :label="list.id" :key="list.id">{{list.title}}
+                                           </el-checkbox>
+                                       </el-checkbox-group>
                                    </div>
                                     <div class="model_ul_right">
                                         <el-checkbox-group v-model="have_rule" style="display: inline-block;">
@@ -104,7 +112,7 @@
                     </el-table-column>
                     <el-table-column
                         label="操作">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button @click="toAdd(scope.row.id)" type="text" size="small"
                                        class="pro">添加
                             </el-button>
