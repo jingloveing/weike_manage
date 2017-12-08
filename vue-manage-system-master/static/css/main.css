@@ -150,3 +150,7 @@ a{text-decoration: none}
 .el-table th>.cell {
     text-align: center;
 }
+.el-table .cell, .el-table th>div {
+    padding-left: 10px!important;
+    padding-right: 10px!important;
+}

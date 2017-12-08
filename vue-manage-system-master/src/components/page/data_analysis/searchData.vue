@@ -68,7 +68,7 @@
                     </div>
                     <div style="width: 30%;float: right;margin: 50px 0;">
                         <ul class="pie_des">
-                            <li><i style="background-color:#009efb; "></i>第一周</li>
+                            <li><i style="background-color:#009efb;"></i>第一周</li>
                             <li><i style="background-color: #ff5b6b;"></i>第二周</li>
                             <li><i style="background-color: #ffa55c;"></i>第三周</li>
                             <li><i style="background-color: #fff45c;"></i>第四周</li>
@@ -140,7 +140,7 @@
                                 },
                                 axisLabel:{
                                     textStyle:{
-                                        color:'#bac7cd' //横坐标字体颜色
+                                        color:'#bac7cd',//横坐标字体颜色
                                     }
                                 }
                             },

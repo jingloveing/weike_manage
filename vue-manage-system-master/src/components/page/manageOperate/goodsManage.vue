@@ -9,51 +9,51 @@
             <p class="m_title">商品分类管理</p>
             <div class="ms-doc_main">
                 <div>
-                    <el-select v-model="value1" placeholder="请选择"  style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="data.condition1" placeholder="请选择"  style="width: 150px;margin-right: 20px;" >
                         <el-option
-                            v-for="item in options1"
+                            v-for="item in searchList.condition1"
                             :key="item.value"
-                            :label="item.label"
+                            :label="item.key"
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="value2" placeholder="状态" style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="data.condition2" placeholder="状态" style="width: 150px;margin-right: 20px;" >
                         <el-option
-                            v-for="item in options2"
+                            v-for="item in searchList.condition2"
                             :key="item.value"
-                            :label="item.label"
+                            :label="item.key"
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="value3" placeholder="佣金定位" style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="data.condition3" placeholder="佣金定位" style="width: 150px;margin-right: 20px;" >
                         <el-option
-                            v-for="item in options3"
+                            v-for="item in searchList.condition3"
                             :key="item.value"
-                            :label="item.label"
+                            :label="item.key"
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="value4" placeholder="劵额" style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="data.condition4" placeholder="劵额" style="width: 150px;margin-right: 20px;" >
                         <el-option
-                            v-for="item in options4"
+                            v-for="item in searchList.condition4"
                             :key="item.value"
-                            :label="item.label"
+                            :label="item.key"
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="value5" placeholder="专场" style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="data.condition5" placeholder="专场" style="width: 150px;margin-right: 20px;" >
                         <el-option
-                            v-for="item in options5"
+                            v-for="item in searchList.condition5"
                             :key="item.value"
-                            :label="item.label"
+                            :label="item.key"
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;">筛选</el-button>
+                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;" @click="getGoodsList()">筛选</el-button>
                 </div>
                 <el-table
                     ref="multipleTable"
-                    :data="tableData3"
+                    :data="goodsList"
                     tooltip-effect="dark"
                     style="width: 100%;text-align: center;margin: 20px 0;"
                     border
@@ -71,7 +71,7 @@
                     </el-table-column>
                     <el-table-column
                         label="标题"
-                        width="200"
+                        width="100"
                         show-overflow-tooltip>
                         <template slot-scope="scope">{{ scope.row.title }}</template>
                     </el-table-column>
@@ -92,6 +92,7 @@
                     <el-table-column
                         prop="discount"
                         label="折扣"
+                        width="70"
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
@@ -111,23 +112,23 @@
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
-                    <el-select v-model="value1" placeholder="选择分类"  style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="goods_id" placeholder="选择分类"  style="width: 160px;margin-right: 20px;" >
                         <el-option
-                            v-for="item in options1"
+                            v-for="item in searchList.condition1"
                             :key="item.value"
-                            :label="item.label"
+                            :label="item.key"
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="value2" placeholder="选择专场" style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="cate_id" placeholder="选择专场" style="width: 160px;margin-right: 20px;" >
                         <el-option
-                            v-for="item in options2"
+                            v-for="item in searchList.condition5"
                             :key="item.value"
-                            :label="item.label"
+                            :label="item.key"
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;">确认</el-button>
+                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;" @click="save()">确认</el-button>
                 </div>
             </div>
         </div>
@@ -140,261 +141,68 @@
         components: {},
         data() {
             return {
-                goodsDataList: [],
-                options1: [{
-                    value: '选项1',
-                    label: '全部商品'
-                }, {
-                    value: '选项2',
-                    label: '最新'
-                }, {
-                    value: '选项3',
-                    label: '即将领完'
-                }
-                ],
-                value1:'全部商品',
-            options2: [{
-                value: '选项1',
-                label: '展示'
-            }, {
-                value: '选项3',
-                label: '即将过期'
-            }
-            ],
-                value2:'',
-                options3: [{
-                    value: '选项1',
-                    label: '30%以上'
-                }, {
-                    value: '选项2',
-                    label: '10%-30%'
-                },{
-                    value: '选项3',
-                    label: '10%以下'
-                }
-                ],
-                value3:'',
-                options4: [{
-                    value: '选项1',
-                    label: '1-10元'
-                }, {
-                    value: '选项2',
-                    label: '10-20元'
-                },{
-                    value: '选项3',
-                    label: '20元以上'
-                }
-                ],
-                value4:'',
-                options5: [{
-                    value: '选项1',
-                    label: '粉丝福利'
-                }, {
-                    value: '选项2',
-                    label: '9.9专场'
-                },{
-                    value: '选项3',
-                    label: '19.9专场'
-                },{
-                    value: '选项3',
-                    label: '聚折扣'
-                },{
-                    value: '选项3',
-                    label: '应季必备'
-                }
-                ],
-                value5:'',
-                tableData3: [
-                    {
-                    pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                    title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                    brokerage:'10',
-//                    原价
-                    reserve_price:'200',
-                    zk_final_price:'5',
-//                    折扣
-                    discount:'0.9',
-                    coupon_number:'100',
-//                    销量
-                    volume:'100',
-                    stock:'100',
+                searchList:{},
+                goodsList:[],
+                data:{
+                    condition1:'',
+                    condition2:'',
+                    condition3:'',
+                    condition4:'',
+                    condition5:'',
                 },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                    {
-                        pict_url: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        title: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        brokerage:'10',
-//                    原价
-                        reserve_price:'200',
-                        zk_final_price:'5',
-//                    折扣
-                        discount:'0.9',
-                        coupon_number:'100',
-//                    销量
-                        volume:'100',
-                        stock:'100',
-                    },
-                ],
-                multipleSelection: []
+                cate_id:'',
+                goods_id:[],
             }
         },
         methods: {
-//            //      获取商品类目数据
-//            getGoodsList: function () {
-//                this.$ajax({
-//                    method: 'POST',
-//                    url: '/api/Goodsdata/productTypeData'
-//                }).then((res) => {
-//                    if (res.data.code == '200') {
-//                        this.goodsDataList = res.data.data.more_data
-//                        console.log(this.goodsDataList)
-////          console.log(imgList)
-//                    }
-//                }, (err) => {
-//                    console.log(err)
-//                })
-//            },
+            //      获取搜索条件列表
+            getSearchList: function () {
+                this.$ajax.post('/api/goods/goodsSearchList',).then((res) => {
+                    if (res.data.code == '200') {
+
+                        this.searchList = res.data.data
+
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      获取商品列表
+            getGoodsList: function () {
+                this.$ajax.post('/api/Goods/goodslist',this.data).then((res) => {
+                    if (res.data.code == '200') {
+                        this.goodsList = res.data.data
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+//            批量处理商品分类
+            save: function () {
+                this.$ajax.post('/api/goods/goodsCategory',{goods_id:this.goods_id,cate_id:this.cate_id}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getGoodsList()
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                var data = []
+                for (var i = 0; i < val.length; i++) {
+                    data.push(val[i].id);
+                }
+                this.goods_id = data;
+                console.log(this.goods_id)
             }
         },
         mounted() {
@@ -402,7 +210,8 @@
 
         },
         created: function () {
-
+              this.getSearchList()
+            this.getGoodsList()
         }
     }
 </script>
@@ -410,8 +219,8 @@
 <style scoped>
     .ms-doc {
         width: 100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        max-width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;
