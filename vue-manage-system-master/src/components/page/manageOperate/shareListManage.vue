@@ -11,13 +11,18 @@
                 <div>
                     <span>下单时间：</span>
                     <el-date-picker
-                        v-model="dateValue1"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        v-model="start"
+                        type="date"
+                        placeholder="开始日期"
+                        :picker-options="pickerOptions0" @change="changeDate1" value-format="yyyy-MM-dd">
                     </el-date-picker>
-                    <el-select v-model="value1" placeholder="晒单状态"  style="width: 160px;margin-right: 20px;" >
+                    <el-date-picker
+                        v-model="end"
+                        type="date"
+                        placeholder="结束日期"
+                        :picker-options="pickerOptions1" @change="changeDate2" value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                    <el-select v-model="is_square" placeholder="晒单状态"  style="width: 160px;margin-right: 20px;" >
                         <el-option
                             v-for="item in options1"
                             :key="item.value"
@@ -25,7 +30,7 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="value2" placeholder="状态"  style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="status" placeholder="状态"  style="width: 160px;margin-right: 20px;" >
                         <el-option
                             v-for="item in options2"
                             :key="item.value"
@@ -37,7 +42,7 @@
                 </div>
                 <el-table
                     ref="multipleTable"
-                    :data="tableData3"
+                    :data="order_list"
                     tooltip-effect="dark"
                     style="width: 100%;text-align: center;margin: 20px 0;"
                     border
@@ -50,38 +55,36 @@
                     <el-table-column
                         label="晒单截图" height="95">
                         <template slot-scope="scope">
-                            <img :src="scope.row.product_image" alt="" style="width:76px;height:76px;margin-top: 5px;">
+                            <img :src="scope.row.evaluate_url" alt="" style="width:76px;height:76px;margin-top: 5px;">
                         </template>
                     </el-table-column>
                     <el-table-column
                         label="留言"
                         width="200"
                         show-overflow-tooltip>
-                        <template slot-scope="scope">{{ scope.row.product_name }}</template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="exchange_num"
-                        label="账号ID">
+                        <template slot-scope="scope">{{ scope.row.evaluate_detail }}</template>
                     </el-table-column>
                     <el-table-column
                         prop="wechat_nickname"
-                        label="兑换ID"
-                        show-overflow-tooltip>
+                        label="账号ID">
                     </el-table-column>
                     <el-table-column
-                        prop="exchange_time"
+                        prop="create_time"
                         label="时间"
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
-                        prop="info"
+                        prop="order_num"
                         label="订单号"
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
-                        prop="express_status"
+                        prop="examine_status"
                         label="晒单状态"
                         show-overflow-tooltip>
+                        <!--<template slot-scope="scope">-->
+                            <!--<span></span>-->
+                        <!--</template>-->
                     </el-table-column>
                     <el-table-column
                         prop="express_status"
@@ -115,7 +118,7 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;">确认</el-button>
+                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;" >确认</el-button>
                 </div>
             </div>
         </div>
@@ -124,7 +127,7 @@
             <div class="ms-doc_main">
                 <div>
                     <span style="display: inline-block;width: 200px;text-align: right;">用户晒单返元宝数值设定</span>
-                    <el-input v-model="input" placeholder="请输入数值" style="width: 400px;margin:0 20px;"></el-input>元宝/单
+                    <el-input v-model="acer" placeholder="请输入数值" style="width: 400px;margin:0 20px;"></el-input>元宝/单
                 </div>
                 <div style="margin: 30px 0;">
                     <span style="display: inline-block;width: 200px;text-align: right;float: left;">晒单规则说明</span>
@@ -132,11 +135,11 @@
                         type="textarea"
                         :rows="4"
                         placeholder="请输入内容"
-                        v-model="textarea" style="width: 400px;margin:0 23px;">
+                        v-model="brief" style="width: 400px;margin:0 23px;">
                     </el-input>
                 </div>
                 <div style="text-align: center;">
-                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">保存</el-button>
+                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;" @click="saveSet()">保存</el-button>
 
                 </div>
             </div>
@@ -164,56 +167,56 @@
         components: {},
         data() {
             return {
-                gridData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }],
+                start: '',
+                end: '',
+                orderList:[],
+                pickerOptions0: {
+                    disabledDate: (time) => {
+                        if (this.value2 != "") {
+                            return time.getTime() > Date.now() || time.getTime() > this.value2;
+                        } else {
+                            return time.getTime() > Date.now();
+                        }
+
+                    }
+                },
+                pickerOptions1: {
+                    disabledDate: (time) => {
+                        return time.getTime() < this.value1 || time.getTime() > Date.now();
+                    }
+                },
                 dialogTableVisible: false,
-                input:'',
-                goodsDataList: [],
-                textarea:'',
                 options1: [{
-                    value: '选项1',
+                    value: '',
                     label: '全部'
                 },
                     {
-                        value: '选项2',
+                        value: '1',
                         label: '广场中'
                     },{
-                        value: '选项3',
+                        value: '2',
                         label: '未展示'
                     }
                 ],
-                value1:'',
-                options2: [{
-                    value: '选项1',
+                is_square:'',
+                options2: [
+                    {
+                    value: '',
                     label: '全部'
                 },{
-                    value: '选项3',
+                    value: '1',
                     label: '已奖励'
                 }, {
-                    value: '选项3',
+                    value: '2',
                     label: '未审核'
                 }, {
-                    value: '选项3',
+                    value: '3',
                     label: '未通过'
                 }
                 ],
-                value2:'',
-                options3: [{
+                 status:'',
+                options3: [
+                    {
                     value: '选项1',
                     label: '晒单状态处理'
                 }, {
@@ -294,13 +297,66 @@
                         express_status:'0.9',
                     }
                 ],
-                multipleSelection: []
+                share_id: [],
+                acer:'',
+                brief:'',
             }
         },
         methods: {
-
+            //      获取晒单审核列表
+            getOrderList: function () {
+                this.$ajax.post('/api/Shareorder/getOrderList',).then((res) => {
+                    if (res.data.code == '200') {
+                        this.orderList=res.data.data.order_list
+                        this.start = res.data.data.start
+                        this.end = res.data.data.end
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      获取默认晒单设置
+            getSet: function () {
+                this.$ajax.get('/api/Shareorder/setShareConfig',).then((res) => {
+                    if (res.data.code == '200') {
+                        this.acer=res.data.data.acer
+                        this.brief = res.data.data.brief
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //     修改晒单设置
+            saveSet: function () {
+                this.$ajax.post('/api/Shareorder/setShareConfig',{acer:this.acer,brief:this.brief}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getSet()
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            changeDate1(e) {
+                this.start = e
+            },
+            changeDate2(e) {
+                this.end = e
+            },
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                var data = []
+                for (var i = 0; i < val.length; i++) {
+                    data.push(val[i].order_id);
+                }
+                this.share_id = data;
             },
             toShow(){
                 this.dialogTableVisible = true
@@ -312,7 +368,8 @@
 
         },
         created: function () {
-
+          this.getSet()
+            this.getOrderList()
         }
     }
 </script>

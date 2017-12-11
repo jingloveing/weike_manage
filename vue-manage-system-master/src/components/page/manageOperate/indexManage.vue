@@ -12,47 +12,27 @@
                         <small>尺寸建议：750*260像素;类型要求：jpg.png,3M内大小</small>
                     </p>
                     <div class="left_main">
-                        <div style="margin-bottom: 20px;" v-for="(i,index) in item1" v-model="item1[index].value">
+                        <div style="margin-bottom: 20px;" v-for="(i,index) in bannerList">
                             <div style="position: relative;">
                                 <div class="upload_img">
-
+                                    <img :src="i.banner_image" alt="" style="width: 100%;height: 100%;">
                                 </div>
-                                <el-button type="primary"
-                                           style="background-color: #0f8edd;border-color: #0f8edd;position: absolute;bottom: 30px;">
-                                    上传
-                                </el-button>
+                                <input :id="'banner'+index" type="file"  style="display: none" @change="uploadImg($event,index)" multiple accept="image/*">
+                                <label :for="'banner'+index" class="upload_btn">上传</label>
                             </div>
                             <span style="font-size: 14px;">跳转链接：</span>
-                            <el-input placeholder="请输入链接" v-model="input" style="width: 300px;margin:0 20px;">
+                            <el-input placeholder="请输入链接" v-model="i.banner_url" style="width: 300px;margin:0 20px;">
                                 <template slot="prepend">http://</template>
                             </el-input>
                             <el-button type="danger" @click="del1(index)">删除组</el-button>
                         </div>
-                        <!--<div style="margin-bottom: 20px;">-->
-                            <!--<div style="position: relative;">-->
-                                <!--<div class="upload_img">-->
-
-                                <!--</div>-->
-                                <!--<el-button type="primary"-->
-                                           <!--style="background-color: #0f8edd;border-color: #0f8edd;position: absolute;bottom: 30px;">-->
-                                    <!--上传-->
-                                <!--</el-button>-->
-                            <!--</div>-->
-                            <!--<span style="font-size: 14px;">跳转链接：</span>-->
-                            <!--<el-input placeholder="请输入链接" v-model="input" style="width: 300px;margin:0 20px;">-->
-                                <!--<template slot="prepend">http://</template>-->
-                            <!--</el-input>-->
-                        <!--</div>-->
                         <el-button type="primary" round
                                    style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;" @click="add1()">增加组
                         </el-button>
                     </div>
                     <div style="text-align: center;padding: 20px 0;">
                         <el-button type="primary" round
-                                   style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">保存
-                        </el-button>
-                        <el-button type="primary" round
-                                   style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">预览
+                                   style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;" @click="saveBanner()">保存
                         </el-button>
                     </div>
                 </div>
@@ -89,8 +69,8 @@
                             <div class="part1">
                                 <div class="block">
                                     <el-carousel height="130px">
-                                        <el-carousel-item v-for="(item,index) in imgList" :key="index">
-                                            <img :src="item.url" alt="" width="100%" height="100%">
+                                        <el-carousel-item v-for="(item,index) in bannerList" :key="index">
+                                            <img :src="item.banner_image" alt="" width="100%" height="100%">
                                         </el-carousel-item>
                                     </el-carousel>
                                     <div style="width: 100%;height: 175px;">
@@ -211,14 +191,6 @@
                         value:''
                     }
                 ],
-                item1:[
-                    {
-                        value:''
-                    },
-                    {
-                        value:''
-                    }
-                ],
                 title:'',
                 checked:false,
                 dialogVisible1: false,
@@ -282,18 +254,60 @@
                     },
 
                 ],
-                name:''
+                name:'',
+                bannerList:[]
             }
         },
         methods:{
-//            上传图片 将路径赋给他前面的img图片
+            //      获取banner列表
+            getBannerList: function () {
+                this.$ajax.get('/api/Index/indexBanner').then((res) => {
+                    if (res.data.code == '200') {
+                        this.bannerList = res.data.data.banner_list
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      保存banner列表
+            saveBanner: function () {
+                this.$ajax.post('/api/Index/indexBanner',this.bannerList).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getBannerList()
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
 
 
+//            上传图片
+            uploadImg:function(e,index){
+                const formData = new FormData();
+                formData.append('images',e.target.files[0]);
+                let config ={
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+                console.log(index)
+                this.$ajax.post('api/Index/upload', formData, config).then((res)=>{
+                    if(res.data.code=='200'){
+                        this.bannerList[index].banner_image=res.data.data.image_url
+                        console.log(this.bannerList)
 
-
-
-
-
+                    }
+                },(err)=>{})
+            },
             handleClose(done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
@@ -321,8 +335,9 @@
                 })
             },
             add1(){
-                this.item1.push({
-                    value: null
+                this.bannerList.push({
+                    banner_image:'',
+                    banner_url:''
                 })
             },
             del(){
@@ -330,14 +345,14 @@
             },
             del1(index){
                 console.log(index)
-                this.item1.splice(index,1)
+                this.bannerList.splice(index,1)
             }
         },
         mounted() {
             this.name=this.items[0].text
         },
         created:function(){
-
+            this.getBannerList()
         }
     }
 </script>
@@ -404,7 +419,11 @@
         display: inline-block;
         margin: 25px 20px 25px 5px;
     }
-
+    .upload_btn{
+        font-size: 14px;background-color: #0f8edd;border-color: #0f8edd;position: absolute;bottom: 30px;display: inline-block;padding: 8px 15px;
+        color: white;
+        border-radius: 5px;
+    }
     /*手机模拟页面样式*/
     .phone {
         width: 430px;

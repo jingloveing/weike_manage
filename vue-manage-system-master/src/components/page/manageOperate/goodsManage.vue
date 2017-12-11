@@ -28,25 +28,25 @@
                     <el-select v-model="data.condition3" placeholder="佣金定位" style="width: 150px;margin-right: 20px;" >
                         <el-option
                             v-for="item in searchList.condition3"
-                            :key="item.value"
+                            :key="item.id"
                             :label="item.key"
-                            :value="item.value">
+                            :value="item.id">
                         </el-option>
                     </el-select>
                     <el-select v-model="data.condition4" placeholder="劵额" style="width: 150px;margin-right: 20px;" >
                         <el-option
                             v-for="item in searchList.condition4"
-                            :key="item.value"
+                            :key="item.id"
                             :label="item.key"
-                            :value="item.value">
+                            :value="item.id">
                         </el-option>
                     </el-select>
                     <el-select v-model="data.condition5" placeholder="专场" style="width: 150px;margin-right: 20px;" >
                         <el-option
                             v-for="item in searchList.condition5"
-                            :key="item.value"
-                            :label="item.key"
-                            :value="item.value">
+                            :key="item.id"
+                            :label="item.store_name"
+                            :value="item.id">
                         </el-option>
                     </el-select>
                     <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;" @click="getGoodsList()">筛选</el-button>
@@ -123,9 +123,9 @@
                     <el-select v-model="cate_id" placeholder="选择专场" style="width: 160px;margin-right: 20px;" >
                         <el-option
                             v-for="item in searchList.condition5"
-                            :key="item.value"
+                            :key="item.id"
                             :label="item.key"
-                            :value="item.value">
+                            :value="item.id">
                         </el-option>
                     </el-select>
                     <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;" @click="save()">确认</el-button>

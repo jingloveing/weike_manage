@@ -22,7 +22,7 @@
                         placeholder="结束日期"
                         :picker-options="pickerOptions1" @change="changeDate2" value-format="yyyy-MM-dd">
                     </el-date-picker>
-                    <el-select v-model="value1" placeholder="类型" style="width: 160px;margin-right: 20px;">
+                    <el-select v-model="goods_type" placeholder="类型" style="width: 160px;margin-right: 20px;">
                         <el-option
                             v-for="item in options1"
                             :key="item.value"
@@ -30,7 +30,7 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="value2" placeholder="状态" style="width: 160px;margin-right: 20px;">
+                    <el-select v-model="express_type" placeholder="状态" style="width: 160px;margin-right: 20px;">
                         <el-option
                             v-for="item in options2"
                             :key="item.value"
@@ -38,7 +38,7 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;">筛选</el-button>
+                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;" @click="getOrderList()">筛选</el-button>
                 </div>
                 <el-table
                     ref="multipleTable"
@@ -101,14 +101,16 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="操作" inline-template width="70">
-                        <template>
-                            <span style="display: inline-block;background-color: rgb(223, 236, 235); padding: 0 10px;">发货</span>
+                        label="操作" width="70">
+                        <template slot-scope="scope">
+                            <el-button @click="diliver(scope.row.order_id)" type="text" size="small"
+                                       class="pros" v-show="scope.row.express_status==1">发货
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
-                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;">一件发货
+                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;" @click="diliver(order_id)">一键发货
                     </el-button>
                 </div>
             </div>
@@ -119,13 +121,18 @@
                 <div>
                     <span>下单时间：</span>
                     <el-date-picker
-                        v-model="dateValue1"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        v-model="start2"
+                        type="date"
+                        placeholder="开始日期"
+                        :picker-options="pickerOptions0" @change="changeDate3" value-format="yyyy-MM-dd">
                     </el-date-picker>
-                    <el-select v-model="value3" placeholder="状态" style="width: 160px;margin-right: 20px;">
+                    <el-date-picker
+                        v-model="end2"
+                        type="date"
+                        placeholder="结束日期"
+                        :picker-options="pickerOptions1" @change="changeDate4" value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                    <el-select v-model="status" placeholder="状态" style="width: 160px;margin-right: 20px;">
                         <el-option
                             v-for="item in options3"
                             :key="item.value"
@@ -133,79 +140,85 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;">筛选</el-button>
+                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 20px;" @click=" getList()">筛选</el-button>
                 </div>
                 <el-table
                     ref="multipleTable"
-                    :data="tableData3"
+                    :data="list"
                     tooltip-effect="dark"
                     style="width: 100%;text-align: center;margin: 20px 0;"
                     border
                     height="480"
-                    @selection-change="handleSelectionChange">
+                    @selection-change="handleSelectionChange2">
                     <el-table-column
                         type="selection"
                         width="50" height="95">
                     </el-table-column>
                     <el-table-column
-                        label="商品" height="95">
+                        label="商品" height="95" width="120">
                         <template slot-scope="scope">
                             <img :src="scope.row.pict_url" alt="" style="width:76px;height:76px;margin-top: 5px;">
                         </template>
                     </el-table-column>
                     <el-table-column
                         label="标题"
-                        width="200"
+                        width="180"
                         show-overflow-tooltip>
                         <template slot-scope="scope">{{ scope.row.title }}</template>
                     </el-table-column>
                     <el-table-column
-                        prop="brokerage"
-                        label="账号ID">
+                        prop="wechat_nickname"
+                        label="账号ID" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
-                        prop="reserve_price"
+                        prop="order_num"
                         label="订单号"
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
-                        prop="zk_final_price"
-                        label="时间">
+                        prop="create_time"
+                        label="时间"  width="100">
                     </el-table-column>
                     <el-table-column
-                        prop="discount"
-                        label="状态"
-                        show-overflow-tooltip>
+                        prop="back_status"
+                        label="状态">
+                        <template slot-scope="scope">
+                            <span v-show="scope.row.back_status==1">已返</span>
+                            <span v-show="scope.row.back_status==2">未返</span>
+                            <span v-show="scope.row.back_status==3">未通过</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="discount"
+                        prop="back_acer"
                         label="返元宝值"
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
-                        label="操作" inline-template width="180">
-                        <template>
-                            <span style="display: inline-block;background-color: rgb(223, 236, 235); padding: 0 10px;">已奖励</span>
-                            <span style="display: inline-block;background-color: rgb(223, 236, 235); padding: 0 10px;">不通过</span>
+                        label="操作" width="180">
+                        <template slot-scope="scope">
+                            <el-button @click="orderOperate(scope.row.order_num,1)" type="text" size="small"
+                                                   class="pros" v-show="scope.row.back_status==2">奖励
+                        </el-button>
+                            <el-button @click="orderOperate(scope.row.order_num,2)" type="text" size="small"
+                                       class="pros" v-show="scope.row.back_status==2">不通过
+                            </el-button>
+                            <el-button type="text" size="small"
+                                       class="pros" v-show="scope.row.back_status==1">已奖励
+                            </el-button>
+                            <el-button type="text" size="small"
+                                       class="pros" v-show="scope.row.back_status==3">未通过
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
-                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;">一键奖励
+                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;" @click="orderOperate(order_num,1)">一键奖励
                     </el-button>
-                    <el-button type="danger" round style="background-color: #ff5b6b;border-color: #ff5b6b;">不通过
+                    <el-button type="danger" round style="background-color: #ff5b6b;border-color: #ff5b6b;" @click="orderOperate(order_num,2)">不通过
                     </el-button>
                 </div>
             </div>
         </div>
-        <!--<div class="ms-doc sort">-->
-        <!--<p class="m_title">返利订单设置</p>-->
-        <!--<div class="ms-doc_main">-->
-        <!--审核订单统一返利数值设定-->
-        <!--<el-input v-model="input" placeholder="请输入数值" style="width: 322px;margin-left: 20px;"></el-input>-->
-        <!--<el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">保存</el-button>-->
-        <!--</div>-->
-        <!--</div>-->
     </div>
 </template>
 
@@ -216,6 +229,8 @@
             return {
                 start: '',
                 end: '',
+                start2: '',
+                end2: '',
                 pickerOptions0: {
                     disabledDate: (time) => {
                         if (this.value2 != "") {
@@ -232,8 +247,6 @@
                     }
                 },
                 orderList: [],
-                input: '',
-                goodsDataList: [],
                 options1: [
                     {
                         value: '0',
@@ -247,7 +260,7 @@
                         label: '实物'
                     }
                 ],
-                value1: '0',
+                goods_type: '0',
                 options2: [
                     {
                         value: '0',
@@ -263,139 +276,117 @@
                         label: '已成交'
                     }
                 ],
-                value2: '0',
+                express_type: '0',
                 options3: [
                     {
-                        value: '选项1',
+                        value: '0',
                         label: '全部'
                     }, {
-                        value: '选项3',
-                        label: '已奖励'
+                        value: '1',
+                        label: '已返'
                     }, {
-                        value: '选项3',
-                        label: '未审核'
+                        value: '2',
+                        label: '未返'
                     }, {
-                        value: '选项3',
+                        value: '3',
                         label: '未通过'
                     }
                 ],
-                value3: '全部',
-                dateValue1: '',
-                tableData3: [
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        exchange_time: '2013-01-22',
-                        info: '5',
-                        express_status: '0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        exchange_time: '2013-01-22',
-                        info: '5',
-                        express_status: '0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        exchange_time: '2013-01-22',
-                        info: '5',
-                        express_status: '0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        exchange_time: '2013-01-22',
-                        info: '5',
-                        express_status: '0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        exchange_time: '2013-01-22',
-                        info: '5',
-                        express_status: '0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        exchange_time: '2013-01-22',
-                        info: '5',
-                        express_status: '0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        exchange_time: '2013-01-22',
-                        info: '5',
-                        express_status: '0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        info: '5',
-                        express_status: '0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        exchange_time: '2013-01-22',
-                        info: '5',
-                        express_status: '0.9',
-                    },
-                    {
-                        product_image: 'https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg',
-                        product_name: '王小虎哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈啊哈哈哈哈哈哈哈哈哈哈哈哈哈哈',
-                        exchange_num: '10',
-                        wechat_nickname: '200',
-                        exchange_time: '2013-01-22',
-                        info: '5',
-                        express_status: '0.9',
-                    }
-                ],
-                multipleSelection: []
+                status:'',
+                order_id:[],
+                list:[],
+                order_num:[]
             }
         },
         methods: {
             //      获取商品列表列表
             getOrderList: function () {
-                this.$ajax.post('/api/Order/orderList', {}).then((res) => {
+                this.$ajax.post('/api/Order/orderList', {start:this.start,end:this.end,goods_type:this.goods_type,express_type:this.express_type}).then((res) => {
                     if (res.data.code == '200') {
                         this.orderList = res.data.data.order_list
+                        this.start = res.data.data.start
+                        this.end = res.data.data.end
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      获取返利订单审核订单列表
+            getList: function () {
+                this.$ajax.post('/api/Order/backOrderList', {start:this.start2,end:this.end2,status:this.status}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.list = res.data.data.order_list
+                        this.start2 = res.data.data.start
+                        this.end2 = res.data.data.end
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      发货
+            diliver: function (id) {
+                this.$ajax.post('/api/Order/diliver', {order_id:id}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getOrderList()
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      操作：奖励或不通过
+            orderOperate: function (id,status) {
+                this.$ajax.post('/api/Order/examineOrder', {order_num:id,status:status}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getList()
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
                     }
                 }, (err) => {
                     console.log(err)
                 })
             },
             handleSelectionChange(val) {
-                this.multipleSelection = val;
+                var data = []
+                for (var i = 0; i < val.length; i++) {
+                    data.push(val[i].order_id);
+                }
+                this.order_id = data;
+            },
+            handleSelectionChange2(val) {
+                var data = []
+                for (var i = 0; i < val.length; i++) {
+                    data.push(val[i].order_num);
+                }
+                this.order_num = data;
+                console.log(this.order_num)
             },
             changeDate1(e) {
                 this.start = e
-                this.getOrderList()
             },
             changeDate2(e) {
                 this.end = e
-                this.getOrderList()
+            },
+            changeDate3(e) {
+                this.start2 = e
+            },
+            changeDate4(e) {
+                this.end2 = e
             },
         },
         mounted() {
@@ -404,6 +395,7 @@
         },
         created: function () {
             this.getOrderList()
+            this.getList()
         }
     }
 </script>
@@ -432,5 +424,12 @@
 
     .sort {
         margin: 20px 0 54px;
+    }
+    .pros {
+        background-color: rgb(223, 236, 235);
+        padding: 0 10px;
+        cursor: pointer;
+        color: #54667a;
+        line-height: 24px;
     }
 </style>
