@@ -71,7 +71,7 @@
                         localStorage.setItem('ms_password',self.ruleForm.password);
                         localStorage.setItem('ms_nickname',res.data.data.user_info.nickname);
                         localStorage.setItem('ms_userPhoto',res.data.data.user_info.head_image);
-                        self.$router.push('/home');
+                        self.$router.push('/admin/home');
                     }else{
                         this.$message({
                             message: res.data.error,

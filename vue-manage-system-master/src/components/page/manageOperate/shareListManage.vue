@@ -38,11 +38,11 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;">筛选</el-button>
+                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;" @click="getOrderList()">筛选</el-button>
                 </div>
                 <el-table
                     ref="multipleTable"
-                    :data="order_list"
+                    :data="orderList"
                     tooltip-effect="dark"
                     style="width: 100%;text-align: center;margin: 20px 0;"
                     border
@@ -53,7 +53,7 @@
                         width="50" height="95">
                     </el-table-column>
                     <el-table-column
-                        label="晒单截图" height="95">
+                        label="晒单截图" height="95" width="120">
                         <template slot-scope="scope">
                             <img :src="scope.row.evaluate_url" alt="" style="width:76px;height:76px;margin-top: 5px;">
                         </template>
@@ -79,30 +79,37 @@
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
-                        prop="examine_status"
                         label="晒单状态"
-                        show-overflow-tooltip>
-                        <!--<template slot-scope="scope">-->
-                            <!--<span></span>-->
-                        <!--</template>-->
+                        width="80">
+                        <template slot-scope="scope">
+                            <span v-text="scope.row.is_square=='1'?'广场中':'未展示'"></span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="express_status"
-                        label="状态"
-                        show-overflow-tooltip>
+                        label="状态" width="70">
+                        <template slot-scope="scope">
+                            <span v-show="scope.row.examine_status==1">已奖励</span>
+                            <span v-show="scope.row.examine_status==2">未审核</span>
+                            <span v-show="scope.row.examine_status==3">未通过</span>
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        label="操作" inline-template width="180">
+                        label="操作" width="180">
                         <!--/奖励。。。未奖励   通过。。。不通过-->
-                        <template>
-                            <el-button type="text" @click="toShow()" style="color: #0f8edd;display: block;margin: 0 auto;">晒单详情</el-button>
-                            <span style="display: inline-block;background-color: rgb(223, 236, 235); padding: 0 10px;">已奖励</span>
-                            <span style="display: inline-block;background-color: rgb(223, 236, 235); padding: 0 10px;">不通过</span>
+                        <!--examine_status-->
+                        <template slot-scope="scope">
+                            <el-button type="text" @click="toShow(scope.row.evaluate_id)" style="color: #0f8edd;display: block;margin: 0 auto;">晒单详情</el-button>
+                            <el-button @click="change(scope.row.evaluate_id,2)" type="text" size="small"
+                                       class="pros" v-show="scope.row.examine_status==2">奖励
+                            </el-button>
+                            <el-button @click="change(scope.row.evaluate_id,3)" type="text" size="small"
+                                       class="pros" v-show="scope.row.examine_status==2">不通过
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
-                    <el-select v-model="value1" placeholder="晒单状态"  style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="value3" placeholder="晒单状态"  style="width: 160px;margin-right: 20px;" >
                         <el-option
                             v-for="item in options3"
                             :key="item.value"
@@ -110,7 +117,7 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-select v-model="value2" placeholder="奖励"  style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="type" placeholder="奖励"  style="width: 160px;margin-right: 20px;" >
                         <el-option
                             v-for="item in options4"
                             :key="item.value"
@@ -118,7 +125,7 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;" >确认</el-button>
+                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;" @click="saveAll()">确认</el-button>
                 </div>
             </div>
         </div>
@@ -147,15 +154,11 @@
         <!--模态框-->
         <el-dialog title="晒单详情" :visible.sync="dialogTableVisible">
             <div class="model_content">
-                <p class="title">昵称 <span class="date">2017-11-03</span></p>
-                <p class="des">留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容留言内容</p>
+                <p class="title">{{share_info.wechat_nickname}} <span class="date">{{share_info.update_time}}</span></p>
+                <p class="des">{{share_info.evaluate_detail}}</p>
                 <p class="title">晒单截图</p>
                 <div class="imgList">
-                    <img src="/static/img/upload_img_bd.png" alt="">
-                    <img src="/static/img/upload_img_bd.png" alt="">
-                    <img src="/static/img/upload_img_bd.png" alt="">
-                    <img src="/static/img/upload_img_bd.png" alt="">
-                    <img src="/static/img/upload_img_bd.png" alt="">
+                    <img :src="list.image" alt="" v-for="list in share_info.evaluate_url">
                 </div>
             </div>
         </el-dialog>
@@ -186,7 +189,8 @@
                     }
                 },
                 dialogTableVisible: false,
-                options1: [{
+                options1: [
+                    {
                     value: '',
                     label: '全部'
                 },
@@ -217,29 +221,30 @@
                  status:'',
                 options3: [
                     {
-                    value: '选项1',
+                    value: '',
                     label: '晒单状态处理'
                 }, {
-                    value: '选项3',
+                    value: '1',
                     label: '加入广场'
                 }, {
-                    value: '选项3',
+                    value: '2',
                     label: '撤出广场'
                 }
                 ],
-                value3:'晒单状态处理',
-                options4: [{
-                    value: '选项1',
+                value3:'',
+                options4: [
+                    {
+                    value: '',
                     label: '审核状态处理'
                 }, {
-                    value: '选项3',
+                    value: '2',
                     label: '奖励'
                 }, {
-                    value: '选项3',
+                    value: '3',
                     label: '不通过'
                 }
                 ],
-                value4:'审核状态处理',
+                type:'',
                 dateValue1:'',
                 tableData3: [
                     {
@@ -300,12 +305,19 @@
                 share_id: [],
                 acer:'',
                 brief:'',
+                share_info:{
+                        evaluate_detail:'',
+                        evaluate_url:[],
+                        update_time:'',
+                        wechat_nickname:''
+                    },
+//            defaultImg: 'this.src="' +require('../../static/img/default_img.png')+ '"',
             }
         },
         methods: {
             //      获取晒单审核列表
             getOrderList: function () {
-                this.$ajax.post('/api/Shareorder/getOrderList',).then((res) => {
+                this.$ajax.post('/api/Shareorder/getOrderList',{start:this.start,end:this.end,is_square:this.is_square,status:this.status}).then((res) => {
                     if (res.data.code == '200') {
                         this.orderList=res.data.data.order_list
                         this.start = res.data.data.start
@@ -321,6 +333,46 @@
                     if (res.data.code == '200') {
                         this.acer=res.data.data.acer
                         this.brief = res.data.data.brief
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //     批量晒单设置
+            saveAll: function () {
+                this.$ajax.post('/api/Shareorder/examineOrder',{share_id:this.share_id,type:this.type,is_square:this.value3}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getOrderList()
+
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //     单个晒单奖励或不通过设置
+            change: function (id,type) {
+                this.$ajax.post('/api/Shareorder/examineOrder',{share_id:id,type:type}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getOrderList()
+
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
                     }
                 }, (err) => {
                     console.log(err)
@@ -354,13 +406,20 @@
             handleSelectionChange(val) {
                 var data = []
                 for (var i = 0; i < val.length; i++) {
-                    data.push(val[i].order_id);
+                    data.push(val[i].evaluate_id);
                 }
                 this.share_id = data;
+                console.log(this.share_id)
             },
-            toShow(){
+            toShow(id){
                 this.dialogTableVisible = true
-
+                this.$ajax.post('/api/Shareorder/shareOrderInfo',{share_id:id}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.share_info=res.data.data.share_info
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
             }
         },
         mounted() {
@@ -377,8 +436,8 @@
 <style scoped>
     .ms-doc {
         width: 100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        max-width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;
@@ -416,10 +475,18 @@
     .imgList{
         font-size: 0;
     }
-    .imgList img{
+    .imgList>img{
         width: 140px;
         height: 140px;
         margin: 5px calc(((100%/4) - 140px)/2);
+    }
+    .pros {
+        background-color: rgb(223, 236, 235);
+        padding: 2px 10px;
+        cursor: pointer;
+        color: #54667a;
+        line-height: 24px;
+        margin-bottom: 3px;
     }
 </style>
 

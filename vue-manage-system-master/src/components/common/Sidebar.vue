@@ -24,7 +24,7 @@
                     <el-submenu :index="item.url">
                         <template slot="title">
                             <!--<img :src="item.icon_blue" alt="" style="width: 20px;height: 20px;vertical-align: middle;margin-right: 10px;">-->
-                            <img :src="item.icon" alt="" style="width: 20px;height: 20px;vertical-align: middle;margin-right: 10px;">
+                            <!--<img :src="item.icon" alt="" style="width: 20px;height: 20px;vertical-align: middle;margin-right: 10px;">-->
                             {{ item.name }}</template>
                         <el-menu-item v-for="(subItem,i) in item._data" :key="i" :index="subItem.url">{{ subItem.name }}
                         </el-menu-item>
@@ -33,7 +33,7 @@
                 <template v-else>
                     <el-menu-item :index="item.url" v-on:click="selected = !selected">
                         <!--<img :src="item.icon_blue" alt="" style="width: 20px;height: 20px;vertical-align: middle;margin-right: 10px;">-->
-                        <img :src="item.icon" alt="" style="width: 20px;height: 20px;vertical-align: middle;margin-right: 10px;">
+                        <!--<img :src="item.icon" alt="" style="width: 20px;height: 20px;vertical-align: middle;margin-right: 10px;">-->
                         {{ item.name }}
                     </el-menu-item>
                 </template>

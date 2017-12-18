@@ -13,50 +13,50 @@
                         <p class="title"><i class="num">1</i>专区 <small>(建议展示领劵特惠类商品，例：9.9特惠)</small></p>
                         <div style="position: relative;">
                             <div class="upload_img" id="upload_img1">
-                                <img :src="imgUrl1" alt="" style="width: 100%;height: 100%;">
+                                <img :src="store_list[0].image" alt="" style="width: 100%;height: 100%;">
                             </div>
-                                <input id="file1" type="file"  style="display: none" @change="uploadImg1($event)" multiple accept="image/*">
+                                <input id="file1" type="file"  style="display: none" @change="uploadImg($event,0)" multiple accept="image/*">
                             <label for="file1" class="upload_btn">上传</label>
                         </div>
-                        <span style="font-size: 14px;">专区名称自定义：</span><el-input v-model="input" style="width: 200px;margin:0 20px;" placeholder="限制6个中文字以内"></el-input>
+                        <span style="font-size: 14px;">专区名称自定义：</span><el-input v-model="store_list[0].store_name" style="width: 200px;margin:0 20px;" placeholder="限制6个中文字以内"></el-input>
                     </div>
                     <div style="margin-bottom: 20px;">
                         <p class="title"><i class="num">2</i>专区 <small>(建议展示领劵特惠类商品，例：19.9包邮)</small></p>
                         <div style="position: relative;">
                             <div class="upload_img" id="upload_img2">
-                                <img :src="imgUrl2" alt="" style="width: 100%;height: 100%;">
+                                <img :src="store_list[1].image" alt="" style="width: 100%;height: 100%;">
                             </div>
-                            <input id="file2" type="file"  style="display: none"  @change="uploadImg2($event)" multiple accept="image/*">
+                            <input id="file2" type="file"  style="display: none"  @change="uploadImg($event,1)" multiple accept="image/*">
                             <label for="file2" class="upload_btn">上传</label>
                         </div>
-                        <span style="font-size: 14px;">专区名称自定义：</span><el-input v-model="input" style="width: 200px;margin:0 20px;" placeholder="限制6个中文字以内"></el-input>
+                        <span style="font-size: 14px;">专区名称自定义：</span><el-input v-model="store_list[1].store_name" style="width: 200px;margin:0 20px;" placeholder="限制6个中文字以内"></el-input>
                     </div>
                     <div style="margin-bottom: 20px;">
                         <p class="title"><i class="num">3</i>专区 <small>(建议展示折扣类商品，例：聚折扣)</small></p>
                         <div style="position: relative;">
                             <div class="upload_img" id="upload_img3">
-                                <img :src="imgUrl3" alt="" style="width: 100%;height: 100%;">
+                                <img :src="store_list[2].image" alt="" style="width: 100%;height: 100%;">
                             </div>
-                            <input id="file3" type="file"  style="display: none" @change="uploadImg3($event)" multiple accept="image/*">
+                            <input id="file3" type="file"  style="display: none" @change="uploadImg($event,2)" multiple accept="image/*">
                             <label for="file3" class="upload_btn" >上传</label>
                         </div>
-                        <span style="font-size: 14px;">专区名称自定义：</span><el-input v-model="input" style="width: 200px;margin:0 20px;" placeholder="限制6个中文字以内"></el-input>
+                        <span style="font-size: 14px;">专区名称自定义：</span><el-input v-model="store_list[2].store_name" style="width: 200px;margin:0 20px;" placeholder="限制6个中文字以内"></el-input>
                     </div>
                     <div style="margin-bottom: 20px;">
                         <p class="title"><i class="num">4</i>专区 <small>(自定义商品专区，例：应季必备)</small></p>
                         <div style="position: relative;">
                             <div class="upload_img" id="upload_img4">
-                                <img :src="imgUrl4" alt="" style="width: 100%;height: 100%;">
+                                <img :src="store_list[3].image" alt="" style="width: 100%;height: 100%;">
                             </div>
-                            <input id="file4" type="file"  style="display: none" @change="uploadImg4($event)" multiple accept="image/*">
+                            <input id="file4" type="file"  style="display: none" @change="uploadImg($event,3)" multiple accept="image/*">
                             <label for="file4" class="upload_btn" >上传</label>
                         </div>
-                        <span style="font-size: 14px;">专区名称自定义：</span><el-input v-model="input" style="width: 200px;margin:0 20px;" placeholder="限制6个中文字以内"></el-input>
+                        <span style="font-size: 14px;">专区名称自定义：</span><el-input v-model="store_list[3].store_name" style="width: 200px;margin:0 20px;" placeholder="限制6个中文字以内"></el-input>
                     </div>
                 </div>
                 <div style="text-align: center;margin-bottom: 20px;">
-                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">全部保存</el-button>
-                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">一键预览</el-button>
+                    <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;" @click="save()">全部保存</el-button>
+                    <!--<el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">一键预览</el-button>-->
                 </div>
             </div>
             <div class="right">
@@ -66,9 +66,9 @@
                        <div class="phone_main">
                            <div class="part1">
                                <div class="nav">
-                                   <img src="/static/img/img.jpg" alt="" class="bd">
+                                   <img :src="store_list[0].image" alt="" class="bd">
                                    <div>
-                                       <span>9.9专区专区赚</span>
+                                       <span>{{store_list[0].store_name}}</span>
                                        <img src="/static/img/1.png" alt="">
                                    </div>
                                    <img src="/static/img/triangle.png" alt="" class="triangle">
@@ -77,9 +77,9 @@
                            </div>
                            <div class="part1">
                                <div class="nav">
-                                   <img src="/static/img/img.jpg" alt="" class="bd">
+                                   <img :src="store_list[1].image" alt="" class="bd">
                                    <div>
-                                       <span>19.9专区</span>
+                                       <span>{{store_list[1].store_name}}</span>
                                        <img src="/static/img/2.png" alt="">
                                    </div>
                                    <img src="/static/img/triangle.png" alt="" class="triangle">
@@ -88,9 +88,9 @@
                            </div>
                            <div class="part1">
                                <div class="nav">
-                                   <img src="/static/img/img.jpg" alt="" class="bd">
+                                   <img :src="store_list[2].image" alt="" class="bd">
                                    <div>
-                                       <span>聚折扣</span>
+                                       <span>{{store_list[2].store_name}}</span>
                                        <img src="/static/img/3.png" alt="">
                                    </div>
                                    <img src="/static/img/triangle.png" alt="" class="triangle">
@@ -99,14 +99,14 @@
                            </div>
                            <div class="part1">
                                <div class="nav">
-                                   <img src="/static/img/img.jpg" alt="" class="bd">
+                                   <img :src="store_list[3].image" alt="" class="bd">
                                    <div>
-                                       <span>应急必备</span>
+                                       <span>{{store_list[3].store_name}}</span>
                                        <img src="/static/img/4.png" alt="">
                                    </div>
                                    <img src="/static/img/triangle.png" alt="" class="triangle">
                                </div>
-                               <img src="/static/img/goods2.png" alt="" class="goods2">
+                               <img src="/static/img/goods.png" alt="" class="goods2">
                            </div>
                        </div>
                     </div>
@@ -120,14 +120,38 @@ export default {
     data (){
         return{
             input:'',
-            imgUrl1: '',
-            imgUrl2: '',
-            imgUrl3: '',
-            imgUrl4: ''
+            store_list:[
+                {
+                    store_name:'',
+                    image:''
+                },
+                {
+                    store_name:'',
+                    image:''
+                },
+                {
+                    store_name:'',
+                    image:''
+                },
+                {
+                    store_name:'',
+                    image:''
+                },
+            ]
         }
     },
     methods:{
-        uploadImg1:function(e){
+        //      获取专区页列表
+        getAffordable: function () {
+            this.$ajax.post('/api/Affordable/affordable').then((res) => {
+                if (res.data.code == '200') {
+                    this.store_list = res.data.data.store_list
+                }
+            }, (err) => {
+                console.log(err)
+            })
+        },
+        uploadImg:function(e,index){
             const formData = new FormData();
             formData.append('images',e.target.files[0]);
             let config ={
@@ -137,57 +161,30 @@ export default {
             }
             this.$ajax.post('api/Index/upload', formData, config).then((res)=>{
                 if(res.data.code=='200'){
-                    this.imgUrl1=res.data.data.image_url
-
+                    this.store_list[index].image=res.data.data.image_url
                 }
             },(err)=>{})
         },
-        uploadImg2:function(e){
-            const formData = new FormData();
-            formData.append('images',e.target.files[0]);
-            let config ={
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+        save(){
+            this.$ajax.post('/api/Affordable/save',this.store_list).then((res) => {
+                if (res.data.code == '200') {
+                    this.$message({
+                        message: res.data.data.message,
+                        type: 'success'
+                    });
+                }else{
+                    this.$message({
+                        message: res.data.error,
+                        type: 'error'
+                    });
                 }
-            }
-            this.$ajax.post('api/Index/upload', formData, config).then((res)=>{
-                if(res.data.code=='200'){
-                    this.imgUrl2=res.data.data.image_url
-
-                }
-            },(err)=>{})
-        },
-        uploadImg3:function(e){
-            const formData = new FormData();
-            formData.append('images',e.target.files[0]);
-            let config ={
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
-            this.$ajax.post('api/Index/upload', formData, config).then((res)=>{
-                if(res.data.code=='200'){
-                    this.imgUrl3=res.data.data.image_url
-
-                }
-            },(err)=>{})
-        },
-        uploadImg4:function(e){
-            const formData = new FormData();
-            formData.append('images',e.target.files[0]);
-            let config ={
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
-            this.$ajax.post('api/Index/upload', formData, config).then((res)=>{
-                if(res.data.code=='200'){
-                    this.imgUrl4=res.data.data.image_url
-
-                }
-            },(err)=>{})
+            }, (err) => {
+                console.log(err)
+            })
         }
-
+    },
+    created:function(){
+        this.getAffordable()
     }
 }
 </script>

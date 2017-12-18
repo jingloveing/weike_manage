@@ -41,24 +41,23 @@
                     <div class="left_main">
                         <div style="width: 100%;height: 318px;">
                             <ul class="nav-small">
-                                <li v-for="type in 10" style="margin-bottom: 40px;">
-                                    <!-- :onerror="defaultImg"-->
-                                    <img src="/static/img/add_img.png" style="width: 60px;height: 60px;" @click="dialogVisible1 = true">
-                                    <span style="font-size: 14px;">分类{{type}}</span>
+                                <li v-for="(type,index) in index_cate" style="margin-bottom: 40px;">
+                                    <img :src="type.image_url" style="width: 60px;height: 60px;" @click="selected(type.id)">
+                                    <span style="font-size: 14px;">{{type.cate_name}}</span>
                                 </li>
                             </ul>
-                            <el-button type="success" round style="margin-left: 50px;" @click="dialogVisible2 = true">创建二级分类
+                            <el-button type="success" round style="margin-left: 50px;" @click="getAllCateType()">创建二级分类
                             </el-button>
                         </div>
                     </div>
-                    <div style="text-align: center;padding: 20px 0;">
-                        <el-button type="primary" round
-                                   style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">保存
-                        </el-button>
-                        <el-button type="primary" round
-                                   style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">预览
-                        </el-button>
-                    </div>
+                    <!--<div style="text-align: center;padding: 20px 0;">-->
+                        <!--<el-button type="primary" round-->
+                                   <!--style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;" @click="saveCate()">保存-->
+                        <!--</el-button>-->
+                        <!--&lt;!&ndash;<el-button type="primary" round&ndash;&gt;-->
+                                   <!--&lt;!&ndash;style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 50px;">预览&ndash;&gt;-->
+                        <!--&lt;!&ndash;</el-button>&ndash;&gt;-->
+                    <!--</div>-->
                 </div>
             </div>
             <div class="right">
@@ -75,7 +74,7 @@
                                     </el-carousel>
                                     <div style="width: 100%;height: 175px;">
                                         <ul class="nav-small">
-                                            <li v-for="type in typeList">
+                                            <li v-for="(type,index) in index_cate">
                                                 <!-- :onerror="defaultImg"-->
                                                 <img :src="type.image_url">
                                                 <span>{{type.cate_name}}</span>
@@ -93,169 +92,79 @@
         <el-dialog
             title="选择图标"
             :visible.sync="dialogVisible1"
-            width="30%"
-            :before-close="handleClose">
+            :before-close="handleClose1" style="min-width: 1300px;">
             <div class="imgList">
-               <div class="tab" v-for="i in 10">
-                  <div class="check" v-show=" checked">
+               <div class="tab" v-for="(list,index) in all_type">
+                  <div class="check" v-show="list.checked">
                       <img src="/static/img/checked_img.png" alt="">
                   </div>
-                   <div @click="isChecked()" :class="checked?'active':''">
-                       <img src="/static/img/img.jpg" alt="">
+                   <div @click="isChecked(index)" :class="list.checked?'active':''">
+                       <img :src="list.image_url" alt="">
                    </div>
-                   <p class="img_name">热门</p>
+                   <p class="img_name">{{list.cate_name}}</p>
                </div>
             </div>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible1 = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible1 = false" style="background-color: #0f8edd;border-color: #0f8edd;">确 定</el-button>
+    <el-button @click="handleClose1">取 消</el-button>
+    <el-button type="primary" @click="sure()" style="background-color: #0f8edd;border-color: #0f8edd;">确 定</el-button>
   </span>
-            <!--创建二级菜单弹出框-->
         </el-dialog>
+        <!--创建二级菜单弹出框-->
         <el-dialog
             title="二级分类菜单"
-            :visible.sync="dialogVisible2"
-            width="30%"
-            :before-close="handleClose">
+            :visible.sync="dialogVisible2" style="min-width:1100px;">
             <div>
                <div class="model_left">
-                    <ul v-for="(item,index) in items">
-                        <li :class="[item.active ? activeClass:'']" v-on:click="navClickEvent(items,index)">{{item.text}}</li>
+                    <ul>
+                        <li :class="indexs==index ? activeClass:''" v-on:click="navClickEvent(index_cate,index)" :key="index" v-for="(item,index) in child_cate">{{item.cate_name}}</li>
                     </ul>
                </div>
                 <div class="model_right">
-                    <p>{{name}}</p>
+                    <p style="margin-bottom: 10px;">{{child_cate[indexs].cate_name}}</p>
                     <div id="model_list">
-                        <input type="text" class="model_input" v-for="(i,index) in item" v-model="item[index].value">
+                        <input type="text" class="model_input" v-for="(item,index) in child_cate[indexs].child" v-model="item.cate_name">
                     </div>
-                    <img src="/static/img/add.png" alt="" style="margin:0 20px;" @click="add()">
-                    <img src="/static/img/del.png" alt="" style="margin:0 10px;" @click="del()">
-
+                   <div>
+                       <img src="/static/img/add.png" alt="" style="margin:2px 20px;" @click="add()">
+                       <img src="/static/img/del.png" alt="" style="margin:2px 10px;" @click="del()">
+                   </div>
+                    <div style="position: absolute;bottom: 7px;text-align: center;width: 100%;">
+                        <el-button type="primary" @click="" style="background-color: #0f8edd;border-color: #0f8edd;" @click="saveCateType()">保存</el-button>
+                    </div>
                 </div>
             </div>
-            <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible2 = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible2= false" style="background-color: #0f8edd;border-color: #0f8edd;">保存</el-button>
-  </span>
+            <span slot="footer" class="dialog-footer"></span>
         </el-dialog>
     </div>
 </template>
 <script>
     export default {
         components: {
-
         },
         data() {
             return {
+                indexs:0,
                 activeClass:'selected',
-                items:[
-                    {
-                        text: '热门',
-                        active : true
-                    },
-                    {
-                        text: '服饰',
-                        active : false
-                    },
-                    {
-                        text: '家居',
-                        active : false
-                    },
-                    {
-                        text: '家纺',
-                        active : false
-                    },
-                    {
-                        text: '母婴',
-                        active : false
-                    },
-                    {
-                        text:'电器',
-                        active:false
-                    }
-                ],
-                item:[
-                    {
-                        value:''
-                    },
-                    {
-                        value:''
-                    },
-                    {
-                        value:''
-                    },
-                    {
-                        value:''
-                    },
-                    {
-                        value:''
-                    }
-                ],
-                title:'',
-                checked:false,
                 dialogVisible1: false,
                 dialogVisible2: false,
                 input: '',
-//                defaultImg: 'this.src="' + require('../../static/img/default_img.png') + '"',
-                imgList:[
-                    {
-                        url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg"
-                    },
-                    {
-                        url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg"
-                    },
-                    {
-                        url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg"
-                    },
-                    {
-                        url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg"
-                    }
-                ],
-                typeList:[
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-                    {
-                        image_url:"https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike92%2C5%2C5%2C92%2C30/sign=1a3d82d42f2dd42a4b0409f9625230d0/314e251f95cad1c86a912b9a753e6709c93d5161.jpg",
-                        cate_name:"热门"
-                    },
-
-                ],
                 name:'',
-                bannerList:[]
+                bannerList:[],
+                all_type:[],
+                index_cate:[],
+                index:'',
+                old_id:'',
+                new_id:'',
+                child_cate:[
+                    {
+                        cate_name:'',
+                        child:[
+                            {
+                                cate_name:''
+                            }
+                        ]
+                    }
+                ]
             }
         },
         methods:{
@@ -269,15 +178,37 @@
                     console.log(err)
                 })
             },
-            //      保存banner列表
-            saveBanner: function () {
-                this.$ajax.post('/api/Index/indexBanner',this.bannerList).then((res) => {
+            //      获取当前分类列表
+            getCateType: function () {
+                this.$ajax.get('/api/Index/setCateType').then((res) => {
+                    if (res.data.code == '200') {
+                        this.index_cate = res.data.data.index_cate
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      获取创建二级菜单弹框当前分类列表
+            getAllCateType: function () {
+                this.dialogVisible2 = true
+                this.$ajax.get('/api/Index/createChildCate').then((res) => {
+                    if (res.data.code == '200') {
+                        this.child_cate = res.data.data.child_cate
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      保存创建二级菜单弹框当前分类列表
+            saveCateType: function () {
+                let cate_id = this.child_cate[this.indexs].id
+                let new_cate = this.child_cate[this.indexs].child
+                this.$ajax.post('/api/Index/createChildCate',{cate_id:cate_id,child_cate:new_cate}).then((res) => {
                     if (res.data.code == '200') {
                         this.$message({
                             message: res.data.data.message,
                             type: 'success'
                         });
-                        this.getBannerList()
                     }else{
                         this.$message({
                             message: res.data.error,
@@ -288,8 +219,24 @@
                     console.log(err)
                 })
             },
-
-
+            //      保存banner列表
+            saveBanner: function () {
+                this.$ajax.post('/api/Index/indexBanner',this.bannerList).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
 //            上传图片
             uploadImg:function(e,index){
                 const formData = new FormData();
@@ -308,30 +255,66 @@
                     }
                 },(err)=>{})
             },
-            handleClose(done) {
+//            关闭选择图标弹框
+            handleClose1(done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
+                        this.old_id=''
+                        this.new_id=''
                         done();
                     })
                     .catch(_ => {});
             },
-            isChecked(){
-                this.checked=!this.checked
+//            选择图标
+            isChecked(index){
+                for(var i=0;i<this.all_type.length;i++){
+                    this.all_type[i].checked=false
+                }
+                this.all_type[index].checked=!this.all_type[index].checked
+                this.new_id=this.all_type[index].id
 
             },
-            navClickEvent:function(items,index){
+//            点击选择图标确定按钮
+            sure(){
+//                console.log()
+                this.$ajax.post('/api/Index/setCateType',{old_id:this.old_id,new_id:this.new_id}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.old_id=''
+                        this.new_id=''
+                        this.getCateType()
+                        this.dialogVisible1 = false
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                        this.old_id=''
+                        this.new_id=''
+                        this.dialogVisible1 = false
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+//            修改二级分类列表tab选项卡
+            navClickEvent:function(index_cate,index){
                 /*默认切换类的动作*/
-                items.forEach(function(el){
-                    el.active = false;
-                });
-                items[index].active = true;
-                console.log(items,index)
-                this.name=items[index].text
-                console.log(this.name)
+                this.indexs=index
+//                index_cate.forEach(function(el){
+//                    el.active = false;
+//                });
+//                index_cate[index].active = true;
+//                console.log(index_cate,index)
+//                this.name=index_cate[index].text
+//                console.log(this.name)
             },
             add(){
-                this.item.push({
-                    value: null
+                this.child_cate[this.indexs].child.push({
+                    cate_name: null
                 })
             },
             add1(){
@@ -341,18 +324,30 @@
                 })
             },
             del(){
-                this.item.shift()
+                this.child_cate[this.indexs].child.pop()
             },
             del1(index){
-                console.log(index)
                 this.bannerList.splice(index,1)
-            }
+            },
+//            获取全部图标分类
+            selected(id){
+                this.old_id = id
+                this.dialogVisible1=true
+                this.$ajax.get('/api/Index/allCateType').then((res) => {
+                    if (res.data.code == '200') {
+                        this.all_type = res.data.data.all_type
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
         },
         mounted() {
             this.name=this.items[0].text
         },
         created:function(){
             this.getBannerList()
+            this.getCateType()
         }
     }
 </script>
@@ -444,8 +439,6 @@
         font-size: 0;
     }
 
-
-
     .nav-small {
         overflow: hidden;
         padding: 22px 1px 1px 2px;
@@ -468,7 +461,7 @@
     }
 
     .nav-small li span {
-        font-size: 12px;
+        font-size: 10px;
         color: #333333;
         display: block;
     }
@@ -476,9 +469,10 @@
         font-size: 0;
     }
     .tab{
-        width: 130px;
+        width: 18%;
+        /*width: 130px;*/
         height: 132px;
-        margin: 5px calc(((100%/5) - 130px)/2);
+        margin: 5px calc(((100%/5) - 18%)/2);
         border: 1px solid #e9f1f3;
         text-align: center;
         display: inline-block;
@@ -516,19 +510,17 @@
     .model_right{
         float: right;
         width: 60%;
-        min-height: 400px;
+        min-height: 362px;
         border: 1px solid #e9f1f3;
         padding: 20px;
         font-size: 0;
-    }
-    .model_left ul{
-        margin: 20px 0;
+        position: relative;
     }
     .model_left ul li{
         list-style: none;
         font-size: 14px;
         color: #54667a;
-        padding: 0px 20px;
+        padding: 10px 20px;
     }
     .selected{
         background-color: #f2f7f8;

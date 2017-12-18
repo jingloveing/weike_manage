@@ -2,9 +2,9 @@
     <div class="header">
         <div class="logo"><img src="/static/img/logo.png" alt=""></div>
          <div class="nav">
-             <span><img src="/static/img/setting_img.png" alt="">设置</span>
-             <span v-on:click="toprops()"><img src="/static/img/prop_img.png" alt="">参数</span>
-             <span><img src="/static/img/num_img.png" alt="">库存：{{num}}</span>
+             <span v-on:click="goodsSetting()"><img src="/static/img/num_img.png" alt="">商品采集</span>
+             <span v-on:click="toprops()"><img src="/static/img/prop_img.png" alt="">参数设置</span>
+             <span style="margin-left: 20px;">库存：{{num}}</span>
          </div>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
@@ -99,13 +99,17 @@
                 }
             },
             toprops(){
-                    const ur = "/props";
-                    this.$router.push({ path: ur })
+                    const url = "/admin/props";
+                    this.$router.push({ path: url })
             },
             toNotice(){
-                const ur = "/notice";
-                this.$router.push({ path: ur })
+                const url = "/admin/notice";
+                this.$router.push({ path: url })
             },
+            goodsSetting(){
+                const url="/admin/goodsSetting";
+                this.$router.push({ path: url })
+            }
         },
         created:function(){
             this.userPhoto = localStorage.getItem('ms_userPhoto');
