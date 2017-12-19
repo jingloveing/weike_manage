@@ -32,9 +32,9 @@
                         width="50" height="95">
                     </el-table-column>
                     <el-table-column
-                        label="商品" height="95">
+                        label="商品" height="95" width="80">
                         <template slot-scope="scope">
-                            <img :src="scope.row.pict_url" alt="" style="width:76px;height:76px;margin-top: 5px;">
+                            <img :src="scope.row.pict_url" alt="" style="width:60px;height:60px;margin-top: 5px;">
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -73,7 +73,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="操作" width="90">
+                        label="操作" width="80">
                         <template slot-scope="scope">
                             <el-button @click="change(scope.row.id,scope.row.on_sale)" type="text" size="small" class="pros" v-text="scope.row.on_sale==1?'下架':'上架'">上架</el-button>
                         </template>
@@ -350,9 +350,9 @@
 
 <style scoped>
     .ms-doc {
-        width: 100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        /*width: 100%;*/
+        width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;

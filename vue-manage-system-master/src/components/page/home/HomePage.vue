@@ -6,8 +6,11 @@
             </el-breadcrumb>
         </div>
         <div class="ms-doc">
-           <p>总数据</p>
-            <div class="ms-doc_main">
+            <div class="date_select">
+              <p>总数据</p>
+              <a class="lead_out" :href="'/api/Summarydata/export?type='+type+'&day_type='+date_type" style="top: 20px;"><img src="/static/img/lead_out.png" alt="">导出当前结果</a>
+            </div>
+                <div class="ms-doc_main">
                 <ul class="tab" id="tab1">
                     <li class="active">访问数据</li>
                     <li>用户数据</li>
@@ -185,7 +188,7 @@
                     if (res.data.code == '200') {
                         this.time = res.data.data.time;
                         this.counts = res.data.data.count;
-                        console.log(this.counts)
+//                        console.log(this.counts)
                         this.total_count=res.data.data.total_count;
                         var arr=[]
                         for(var i= 0;i<this.time.length;i++){
@@ -193,7 +196,7 @@
                         }
 //                        this.arr = JSON.stringify(arr)
                         this.arr = arr
-                        console.log(this.arr)
+//                        console.log(this.arr)
                         var Broken = echarts.init(document.getElementById('broken'));
                         Broken.setOption({
                             backgroundColor: '#fff',
@@ -256,7 +259,7 @@
                             ]
                         });
                         if(this.date_type!==1){
-                            console.log('aaa')
+//                            console.log('aaa')
                             var RoundOne = echarts.init(document.getElementById('roundOne'));
                             RoundOne.setOption({
                                 tooltip: {

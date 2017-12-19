@@ -21,7 +21,7 @@
                     placeholder="结束日期"
                     :picker-options="pickerOptions1" @change="changeDate3" value-format="yyyy-MM-dd">
                 </el-date-picker>
-                    <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                    <a class="lead_out" :href="'/api/Searchdata/weekWordsExport?start='+start+'&end='+end"><img src="/static/img/lead_out.png" alt="">导出当前结果</a>
                 </div>
                 <div class="ms-doc_chart" style="font-size: 0;">
                     <p class="title">一周搜索关键词TOP10</p>
@@ -60,7 +60,7 @@
                     type="month"
                     placeholder="选择月" @change="changeDate1" value-format="yyyy-MM-dd">
                 </el-date-picker>
-                    <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                    <a class="lead_out" :href="'/api/Searchdata/monthDataExport?month='+dateValue2"><img src="/static/img/lead_out.png" alt="">导出当前结果</a>
                 </div>
                 <div class="ms-doc_chart" style="width: 100%;font-size: 0;">
                     <p class="title">月搜索调用统计分布</p>

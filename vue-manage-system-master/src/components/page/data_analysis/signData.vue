@@ -21,7 +21,7 @@
                     placeholder="结束日期"
                     :picker-options="pickerOptions1" @change="changeDate5" value-format="yyyy-MM-dd">
                     </el-date-picker>
-                    <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                    <a class="lead_out" :href="'/api/Signdata/signDataExport?start='+start+'&end='+end"><img src="/static/img/lead_out.png" alt="">导出当前结果</a>
                 </div>
                 <div class="ms-doc_chart" style="font-size: 0;">
                     <p class="title">签到趋势图</p>
@@ -41,7 +41,7 @@
                     type="month"
                     placeholder="选择月" @change="changeDate1" value-format="yyyy-MM-dd">
                 </el-date-picker>
-                <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                <!--<span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>-->
                 </div>
                 <div class="ms-doc_chart" style="font-size: 0;">
                     <p class="title">月签到对比分析</p>
@@ -65,7 +65,7 @@
                         type="month"
                         placeholder="选择月" @change="changeDate2" value-format="yyyy-MM-dd">
                     </el-date-picker>
-                    <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                    <!--<span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>-->
                     </div>
                 </div>
                 <table>
@@ -123,7 +123,7 @@
                     type="month"
                     placeholder="选择月" @change="changeDate3" value-format="yyyy-MM-dd">
                 </el-date-picker>
-                <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                <!--<span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>-->
                 </div>
                 <div class="ms-doc_chart" style="width: 100%;font-size: 0;">
                     <p class="title">月签到数据分析</p>
@@ -173,80 +173,80 @@
                 dateValue2: '',
                 dateValue3: '',
                 goodsDataList: [],
-                month_list1:{},
-                month_list2:{},
-                month_list3:{},
-//                month_list1:{
-//                    week0:{
-//                        "week_list":[]
-//                    },
-//                    week1:{
-//                        "week_list":[]
-//                    },
-//                    week2:{
-//                        "week_list":[]
-//                    },
-//                    week3:{
-//                        "week_list":[]
-//                    },
-//                    week4:{
-//                        "week_list":[]
-//                    }
-//                },
-//                month_list2:{
-//                    week0:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    },
-//                    week1:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    },
-//                    week2:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    },
-//                    week3:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    },
-//                    week4:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    },
-//                },
-//                month_list3:{
-//                    week0:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    },
-//                    week1:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    },
-//                    week2:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    },
-//                    week3:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    },
-//                    week4:{
-//                        "week_list":[],
-//                        week_count:'',
-//                        week_percent:''
-//                    }
-//                },
+//                month_list1:{},
+//                month_list2:{},
+//                month_list3:{},
+                month_list1:{
+                    week0:{
+                        "week_list":[]
+                    },
+                    week1:{
+                        "week_list":[]
+                    },
+                    week2:{
+                        "week_list":[]
+                    },
+                    week3:{
+                        "week_list":[]
+                    },
+                    week4:{
+                        "week_list":[]
+                    }
+                },
+                month_list2:{
+                    week0:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    },
+                    week1:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    },
+                    week2:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    },
+                    week3:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    },
+                    week4:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    },
+                },
+                month_list3:{
+                    week0:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    },
+                    week1:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    },
+                    week2:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    },
+                    week3:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    },
+                    week4:{
+                        "week_list":[],
+                        week_count:'',
+                        week_percent:''
+                    }
+                },
                 week_total:[],
                 total_count:'',
                 total_count2:'',

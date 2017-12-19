@@ -63,7 +63,7 @@
                     placeholder="结束日期"
                     :picker-options="pickerOptions1" @change="changeDate3" value-format="yyyy-MM-dd">
                 </el-date-picker>
-                <span class="lead_out"><img src="/static/img/lead_out.png" alt="">导出当前结果</span>
+                <a class="lead_out" :href="'/api/Goodsdata/export2?start='+start+'&end='+end"><img src="/static/img/lead_out.png" alt="">导出当前结果</a>
                 </div>
                 <div class="ms-doc_chart" style="width: 100%;font-size: 0;">
                     <p class="title">TOP10商品取调统计分析</p>

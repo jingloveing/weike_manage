@@ -10,7 +10,7 @@
             <div class="ms-doc_main">
                 <div>
                     <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;"
-                               @click="dialogVisible = true">添加商品
+                               @click="add()">添加商品
                     </el-button>
                     <el-select v-model="value1" placeholder="类型" style="width: 160px;margin:0 20px;">
                         <el-option
@@ -130,7 +130,7 @@
         </div>
         <!--添加商品弹出框-->
         <el-dialog
-            title="添加兑换商品"
+            :title="title"
             :visible.sync="dialogVisible"
             :before-close="handleClose">
             <div>
@@ -150,6 +150,7 @@
                     </div>
                     <el-upload
                         name="images"
+                        :file-list="small_images"
                         :action="upload"
                         :onError="uploadError"
                         :onSuccess="uploadSuccess"
@@ -198,7 +199,7 @@
                 </div>
             </div>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button @click="close()">取 消</el-button>
     <el-button type="primary" @click="addGoods()"
                style="background-color: #0f8edd;border-color: #0f8edd;">保存</el-button>
   </span>
@@ -211,6 +212,7 @@
         components: {},
         data() {
             return {
+                small_images:[],
                 upload: '/api/Index/upload',
                 goodsList: [],
                 exchangeBrief: '',
@@ -232,17 +234,17 @@
                 value1: '0',
                 options2: [
                     {
-                        value: 0,
+                        value: '0',
                         label: '全部'
                     }, {
-                        value: 1,
+                        value: '1',
                         label: '上架'
                     }, {
-                        value: 2,
+                        value: '2',
                         label: '未上架'
                     }
                 ],
-                value2: 0,
+                value2: '0',
                 dateValue1: '',
                 product_id: [],
                 options3: [
@@ -272,8 +274,7 @@
                     product_image: '',
                     product_id:'',
                 },
-
-
+                title:'添加兑换商品'
             }
         },
         methods: {
@@ -383,12 +384,13 @@
                 }
 
                 this.$ajax.post('/api/Acerstore/editProductAcer', this.data).then((res) => {
+                    this.data = {}
+                    this.small_images=[]
                     if (res.data.code == '200') {
                         this.$message({
                             message: res.data.data.message,
                             type: 'success'
                         });
-                        this.data = {}
                         this.dialogVisible = false
                         this.getGoodsList()
                     } else {
@@ -401,13 +403,32 @@
                     console.log(err)
                 })
             },
+//            新增
+            add(){
+                this.title='新增兑换商品'
+                this.data={
+                    small_images: [],
+                        goods_type: '0',
+                        product_name: '',
+                        content: '',
+                        stock: '',
+                        market_price: '',
+                        exchange_acer: '',
+                        product_image: '',
+                        product_id:'',
+                }
+                this.dialogVisible=true
+            },
 //            编辑商品
             edit(id){
+                this.title='编辑兑换商品'
                 this.data.product_id=id
                 this.$ajax.get('/api/Acerstore/editProductAcer',{params:{product_id:id}}).then((res) => {
                     if (res.data.code == '200') {
                         this.data = res.data.data.product
-                        console.log(this.data)
+                        for(var i=0;i<this.data.small_images.length;i++){
+                            this.small_images.push({url:this.data.small_images[i]})
+                        }
                         this.dialogVisible=true
                     }
                 }, (err) => {
@@ -442,13 +463,34 @@
             handleClose(done) {
                 this.$confirm('确认关闭？')
                     .then(_ => {
+                        this.small_images=[]
                         done();
                     })
                     .catch(_ => {
                     });
             },
+            close(){
+                this.small_images=[]
+                this.data={
+                    small_images: [],
+                    goods_type: '0',
+                    product_name: '',
+                    content: '',
+                    stock: '',
+                    market_price: '',
+                    exchange_acer: '',
+                    product_image: '',
+                    product_id:'',
+                }
+                this.dialogVisible = false
+            },
             handleRemove(file, fileList) {
-                this.removeByValue(this.data.small_images,file.response.data.image_url)
+                if(file.response){
+                    this.removeByValue(this.data.small_images,file.response.data.image_url)
+                }else{
+                    this.removeByValue(this.data.small_images,file.url)
+                }
+
             },
             // 上传成功后的回调
             uploadSuccess(res, file, fileList) {
@@ -482,12 +524,12 @@
             },
 //            删除图片数组中的指定值的元素
             removeByValue(arr, val) {
-                for (var i = 0; i < arr.length; i++) {
-                    if (arr[i] == val) {
-                        arr.splice(i, 1);
-                        break;
+                    for (var i = 0; i < arr.length; i++) {
+                        if (arr[i] == val) {
+                            arr.splice(i, 1);
+                            break;
+                        }
                     }
-                }
             }
         },
         mounted() {
@@ -503,8 +545,8 @@
 
 <style scoped>
     .ms-doc {
-        width: 100%;
-        max-width: 980px;
+        /*width: 100%;*/
+        width: 980px;
         /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;

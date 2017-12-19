@@ -4,59 +4,66 @@
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item style="font-size: 24px;margin-left: 20px;">商品采集</el-breadcrumb-item>
             </el-breadcrumb>
-            <p>商品总库总共：<span>1111</span>件商品</p>
+            <p>商品总库总共：<span>{{totalCount}}</span>件商品</p>
         </div>
         <div class="ms-doc">
-            <el-form ref="form" :model="form" label-width="50px" style="color: #848c97;">
+            <el-form ref="form" label-width="50px" style="color: #848c97;">
                 <el-form-item label="时间">
-                    <span class="time_tab">全部</span>
-                    <span class="time_tab">今日更新</span>
-                    <span class="time_tab">1小时更新</span>
-                    <span class="time_tab">6小时更新</span>
-                    <span class="time_tab">24小时更新</span>
+                    <span class="time_tab time_select timeTab">全部</span>
+                    <span class="time_tab timeTab">今日更新</span>
+                    <span class="time_tab timeTab">1小时更新</span>
+                    <span class="time_tab timeTab">6小时更新</span>
+                    <span class="time_tab timeTab">24小时更新</span>
                     <span class="time_tab">时间区间</span>
                     <el-date-picker
-                        v-model="form.value1"
+                        v-model="data.start"
                         type="datetime"
-                        placeholder="开始时间" class="time_tab time"></el-date-picker>
+                        placeholder="开始时间" class="time_tab time" @change="startChange" ></el-date-picker>
                     -
                     <el-date-picker
-                        v-model="form.value2"
+                        v-model="data.end"
                         type="datetime"
-                        placeholder="结束时间" class="time">
+                        placeholder="结束时间" class="time" @change="endChange">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="类目">
-                    <span class="time_tab">全部</span>
-                    <el-checkbox-group v-model="form.type" class="time_tab">
-                        <el-checkbox label="女装" name="type"></el-checkbox>
-                        <el-checkbox label="男装" name="type"></el-checkbox>
-                        <el-checkbox label="鞋包" name="type"></el-checkbox>
-                        <el-checkbox label="手机周边" name="type"></el-checkbox>
-                        <el-checkbox label="美妆" name="type"></el-checkbox>
-                        <el-checkbox label="美食" name="type"></el-checkbox>
-                        <el-checkbox label="母婴" name="type"></el-checkbox>
-                        <el-checkbox label="百货" name="type"></el-checkbox>
-                        <el-checkbox label="其他" name="type"></el-checkbox>
+                    <span class="time_tab time_select" id="all" @click="all()">全部</span>
+                    <el-checkbox-group v-model="checkedList" @change="handleCheckedCitiesChange" style="display: inline-block;margin-left: 14px;">
+                        <el-checkbox v-for="(list,index) in list" :label="index+1" :key="index+1">{{list}}</el-checkbox>
                     </el-checkbox-group>
+                    <!--<span class="time_tab time_select">全部</span>-->
+                    <!--<el-checkbox-group v-model="form.type" class="time_tab">-->
+                        <!--<el-checkbox label="女装" name="type"></el-checkbox>-->
+                        <!--<el-checkbox label="男装" name="type"></el-checkbox>-->
+                        <!--<el-checkbox label="鞋包" name="type"></el-checkbox>-->
+                        <!--<el-checkbox label="手机周边" name="type"></el-checkbox>-->
+                        <!--<el-checkbox label="美妆" name="type"></el-checkbox>-->
+                        <!--<el-checkbox label="美食" name="type"></el-checkbox>-->
+                        <!--<el-checkbox label="母婴" name="type"></el-checkbox>-->
+                        <!--<el-checkbox label="百货" name="type"></el-checkbox>-->
+                        <!--<el-checkbox label="其他" name="type"></el-checkbox>-->
+                    <!--</el-checkbox-group>-->
                 </el-form-item>
                 <el-form-item label="商品">
                     <span class="time_tab">价格</span>
-                    <span class="time_tab"><input type="number">-<input type="number"></span>
+                    <span class="time_tab"><input type="number" v-model="data.price_start">-<input type="number" v-model="data.price_end"></span>
                     <span class="time_tab">拥金</span>
-                    <span class="time_tab"><input type="number">-<input type="number"></span>
+                    <span class="time_tab"><input type="number" v-model="data.commission_start">-<input type="number" v-model="data.commission_end"></span>
                     <span class="time_tab">拥金比</span>
-                    <span class="time_tab"><input type="number"></span>
+                    <span class="time_tab"><input v-model="data.rate"></span>
                     <span class="time_tab">月销量</span>
-                    <span class="time_tab"><input type="number"></span>
+                    <span class="time_tab"><input type="number" v-model="data.volume"></span>
                 </el-form-item>
                 <el-form-item label="领券">
-                    <span class="time_tab">折扣力度</span>
-                    <span class="time_tab"><input type="number"></span>
+                    <!--<span class="time_tab">折扣力度</span>-->
+                    <!--<span class="time_tab"><input type="number"></span>-->
                     <span class="time_tab">券价值</span>
-                    <span class="time_tab"><input type="number">-<input type="number"></span>
+                    <span class="time_tab"><input type="number" v-model="data.coupon_number_start">-<input type="number" v-model="data.coupon_number_end"></span>
                 </el-form-item>
             </el-form>
+            <el-button type="primary" round
+                       style="margin-top: 10px;" @click="getGoodsList()">搜索
+            </el-button>
         </div>
         <div class="ms-doc sort">
             <ul class="tab" id="tabs">
@@ -67,42 +74,41 @@
                 <li>月销额</li>
                 <li>拥金比</li>
                 <li>拥金量</li>
-                <li>折扣力度</li>
+                <!--<li>折扣力度</li>-->
             </ul>
             <ul class="goods_list" style="font-size: 0;">
-                <li v-for="i in 10">
+                <li v-for="(list,index) in goodsList" :key="index">
                     <div class="pic">
-                        <img src="/static/img/img.jpg" alt="" style="width: 100%;height: 100%;">
+                        <img :src="list.pict_url" alt="" style="width: 100%;height: 100%;">
                     </div>
                     <div class="goods_des">
                         <div class="title">
-                            <p class="goods_title" title="哈哈哈哈">
-                                商品名称商哈哈哈哈哈哈哈哈哈哈哈哈哈品名称商品名称商品名称商品名SD敢达好多事似懂非懂就是的地方
+                            <p class="goods_title" :title="list.title">
+                                {{list.title}}
                             </p>
                         </div>
                         <p class="price">
-                            <small>￥</small>
-                            <span class="new_price">88</span>
-                            <small>.88</small>
-                            <del>￥7.3</del>
-                            <span class="num">月销 <span>111</span></span></p>
+                            <small>￥</small><span class="new_price" v-text="list.zk_final_price.rmb">88</span>
+                            <small v-show="list.zk_final_price.corner!==''">.{{list.zk_final_price.corner}}</small>
+                            <del>￥{{list.reserve_price}}</del>
+                            <span class="num">月销 <span v-text="list.volume">111</span></span></p>
                         <p>
-                            <span class="rate"> <small>比率</small><span>20</span><small>.3%</small></span>
+                            <span class="rate"> <small>比率</small><span v-text="list.commission_rate.rmb">20</span><small v-show="list.commission_rate.corner!==''">.{{list.commission_rate.corner}}</small><small>%</small></span>
                             <span class="rate_right"><small style="color: #c0c0c0;">拥金</small> <span
-                                style="font-size: 14px;color: #848c9e;">￥15</span><small
-                                style="color: #848c9e;">.13</small></span>
+                                style="font-size: 14px;color: #848c9e;">￥{{list.commission.rmb}}</span><small
+                                style="color: #848c9e;" v-show="list.commission.corner!==''">.{{list.commission.corner}}</small></span>
                         </p>
                         <p style="margin: 7px 0;">
-                            <span class="juan"><span class="juan_1">券</span><span class="juan_2">10元</span></span>
-                            <span class="discount">折扣 <span>1.4</span>折</span>
+                            <span class="juan"><span class="juan_1">券</span><span class="juan_2">{{list.coupon_number}}元</span></span>
+                            <span class="discount">折扣 <span>{{list.discount}}</span> 折</span>
                         </p>
                         <p style="line-height: 16px;font-size: 12px;color: #848c97;vertical-align: middle;">
                             <img src="/static/img/shop_img.png" alt=""
-                                 style="width: 14px;height: 14px;vertical-align: middle;margin-bottom: 3px;">店铺名字
+                                 style="width: 14px;height: 14px;vertical-align: middle;margin-bottom: 3px;"><span style="width: 140px;overflow: hidden;margin-left: 4px;height: 14px;display: inline-block;">{{list.title}}</span>
                             <img src="/static/img/jian.png" alt="" style="width: 14px;height: 14px;float: right;">
                         </p>
                     </div>
-                    <div class="btn"><span>复制文案</span><span>选取 <img src="/static/img/down.png" alt=""
+                    <div class="btn"><span>复制文案</span><span @click="toSelect(list)">选取 <img src="/static/img/down.png" alt=""
                                                                     style="width: 10px;height: 10px;"></span></div>
                 </li>
             </ul>
@@ -111,23 +117,38 @@
                     @current-change="handleCurrentChange"
                     :page-size=per_page
                     layout="prev, pager, next, jumper"
-                    :total=messageList.total>
+                    :total="totalPage">
                 </el-pagination>
             </div>
         </div>
         <div class="goods_selected">
             <div class="goods_selected_main" v-show="isShow">
-                <span class="clearAll">清空所选商品</span>
+                <span class="clearAll" v-show="selectList.length!==0">清空所选商品</span>
                 <div class="selected_goods">
                      <ul class="selected_goods_list">
-                         <li>
+                         <li v-for="(list,index) in selectList" :key="index">
                              <div class="selected_list_left">
-                                 <img src="/static/img/img.jpg" alt="">
+                                 <img :src="list.pict_url" alt="">
                              </div>
                              <div class="selected_list_right">
-                                 <p> <img src="/static/img/jian.png" alt="" style="width: 14px;height: 14px;float: left;"><span class="selected_list_title">商品名称名称名称斯蒂芬斯哦大神们佛阿迪第三方</span></p>
-                                 <p><span>￥99</span><span class="juan"><span class="juan_1">券</span><span class="juan_2">10元</span></span></p>
+                                 <p style="line-height: 17px;vertical-align: middle">
+                                     <img src="/static/img/jian.png" alt="" style="width: 14px;height: 14px;float: left;">
+                                     <span class="selected_list_title">{{list.title}}</span>
+                                 </p>
+                                 <p style="line-height: 30px;">
+                                     <span style="font-size: 12px;color: #848c97;vertical-align: middle;">￥{{list.zk_final_price.rmb}} <span v-show="list.zk_final_price.corner!==''">.{{list.zk_final_price.corner}}</span></span>
+                                     <span class="juan" style="float: right;margin-top: 8px;"><span class="juan_1">券</span><span class="juan_2">{{list.coupon_number}}元</span></span>
+                                 </p>
+                                 <p style="font-size: 12px;">
+                                     <span style="color: #c0c0c0;">拥金￥{{list.commission.rmb}}</span><span
+                                         style="color: #848c9e;" v-show="list.commission.corner!==''">.{{list.commission.corner}}</span>
+                                     <span style="float: right;color: #ffa55c;">
+                                         比率<span v-text="list.commission_rate.rmb">20</span>
+                                         <span v-show="list.commission_rate.corner!==''">.{{list.commission_rate.corner}}</span><span>%</span>
+                                     </span>
+                                 </p>
                              </div>
+                             <span class="close_btn" @click="closeSelected()"><img src="/static/img/cancel_img.png" alt=""></span>
                          </li>
                      </ul>
                 </div>
@@ -150,37 +171,49 @@
 </template>
 
 <script>
+    const Options = ['女装', '男装', '鞋包', '手机周边','美妆','美食','母婴','百货','其他'];
     export default {
         components: {},
         data() {
             return {
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: '',
-                    value1: '',
-                    value2: '',
-                },
+                checkAll: false,
+                checkedList: [],
+                list: Options,
+                isIndeterminate: true,
                 per_page: 15,
-                messageList: {
-                    data: [],
-                    total: 1
+                data:{
+                   page:1,
+                   limit: 40,
+                   update_time:'1',
+                    start:'',
+                    end:'',
+                    price_start:'',
+                    price_end:'',
+                    commission_start:'',
+                    commission_end:'',
+                    rate:'',
+                    volume:'',
+                    coupon_number_start:'',
+                    coupon_number_end:'',
+                    sort:'1'
                 },
-                isShow: false
+                isShow: false,
+                goodsList:[],
+                totalPage:null,
+                totalCount:'',
+                selectList:[]
             }
         },
         methods: {
-            //      获取消息模板
-            getSetMessage: function () {
-                this.$ajax.get('/api/Message/setMessage').then((res) => {
+            //      获取商品列表
+            getGoodsList: function () {
+                this.data.cate=JSON.stringify(this.checkedList)
+                this.$ajax.get('/api/Goods/collectProduct',{params:this.data}).then((res) => {
                     if (res.data.code == '200') {
-                        this.message = res.data.data.message
-                        console.log(this.message)
+                        this.goodsList = res.data.data.goods_list
+                        this.totalPage=res.data.data.total_page
+                        this.totalCount=res.data.data.total_count
+                        console.log(this.goodsList)
                     }
                 }, (err) => {
                     console.log(err)
@@ -191,10 +224,67 @@
             },
             handleCurrentChange(val) {
 //                获取当前页数的消息
-                this.getMessageList(val)
+                this.data.page=val
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0
+                this.getGoodsList()
             },
             toshow(){
                 this.isShow=!this.isShow
+            },
+            closeSelected(){
+                console.log('点击取消')
+            },
+            startChange(e){
+                this.data.start=e
+            },
+            endChange(e){
+                this.data.end=e
+            },
+            handleCheckedCitiesChange(value) {
+                console.log(value)
+                let checkedCount = value.length;
+                if(checkedCount==0){
+                    document.getElementById('all').classList.add('time_select')
+                    this.checkedList=[]
+                }else{
+                    document.getElementById('all').classList.remove('time_select')
+//                    var a = this.checkedList;
+//                    var json = {};
+//                    for(var i=0;i<a.length;i++)
+//                    {
+//                        json[i]=a[i];
+//                    }
+//                    JSON.stringify(json);
+                    this.data.cate=this.checkedList;
+                }
+            },
+            all(){
+                document.getElementById('all').classList.add('time_select')
+                this.checkedList=[]
+            },
+            toSelect(e){
+                if(this.selectList.length==0){
+                    this.selectList.push(e)
+                    this.$message({
+                        message: "选取成功",
+                    });
+                }else{
+                    for(var i=0;i<this.selectList.length;i++){
+                        if(this.selectList[i]==e){
+                            this.$message({
+                                message: "请勿重选",
+                                type: 'error'
+                            });
+                        }else{
+                            this.selectList.push(e)
+                            this.$message({
+                                message: "选取成功",
+                            });
+                        }
+                    }
+                }
+                console.log(this.selectList)
             }
 
         },
@@ -209,11 +299,38 @@
                         tab[j].className = ""
                     }
                     tab[this.index].className = "active"
+                    self.data.sort=this.index+1
+                    self.getGoodsList()
+
+                }
+            }
+            var timeTab=document.getElementsByClassName('timeTab')
+            for (var i = 0; i < timeTab.length; i++) {
+                let self = this
+                timeTab[i].index = i
+                timeTab[i].onclick = function () {
+                    for (var j = 0; j < timeTab.length; j++) {
+                        timeTab[j].classList.remove("time_select");
+                    }
+                    timeTab[this.index].classList.add("time_select");
+                    switch (this.index){
+                        case 0: this.update_time='1'
+                            break;
+                        case 1: this.update_time='2'
+                            break;
+                        case 2: this.update_time='5'
+                            break;
+                        case 3: this.update_time='3'
+                            break;
+                        case 4: this.update_time='4'
+                            break;
+                    }
+                    console.log(this.update_time)
                 }
             }
         },
         created: function () {
-
+            this.getGoodsList()
         }
     }
 </script>
@@ -256,6 +373,7 @@
         text-align: center;
         display: inline-block;
         padding-left: 18px;
+        cursor: pointer;
     }
 
     .time_tab input {
@@ -264,6 +382,9 @@
         border: 1px solid #e3e3e3;
         padding: 4px 5px;
         color: #54667a;
+    }
+    .time_select{
+        color: #4b9efc;
     }
 
     .tab {
@@ -275,6 +396,7 @@
         color: #848c97;
         font-size: 14px;
         margin: 0 5px;
+        cursor: pointer;
     }
 
     .tab .active {
@@ -296,7 +418,6 @@
     .pic {
         width: 100%;
         height: 208px;
-        background-color: red;
         text-align: center;
         position: relative;
     }
@@ -479,11 +600,12 @@
         font-size: 0;
     }
     .selected_goods_list li{
+        position: relative;
         width: 260px;
         height: 60px;
         font-size: 0px;
         border: 1px solid #e3e3e3;
-        margin: 10px calc(((100%/3) - 280px)/2);
+        margin: 10px calc(((100%/3) - 282px)/2);
         padding: 10px;
         box-sizing:content-box;
     }
@@ -494,8 +616,9 @@
         width: 60px;height: 60px;
     }
     .selected_list_right{
-        width: 190px;height: 100%;display: inline-block;
+        width: 190px;height: 100%;
         margin-left: 10px;
+        float: right;
     }
     .selected_list_title{
         display: inline-block;
@@ -505,6 +628,12 @@
         display: -webkit-box;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
+    }
+    .close_btn{
+        position: absolute;right: -7px;top:-8px;display: inline-block;
+    }
+    .close_btn img{
+        width: 15px;height: 15px;
     }
 </style>
 <style>

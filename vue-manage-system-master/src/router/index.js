@@ -100,10 +100,6 @@ export default new Router({
                     component: resolve => require(['../components/page/menuManage/menuSetting.vue'], resolve)
                 },
                 {
-                    path: '/admin/menuSort',
-                    component: resolve => require(['../components/page/menuManage/menuSort.vue'], resolve)
-                },
-                {
                     path: '/admin/goodsSetting',
                     component: resolve => require(['../components/page/goodsSetting.vue'], resolve)
                 }

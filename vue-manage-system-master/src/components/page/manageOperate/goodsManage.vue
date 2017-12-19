@@ -6,7 +6,7 @@
             </el-breadcrumb>
         </div>
         <div class="ms-doc">
-            <p class="m_title">商品分类管理</p>
+            <p class="m_title">商品管理</p>
             <div class="ms-doc_main">
                 <div>
                     <el-select v-model="data.condition1" placeholder="请选择"  style="width: 150px;margin-right: 20px;" >
@@ -129,6 +129,7 @@
                         </el-option>
                     </el-select>
                     <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;" @click="save()">确认</el-button>
+                    <el-button type="danger" @click="del1()">删除</el-button>
                 </div>
             </div>
         </div>

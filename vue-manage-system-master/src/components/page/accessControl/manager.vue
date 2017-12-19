@@ -44,7 +44,7 @@
         </div>
         <!--添加管理员弹出框-->
         <el-dialog
-            title="添加管理员"
+            :title="title"
             :visible.sync="dialogVisible"
             :before-close="handleClose" style="width: 1100px;margin: 100px auto;">
             <div style="font-size: 14px;color: #54667a;">
@@ -54,7 +54,7 @@
                 </el-checkbox-group>
                 </div>
                 <p><span  class="model_name">姓名：</span><el-input v-model="user_info.username" style="width: 180px;margin: 10px 0 20px;"></el-input></p>
-                <p><span  class="model_name">手机号：</span><el-input v-model="user_info.telephone" style="width: 180px;margin: 10px 0 20px;" maxlength=11></el-input></p>
+                <p><span  class="model_name">手机号：</span><el-input v-model="user_info.telephone" style="width: 180px;margin: 10px 0 20px;"></el-input></p>
                 <p><span  class="model_name">初始密码：</span><el-input v-model="user_info.password" style="width: 180px;margin: 10px 0 20px;"></el-input> <small style="margin-left: 10px;">如不修改密码，留空即可</small></p>
                 <p><span  class="model_name">状态：</span>
                     <el-radio v-model="user_info.status" label="1">允许登录</el-radio>
@@ -81,12 +81,13 @@
                 radio: '1',
                 user_info:{
                     username:'',
-                    telephone:'',
+                    telephone:null,
                     password:'',
                     group_id:[],
                     status:'1',
                     id:''
-                }
+                },
+                title:'添加管理员'
 
             }
         },
@@ -154,7 +155,7 @@
             handleClick(id) {
                 //      获取管理信息
                 if(id){
-                    console.log('111')
+                    this.title='修改权限或密码'
                     this.$ajax.get('/api/Rule/editAdmin',{params:{admin_id:id}}).then((res) => {
                         if (res.data.code == '200') {
                             this.user_info = res.data.data.user_info
@@ -166,6 +167,7 @@
                         console.log(err)
                     })
                 }else{
+                    this.title='添加管理员'
                     this.user_info={
                         username:'',
                         telephone:'',

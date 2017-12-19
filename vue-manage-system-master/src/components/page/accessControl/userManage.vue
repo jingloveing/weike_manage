@@ -37,7 +37,7 @@
             </div>
         </div>
         <el-dialog
-            title="添加用户组"
+            :title="title"
             :visible.sync="dialogVisible"
             :before-close="handleClose" style="width: 1000px;margin: 100px auto;">
             <div>
@@ -143,7 +143,8 @@
                 isIndeterminate: true,
                 list:[],
                 multipleSelection:[],
-                ids:[]
+                ids:[],
+                title:'添加用户组'
             }
         },
         methods: {
@@ -202,10 +203,12 @@
 //            增加//编辑分组
             handleClick(id, name) {
                 if (id) {
+                    this.title='修改用户组'
                     this.id = id
                     this.group_name = name
                     this.dialogVisible = true
                 } else {
+                    this.title='添加用户组'
                     this.group_id = ''
                     this.group_name = ''
                     this.dialogVisible = true
