@@ -18,7 +18,7 @@
                     <el-date-picker
                         v-model="data.start"
                         type="datetime"
-                        placeholder="开始时间" class="time_tab time" @change="startChange" ></el-date-picker>
+                        placeholder="开始时间" class="time_tab time" @change="startChange"></el-date-picker>
                     -
                     <el-date-picker
                         v-model="data.end"
@@ -28,28 +28,31 @@
                 </el-form-item>
                 <el-form-item label="类目">
                     <span class="time_tab time_select" id="all" @click="all()">全部</span>
-                    <el-checkbox-group v-model="checkedList" @change="handleCheckedCitiesChange" style="display: inline-block;margin-left: 14px;">
+                    <el-checkbox-group v-model="checkedList" @change="handleCheckedCitiesChange"
+                                       style="display: inline-block;margin-left: 14px;">
                         <el-checkbox v-for="(list,index) in list" :label="index+1" :key="index+1">{{list}}</el-checkbox>
                     </el-checkbox-group>
                     <!--<span class="time_tab time_select">全部</span>-->
                     <!--<el-checkbox-group v-model="form.type" class="time_tab">-->
-                        <!--<el-checkbox label="女装" name="type"></el-checkbox>-->
-                        <!--<el-checkbox label="男装" name="type"></el-checkbox>-->
-                        <!--<el-checkbox label="鞋包" name="type"></el-checkbox>-->
-                        <!--<el-checkbox label="手机周边" name="type"></el-checkbox>-->
-                        <!--<el-checkbox label="美妆" name="type"></el-checkbox>-->
-                        <!--<el-checkbox label="美食" name="type"></el-checkbox>-->
-                        <!--<el-checkbox label="母婴" name="type"></el-checkbox>-->
-                        <!--<el-checkbox label="百货" name="type"></el-checkbox>-->
-                        <!--<el-checkbox label="其他" name="type"></el-checkbox>-->
+                    <!--<el-checkbox label="女装" name="type"></el-checkbox>-->
+                    <!--<el-checkbox label="男装" name="type"></el-checkbox>-->
+                    <!--<el-checkbox label="鞋包" name="type"></el-checkbox>-->
+                    <!--<el-checkbox label="手机周边" name="type"></el-checkbox>-->
+                    <!--<el-checkbox label="美妆" name="type"></el-checkbox>-->
+                    <!--<el-checkbox label="美食" name="type"></el-checkbox>-->
+                    <!--<el-checkbox label="母婴" name="type"></el-checkbox>-->
+                    <!--<el-checkbox label="百货" name="type"></el-checkbox>-->
+                    <!--<el-checkbox label="其他" name="type"></el-checkbox>-->
                     <!--</el-checkbox-group>-->
                 </el-form-item>
                 <el-form-item label="商品">
                     <span class="time_tab">价格</span>
-                    <span class="time_tab"><input type="number" v-model="data.price_start">-<input type="number" v-model="data.price_end"></span>
-                    <span class="time_tab">拥金</span>
-                    <span class="time_tab"><input type="number" v-model="data.commission_start">-<input type="number" v-model="data.commission_end"></span>
-                    <span class="time_tab">拥金比</span>
+                    <span class="time_tab"><input type="number" v-model="data.price_start">-<input type="number"
+                                                                                                   v-model="data.price_end"></span>
+                    <span class="time_tab">佣金</span>
+                    <span class="time_tab"><input type="number" v-model="data.commission_start">-<input type="number"
+                                                                                                        v-model="data.commission_end"></span>
+                    <span class="time_tab">佣金比</span>
                     <span class="time_tab"><input v-model="data.rate"></span>
                     <span class="time_tab">月销量</span>
                     <span class="time_tab"><input type="number" v-model="data.volume"></span>
@@ -58,7 +61,8 @@
                     <!--<span class="time_tab">折扣力度</span>-->
                     <!--<span class="time_tab"><input type="number"></span>-->
                     <span class="time_tab">券价值</span>
-                    <span class="time_tab"><input type="number" v-model="data.coupon_number_start">-<input type="number" v-model="data.coupon_number_end"></span>
+                    <span class="time_tab"><input type="number" v-model="data.coupon_number_start">-<input type="number"
+                                                                                                           v-model="data.coupon_number_end"></span>
                 </el-form-item>
             </el-form>
             <el-button type="primary" round
@@ -72,8 +76,8 @@
                 <li>价格</li>
                 <li>销量</li>
                 <li>月销额</li>
-                <li>拥金比</li>
-                <li>拥金量</li>
+                <li>佣金比</li>
+                <li>佣金量</li>
                 <!--<li>折扣力度</li>-->
             </ul>
             <ul class="goods_list" style="font-size: 0;">
@@ -88,28 +92,50 @@
                             </p>
                         </div>
                         <p class="price">
-                            <small>￥</small><span class="new_price" v-text="list.zk_final_price.rmb">88</span>
-                            <small v-show="list.zk_final_price.corner!==''">.{{list.zk_final_price.corner}}</small>
+                            <small>￥</small>
+                            <span class="new_price" v-text="list.zk_final_price.rmb">88</span>
+                            <small v-show="list.zk_final_price.corner!=='00'">.{{list.zk_final_price.corner}}</small>
                             <del>￥{{list.reserve_price}}</del>
                             <span class="num">月销 <span v-text="list.volume">111</span></span></p>
                         <p>
-                            <span class="rate"> <small>比率</small><span v-text="list.commission_rate.rmb">20</span><small v-show="list.commission_rate.corner!==''">.{{list.commission_rate.corner}}</small><small>%</small></span>
-                            <span class="rate_right"><small style="color: #c0c0c0;">拥金</small> <span
+                            <span class="rate"> <small>比率</small><span v-text="list.commission_rate.rmb">20</span><small
+                                v-show="list.commission_rate.corner!=='00'">.{{list.commission_rate.corner}}</small><small>%</small></span>
+                            <span class="rate_right"><small style="color: #c0c0c0;">佣金</small> <span
                                 style="font-size: 14px;color: #848c9e;">￥{{list.commission.rmb}}</span><small
-                                style="color: #848c9e;" v-show="list.commission.corner!==''">.{{list.commission.corner}}</small></span>
+                                style="color: #848c9e;"
+                                v-show="list.commission.corner!=='00'">.{{list.commission.corner}}</small></span>
                         </p>
                         <p style="margin: 7px 0;">
-                            <span class="juan"><span class="juan_1">券</span><span class="juan_2">{{list.coupon_number}}元</span></span>
+                            <span class="juan"><span class="juan_1">券</span><span
+                                class="juan_2">{{list.coupon_number}}元</span></span>
                             <span class="discount">折扣 <span>{{list.discount}}</span> 折</span>
                         </p>
                         <p style="line-height: 16px;font-size: 12px;color: #848c97;vertical-align: middle;">
                             <img src="/static/img/shop_img.png" alt=""
-                                 style="width: 14px;height: 14px;vertical-align: middle;margin-bottom: 3px;"><span style="width: 140px;overflow: hidden;margin-left: 4px;height: 14px;display: inline-block;">{{list.title}}</span>
+                                 style="width: 14px;height: 14px;vertical-align: middle;margin-bottom: 3px;"><span
+                            style="width: 140px;overflow: hidden;margin-left: 4px;height: 14px;display: inline-block;">{{list.title}}</span>
                             <img src="/static/img/jian.png" alt="" style="width: 14px;height: 14px;float: right;">
                         </p>
                     </div>
-                    <div class="btn"><span>复制文案</span><span @click="toSelect(list)">选取 <img src="/static/img/down.png" alt=""
-                                                                    style="width: 10px;height: 10px;"></span></div>
+                    <div class="btn">
+                        <span style="position: relative;">
+                            <!--<span>复制文案</span>-->
+                            <el-tooltip placement="right">
+                                  <div slot="content" class="copyText">
+                                      <img style="width: 100px;height: 100px;" :src="list.pict_url">
+                                      <p style="width: 250px;">{{list.title}}</p>
+                                      <p>券后￥{{list.zk_final_price.rmb}}<a v-show="list.zk_final_price.corner!=='00'">.{{list.zk_final_price.corner}}</a></p>
+                                      <p>{{list.coupon_number}}元优惠券</p>
+                                      <p>券：{{list.coupon_url}}</p>
+                                      <p style="width: 250px;">下单链接：{{list.coupon_click_url}}</p>
+                                      <p style="width: 250px;">{{list.item_description}}</p>
+                                  </div>
+                                  <el-button class="copy"  :data-clipboard-text="list.title+'               券后￥'+list.zk_final_price.rmb+'.'+list.zk_final_price.corner+'                   '+
+                                      list.coupon_number+'元优惠券'+'              券：'+list.coupon_url+'                        下单链接：'+list.coupon_click_url+list.item_description">复制文案</el-button>
+                            </el-tooltip>
+                        </span>
+                        <span @click="toSelect(list)">选取 <img src="/static/img/down.png" alt=""
+                                                              style="width: 10px;height: 10px;"></span></div>
                 </li>
             </ul>
             <div class="block">
@@ -123,45 +149,55 @@
         </div>
         <div class="goods_selected">
             <div class="goods_selected_main" v-show="isShow">
-                <span class="clearAll" v-show="selectList.length!==0">清空所选商品</span>
+                <span class="clearAll" v-show="selectList.length!==0" @click="clearAll()">清空所选商品</span>
                 <div class="selected_goods">
-                     <ul class="selected_goods_list">
-                         <li v-for="(list,index) in selectList" :key="index">
-                             <div class="selected_list_left">
-                                 <img :src="list.pict_url" alt="">
-                             </div>
-                             <div class="selected_list_right">
-                                 <p style="line-height: 17px;vertical-align: middle">
-                                     <img src="/static/img/jian.png" alt="" style="width: 14px;height: 14px;float: left;">
-                                     <span class="selected_list_title">{{list.title}}</span>
-                                 </p>
-                                 <p style="line-height: 30px;">
-                                     <span style="font-size: 12px;color: #848c97;vertical-align: middle;">￥{{list.zk_final_price.rmb}} <span v-show="list.zk_final_price.corner!==''">.{{list.zk_final_price.corner}}</span></span>
-                                     <span class="juan" style="float: right;margin-top: 8px;"><span class="juan_1">券</span><span class="juan_2">{{list.coupon_number}}元</span></span>
-                                 </p>
-                                 <p style="font-size: 12px;">
-                                     <span style="color: #c0c0c0;">拥金￥{{list.commission.rmb}}</span><span
-                                         style="color: #848c9e;" v-show="list.commission.corner!==''">.{{list.commission.corner}}</span>
-                                     <span style="float: right;color: #ffa55c;">
+                    <div style="width: 100%;text-align: center;" v-show="selectList.length==0">
+                        <img src="/static/img/empty.png" alt="" style="width: 200px;height: 200px;">
+                    </div>
+                    <ul class="selected_goods_list">
+                        <li v-for="(list,index) in selectList" :key="index">
+                            <div class="selected_list_left">
+                                <img :src="list.pict_url" alt="">
+                            </div>
+                            <div class="selected_list_right">
+                                <p style="line-height: 17px;vertical-align: middle">
+                                    <img src="/static/img/jian.png" alt=""
+                                         style="width: 14px;height: 14px;float: left;">
+                                    <span class="selected_list_title">{{list.title}}</span>
+                                </p>
+                                <p style="line-height: 30px;">
+                                    <span
+                                        style="font-size: 12px;color: #848c97;vertical-align: middle;">￥{{list.zk_final_price.rmb}} <span
+                                        v-show="list.zk_final_price.corner!==''">.{{list.zk_final_price.corner}}</span></span>
+                                    <span class="juan" style="float: right;margin-top: 8px;"><span
+                                        class="juan_1">券</span><span
+                                        class="juan_2">{{list.coupon_number}}元</span></span>
+                                </p>
+                                <p style="font-size: 12px;">
+                                    <span style="color: #c0c0c0;">佣金￥{{list.commission.rmb}}</span><span
+                                    style="color: #848c9e;"
+                                    v-show="list.commission.corner!==''">.{{list.commission.corner}}</span>
+                                    <span style="float: right;color: #ffa55c;">
                                          比率<span v-text="list.commission_rate.rmb">20</span>
                                          <span v-show="list.commission_rate.corner!==''">.{{list.commission_rate.corner}}</span><span>%</span>
                                      </span>
-                                 </p>
-                             </div>
-                             <span class="close_btn" @click="closeSelected()"><img src="/static/img/cancel_img.png" alt=""></span>
-                         </li>
-                     </ul>
+                                </p>
+                            </div>
+                            <span class="close_btn" @click="closeSelected(index)"><img src="/static/img/cancel_img.png"
+                                                                                       alt=""></span>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div style="line-height: 66px;">
                  <span class="goods_selected_center">
                      <span class="has_selected" @click="toshow()">
-                         已选商品( <span style="color: #ff526d;">11</span>)
+                         已选商品(<span style="color: #ff526d;">{{selectList.length}}</span>)
                          <img src="/static/img/arrow_down.png" alt="" v-show="!isShow">
                          <img src="/static/img/arrow_up.png" alt="" v-show="isShow">
                      </span>
             </span>
-                <span class="goods_selected_btn">
+                <span class="goods_selected_btn" @click="toLib()">
                 采集到库
             </span>
             </div>
@@ -171,7 +207,8 @@
 </template>
 
 <script>
-    const Options = ['女装', '男装', '鞋包', '手机周边','美妆','美食','母婴','百货','其他'];
+    const Options = ['女装', '男装', '鞋包', '手机周边', '美妆', '美食', '母婴', '百货', '其他'];
+    import Clipboard from 'clipboard';
     export default {
         components: {},
         data() {
@@ -181,38 +218,38 @@
                 list: Options,
                 isIndeterminate: true,
                 per_page: 15,
-                data:{
-                   page:1,
-                   limit: 40,
-                   update_time:'1',
-                    start:'',
-                    end:'',
-                    price_start:'',
-                    price_end:'',
-                    commission_start:'',
-                    commission_end:'',
-                    rate:'',
-                    volume:'',
-                    coupon_number_start:'',
-                    coupon_number_end:'',
-                    sort:'1'
+                data: {
+                    page: 1,
+                    limit: 40,
+                    update_time: '1',
+                    start: '',
+                    end: '',
+                    price_start: '',
+                    price_end: '',
+                    commission_start: '',
+                    commission_end: '',
+                    rate: '',
+                    volume: '',
+                    coupon_number_start: '',
+                    coupon_number_end: '',
+                    sort: '1'
                 },
                 isShow: false,
-                goodsList:[],
-                totalPage:null,
-                totalCount:'',
-                selectList:[]
+                goodsList: [],
+                totalPage: null,
+                totalCount: '',
+                selectList: [],
             }
         },
         methods: {
             //      获取商品列表
             getGoodsList: function () {
-                this.data.cate=JSON.stringify(this.checkedList)
-                this.$ajax.get('/api/Goods/collectProduct',{params:this.data}).then((res) => {
+                this.data.cate = JSON.stringify(this.checkedList)
+                this.$ajax.get('/api/Goods/collectProduct', {params: this.data}).then((res) => {
                     if (res.data.code == '200') {
                         this.goodsList = res.data.data.goods_list
-                        this.totalPage=res.data.data.total_page
-                        this.totalCount=res.data.data.total_count
+                        this.totalPage = res.data.data.total_page
+                        this.totalCount = res.data.data.total_count
                         console.log(this.goodsList)
                     }
                 }, (err) => {
@@ -224,71 +261,109 @@
             },
             handleCurrentChange(val) {
 //                获取当前页数的消息
-                this.data.page=val
-                document.body.scrollTop = 0;
+                this.data.page = val
+                document.getElementsByClassName('content')[0].scrollTop = 0
                 document.documentElement.scrollTop = 0
                 this.getGoodsList()
             },
-            toshow(){
-                this.isShow=!this.isShow
+            toshow() {
+                this.isShow = !this.isShow
             },
-            closeSelected(){
-                console.log('点击取消')
+            closeSelected(index) {
+                this.selectList.splice(index, 1)
+                localStorage.setItem('selectList', JSON.stringify(this.selectList))
+
             },
-            startChange(e){
-                this.data.start=e
+//            选择开始日期
+            startChange(e) {
+                this.data.start = e
             },
-            endChange(e){
-                this.data.end=e
+//            选择结束日期
+            endChange(e) {
+                this.data.end = e
             },
+//            监听类目多选选项
             handleCheckedCitiesChange(value) {
-                console.log(value)
                 let checkedCount = value.length;
-                if(checkedCount==0){
+                if (checkedCount == 0) {
                     document.getElementById('all').classList.add('time_select')
-                    this.checkedList=[]
-                }else{
+                    this.checkedList = []
+                } else {
                     document.getElementById('all').classList.remove('time_select')
-//                    var a = this.checkedList;
-//                    var json = {};
-//                    for(var i=0;i<a.length;i++)
-//                    {
-//                        json[i]=a[i];
-//                    }
-//                    JSON.stringify(json);
-                    this.data.cate=this.checkedList;
+                    this.data.cate = this.checkedList;
                 }
             },
-            all(){
+            all() {
                 document.getElementById('all').classList.add('time_select')
-                this.checkedList=[]
+                this.checkedList = []
             },
-            toSelect(e){
+            toSelect(e) {
+                if(JSON.parse(localStorage.getItem('selectList'))){
+                    this.selectList = JSON.parse(localStorage.getItem('selectList'))
+                }else{
+                    this.selectList = []
+                }
+                console.log(this.selectList)
                 if(this.selectList.length==0){
                     this.selectList.push(e)
                     this.$message({
                         message: "选取成功",
                     });
+                    localStorage.setItem('selectList',JSON.stringify(this.selectList))
                 }else{
                     for(var i=0;i<this.selectList.length;i++){
-                        if(this.selectList[i]==e){
+                        if(this.selectList[i].id==e.id){
                             this.$message({
                                 message: "请勿重选",
                                 type: 'error'
                             });
-                        }else{
-                            this.selectList.push(e)
-                            this.$message({
-                                message: "选取成功",
-                            });
+                           return
                         }
+                        break
                     }
+                    this.selectList.push(e)
+                    this.$message({
+                        message: "选取成功",
+                    });
+                    localStorage.setItem('selectList',JSON.stringify(this.selectList))
                 }
-                console.log(this.selectList)
-            }
 
+            },
+//            清空采集的商品
+            clearAll() {
+                localStorage.removeItem('selectList')
+                this.selectList = []
+            },
+//            采集商品到库
+            toLib() {
+                var id = []
+                for (var i = 0; i < this.selectList.length; i++) {
+                    id.push(this.selectList[i].id)
+                }
+                if (id.length == 0) {
+                    return
+                }
+                this.$ajax.post('/api/Goods/doCollect', {id: id}).then((res) => {
+                    if (res.data.code == '200') {
+                        localStorage.removeItem('selectList')
+                        this.selectList = []
+                        this.$message({
+                            message: res.data.data.message,
+                        });
+                    } else {
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
         },
         mounted() {
+            const clipboard = new Clipboard('.copy');
+            let self = this
 //            综合排序选项卡
             var tab = document.getElementById('tabs').getElementsByTagName('li');
             for (var i = 0; i < tab.length; i++) {
@@ -299,12 +374,12 @@
                         tab[j].className = ""
                     }
                     tab[this.index].className = "active"
-                    self.data.sort=this.index+1
+                    self.data.sort = this.index + 1
                     self.getGoodsList()
 
                 }
             }
-            var timeTab=document.getElementsByClassName('timeTab')
+            var timeTab = document.getElementsByClassName('timeTab')
             for (var i = 0; i < timeTab.length; i++) {
                 let self = this
                 timeTab[i].index = i
@@ -313,24 +388,47 @@
                         timeTab[j].classList.remove("time_select");
                     }
                     timeTab[this.index].classList.add("time_select");
-                    switch (this.index){
-                        case 0: this.update_time='1'
+                    switch (this.index) {
+                        case 0:
+                            this.update_time = '1'
                             break;
-                        case 1: this.update_time='2'
+                        case 1:
+                            this.update_time = '2'
                             break;
-                        case 2: this.update_time='5'
+                        case 2:
+                            this.update_time = '5'
                             break;
-                        case 3: this.update_time='3'
+                        case 3:
+                            this.update_time = '3'
                             break;
-                        case 4: this.update_time='4'
+                        case 4:
+                            this.update_time = '4'
                             break;
                     }
-                    console.log(this.update_time)
                 }
             }
+            if (JSON.parse(localStorage.getItem('selectList'))) {
+                this.selectList = JSON.parse(localStorage.getItem('selectList'))
+            } else {
+                this.selectList = []
+            }
+            clipboard.on('success', function(e) {
+                self.$message({
+                    message: "复制成功"
+                });
+                e.clearSelection();
+
+            });
+            clipboard.on('error', function(e) {
+                self.$message({
+                    message: "复制失败",
+                    type: 'error'
+                });
+            });
         },
         created: function () {
             this.getGoodsList()
+
         }
     }
 </script>
@@ -383,7 +481,8 @@
         padding: 4px 5px;
         color: #54667a;
     }
-    .time_select{
+
+    .time_select {
         color: #4b9efc;
     }
 
@@ -513,7 +612,7 @@
 
     .btn {
         color: #848c9e;
-        font-size: 12px;
+        font-size: 0;
         width: 100%;
         border-top: 1px solid #e3e3e3;
     }
@@ -524,6 +623,7 @@
         text-align: center;
         display: inline-block;
         cursor: pointer;
+        font-size: 12px;
     }
 
     .btn span:hover {
@@ -568,15 +668,19 @@
         font-size: 14px;
         color: white;
     }
-    .has_selected{
-        width: 200px;display: inline-block;
+
+    .has_selected {
+        width: 200px;
+        display: inline-block;
         cursor: pointer;
 
     }
-    .has_selected:hover{
+
+    .has_selected:hover {
         background-color: #e3e3e3;
     }
-    .clearAll{
+
+    .clearAll {
         font-size: 12px;
         color: #848c97;
         cursor: pointer;
@@ -585,42 +689,58 @@
         position: absolute;
 
     }
-    .clearAll:hover{
+
+    .clearAll:hover {
         color: #ff526d;
     }
-    .goods_selected_main{
-        height: 360px;width:100%;border: 1px solid #e3e3e3;position: relative;
+
+    .goods_selected_main {
+        height: 360px;
+        width: 100%;
+        border: 1px solid #e3e3e3;
+        position: relative;
         overflow-y: scroll;
     }
-    .selected_goods{
+
+    .selected_goods {
         margin: 40px 20px;
 
     }
-    .selected_goods_list{
+
+    .selected_goods_list {
         font-size: 0;
     }
-    .selected_goods_list li{
+
+    .selected_goods_list li {
         position: relative;
         width: 260px;
         height: 60px;
         font-size: 0px;
         border: 1px solid #e3e3e3;
-        margin: 10px calc(((100%/3) - 282px)/2);
+        margin: 10px calc(((100% / 3) - 282px) / 2);
         padding: 10px;
-        box-sizing:content-box;
+        box-sizing: content-box;
     }
-    .selected_list_left{
-        width: 60px;height: 100%;display: inline-block;
+
+    .selected_list_left {
+        width: 60px;
+        height: 100%;
+        display: inline-block;
     }
-    .selected_list_left img{
-        width: 60px;height: 60px;
+
+    .selected_list_left img {
+        width: 60px;
+        height: 60px;
     }
-    .selected_list_right{
-        width: 190px;height: 100%;
+
+    .selected_list_right {
+        width: 190px;
+        height: 100%;
         margin-left: 10px;
         float: right;
     }
-    .selected_list_title{
+
+    .selected_list_title {
         display: inline-block;
         font-size: 12px;
         color: #848c97;
@@ -629,11 +749,31 @@
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
     }
-    .close_btn{
-        position: absolute;right: -7px;top:-8px;display: inline-block;
+
+    .close_btn {
+        position: absolute;
+        right: -7px;
+        top: -8px;
+        display: inline-block;
     }
-    .close_btn img{
-        width: 15px;height: 15px;
+
+    .close_btn img {
+        width: 15px;
+        height: 15px;
+    }
+    .copy{
+        border: none;font-size: 12px; color: #848c97;width: 100%
+    }
+    .copy:hover{
+        background-color: #e9f1f3;
+        color: #0f8edd;
+    }
+    .copyText{
+        width: 250px;
+        color: white;
+        font-size: 12px;
+        box-sizing: content-box;
+        word-wrap: break-word;
     }
 </style>
 <style>

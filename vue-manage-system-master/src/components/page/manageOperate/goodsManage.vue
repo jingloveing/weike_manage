@@ -112,24 +112,24 @@
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
-                    <el-select v-model="goods_id" placeholder="选择分类"  style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="cate_id" placeholder="选择分类"  style="width: 160px;margin-right: 20px;" >
                         <el-option
-                            v-for="item in searchList.condition1"
-                            :key="item.value"
-                            :label="item.key"
-                            :value="item.value">
+                            v-for="item in cateList"
+                            :key="item.id"
+                            :label="item.cate_name"
+                            :value="item.id">
                         </el-option>
                     </el-select>
-                    <el-select v-model="cate_id" placeholder="选择专场" style="width: 160px;margin-right: 20px;" >
+                    <el-select v-model="store_id" placeholder="选择专场" style="width: 160px;margin-right: 20px;" >
                         <el-option
                             v-for="item in searchList.condition5"
                             :key="item.id"
-                            :label="item.key"
+                            :label="item.store_name"
                             :value="item.id">
                         </el-option>
                     </el-select>
                     <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;" @click="save()">确认</el-button>
-                    <el-button type="danger" @click="del1()">删除</el-button>
+                    <el-button type="danger" @click="del()">删除</el-button>
                 </div>
             </div>
         </div>
@@ -153,6 +153,8 @@
                 },
                 cate_id:'',
                 goods_id:[],
+                cateList:[],
+                store_id:''
             }
         },
         methods: {
@@ -163,6 +165,16 @@
 
                         this.searchList = res.data.data
 
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
+            },
+            //      获取分类列表
+            getCateList: function () {
+                this.$ajax.post('/api/goods/cateList',).then((res) => {
+                    if (res.data.code == '200') {
+                        this.cateList = res.data.data.cate_list
                     }
                 }, (err) => {
                     console.log(err)
@@ -180,7 +192,7 @@
             },
 //            批量处理商品分类
             save: function () {
-                this.$ajax.post('/api/goods/goodsCategory',{goods_id:this.goods_id,cate_id:this.cate_id}).then((res) => {
+                this.$ajax.post('/api/goods/storeCategory',{goods_id:this.goods_id,cate_id:this.cate_id,store_id:this.store_id}).then((res) => {
                     if (res.data.code == '200') {
                         this.$message({
                             message: res.data.data.message,
@@ -204,6 +216,24 @@
                 }
                 this.goods_id = data;
                 console.log(this.goods_id)
+            },
+            del(){
+                this.$ajax.get('/api/Goods/delProduct',{params:{id:this.goods_id}}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getGoodsList()
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
             }
         },
         mounted() {
@@ -213,6 +243,7 @@
         created: function () {
               this.getSearchList()
             this.getGoodsList()
+            this.getCateList()
         }
     }
 </script>

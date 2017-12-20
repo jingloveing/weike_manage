@@ -102,6 +102,7 @@
                                @click="changeAll(1)">一键上架
                     </el-button>
                     <el-button type="danger" round @click="changeAll(2)">一键下架</el-button>
+                    <el-button type="danger" @click="del()">删除</el-button>
                 </div>
             </div>
         </div>
@@ -530,6 +531,24 @@
                             break;
                         }
                     }
+            },
+            del(){
+                this.$ajax.get('/api/Acerstore/delProduct',{params:{product_id:this.product_id}}).then((res) => {
+                    if (res.data.code == '200') {
+                        this.$message({
+                            message: res.data.data.message,
+                            type: 'success'
+                        });
+                        this.getGoodsList()
+                    }else{
+                        this.$message({
+                            message: res.data.error,
+                            type: 'error'
+                        });
+                    }
+                }, (err) => {
+                    console.log(err)
+                })
             }
         },
         mounted() {

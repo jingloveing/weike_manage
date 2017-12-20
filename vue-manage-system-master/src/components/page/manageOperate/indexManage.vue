@@ -46,8 +46,8 @@
                                     <span style="font-size: 14px;">{{type.cate_name}}</span>
                                 </li>
                             </ul>
-                            <el-button type="success" round style="margin-left: 50px;" @click="getAllCateType()">创建二级分类
-                            </el-button>
+                            <!--<el-button type="success" round style="margin-left: 50px;" @click="getAllCateType()">创建二级分类-->
+                            <!--</el-button>-->
                         </div>
                     </div>
                     <!--<div style="text-align: center;padding: 20px 0;">-->
@@ -105,36 +105,36 @@
                </div>
             </div>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="handleClose1">取 消</el-button>
+    <el-button @click="dialogVisible1=false">取 消</el-button>
     <el-button type="primary" @click="sure()" style="background-color: #0f8edd;border-color: #0f8edd;">确 定</el-button>
   </span>
         </el-dialog>
-        <!--创建二级菜单弹出框-->
-        <el-dialog
-            title="二级分类菜单"
-            :visible.sync="dialogVisible2" style="min-width:1100px;">
-            <div>
-               <div class="model_left">
-                    <ul>
-                        <li :class="indexs==index ? activeClass:''" v-on:click="navClickEvent(index_cate,index)" :key="index" v-for="(item,index) in child_cate">{{item.cate_name}}</li>
-                    </ul>
-               </div>
-                <div class="model_right">
-                    <p style="margin-bottom: 10px;">{{child_cate[indexs].cate_name}}</p>
-                    <div id="model_list">
-                        <input type="text" class="model_input" v-for="(item,index) in child_cate[indexs].child" v-model="item.cate_name">
-                    </div>
-                   <div>
-                       <img src="/static/img/add.png" alt="" style="margin:2px 20px;" @click="add()">
-                       <img src="/static/img/del.png" alt="" style="margin:2px 10px;" @click="del()">
-                   </div>
-                    <div style="position: absolute;bottom: 7px;text-align: center;width: 100%;">
-                        <el-button type="primary" @click="" style="background-color: #0f8edd;border-color: #0f8edd;" @click="saveCateType()">保存</el-button>
-                    </div>
-                </div>
-            </div>
-            <span slot="footer" class="dialog-footer"></span>
-        </el-dialog>
+        <!--&lt;!&ndash;创建二级菜单弹出框&ndash;&gt;-->
+        <!--<el-dialog-->
+            <!--title="二级分类菜单"-->
+            <!--:visible.sync="dialogVisible2" style="min-width:1100px;">-->
+            <!--<div>-->
+               <!--<div class="model_left">-->
+                    <!--<ul>-->
+                        <!--<li :class="indexs==index ? activeClass:''" v-on:click="navClickEvent(index_cate,index)" :key="index" v-for="(item,index) in child_cate">{{item.cate_name}}</li>-->
+                    <!--</ul>-->
+               <!--</div>-->
+                <!--<div class="model_right">-->
+                    <!--<p style="margin-bottom: 10px;">{{child_cate[indexs].cate_name}}</p>-->
+                    <!--<div id="model_list">-->
+                        <!--<input type="text" class="model_input" v-for="(item,index) in child_cate[indexs].child" v-model="item.cate_name">-->
+                    <!--</div>-->
+                   <!--<div>-->
+                       <!--<img src="/static/img/add.png" alt="" style="margin:2px 20px;" @click="add()">-->
+                       <!--<img src="/static/img/del.png" alt="" style="margin:2px 10px;" @click="del()">-->
+                   <!--</div>-->
+                    <!--<div style="position: absolute;bottom: 7px;text-align: center;width: 100%;">-->
+                        <!--<el-button type="primary" @click="" style="background-color: #0f8edd;border-color: #0f8edd;" @click="saveCateType()">保存</el-button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<span slot="footer" class="dialog-footer"></span>-->
+        <!--</el-dialog>-->
     </div>
 </template>
 <script>
@@ -188,37 +188,37 @@
                     console.log(err)
                 })
             },
-            //      获取创建二级菜单弹框当前分类列表
-            getAllCateType: function () {
-                this.dialogVisible2 = true
-                this.$ajax.get('/api/Index/createChildCate').then((res) => {
-                    if (res.data.code == '200') {
-                        this.child_cate = res.data.data.child_cate
-                    }
-                }, (err) => {
-                    console.log(err)
-                })
-            },
-            //      保存创建二级菜单弹框当前分类列表
-            saveCateType: function () {
-                let cate_id = this.child_cate[this.indexs].id
-                let new_cate = this.child_cate[this.indexs].child
-                this.$ajax.post('/api/Index/createChildCate',{cate_id:cate_id,child_cate:new_cate}).then((res) => {
-                    if (res.data.code == '200') {
-                        this.$message({
-                            message: res.data.data.message,
-                            type: 'success'
-                        });
-                    }else{
-                        this.$message({
-                            message: res.data.error,
-                            type: 'error'
-                        });
-                    }
-                }, (err) => {
-                    console.log(err)
-                })
-            },
+//            //      获取创建二级菜单弹框当前分类列表
+//            getAllCateType: function () {
+//                this.dialogVisible2 = true
+//                this.$ajax.get('/api/Index/createChildCate').then((res) => {
+//                    if (res.data.code == '200') {
+//                        this.child_cate = res.data.data.child_cate
+//                    }
+//                }, (err) => {
+//                    console.log(err)
+//                })
+//            },
+//            //      保存创建二级菜单弹框当前分类列表
+//            saveCateType: function () {
+//                let cate_id = this.child_cate[this.indexs].id
+//                let new_cate = this.child_cate[this.indexs].child
+//                this.$ajax.post('/api/Index/createChildCate',{cate_id:cate_id,child_cate:new_cate}).then((res) => {
+//                    if (res.data.code == '200') {
+//                        this.$message({
+//                            message: res.data.data.message,
+//                            type: 'success'
+//                        });
+//                    }else{
+//                        this.$message({
+//                            message: res.data.error,
+//                            type: 'error'
+//                        });
+//                    }
+//                }, (err) => {
+//                    console.log(err)
+//                })
+//            },
             //      保存banner列表
             saveBanner: function () {
                 this.$ajax.post('/api/Index/indexBanner',this.bannerList).then((res) => {
@@ -301,17 +301,17 @@
                 })
             },
 //            修改二级分类列表tab选项卡
-            navClickEvent:function(index_cate,index){
-                /*默认切换类的动作*/
-                this.indexs=index
-//                index_cate.forEach(function(el){
-//                    el.active = false;
-//                });
-//                index_cate[index].active = true;
-//                console.log(index_cate,index)
-//                this.name=index_cate[index].text
-//                console.log(this.name)
-            },
+//            navClickEvent:function(index_cate,index){
+//                /*默认切换类的动作*/
+//                this.indexs=index
+////                index_cate.forEach(function(el){
+////                    el.active = false;
+////                });
+////                index_cate[index].active = true;
+////                console.log(index_cate,index)
+////                this.name=index_cate[index].text
+////                console.log(this.name)
+//            },
             add(){
                 this.child_cate[this.indexs].child.push({
                     cate_name: null
@@ -340,10 +340,11 @@
                 }, (err) => {
                     console.log(err)
                 })
+
             },
         },
         mounted() {
-            this.name=this.items[0].text
+//            this.name=this.items[0].text
         },
         created:function(){
             this.getBannerList()
