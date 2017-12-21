@@ -13,7 +13,7 @@
                 <el-table
                     :data="managerList"
                     border
-                    style="width: 100%">
+                    style="width: 100%;text-align: center;">
                     <el-table-column
                         prop="username"
                         label="用户名" show-overflow-tooltip>
@@ -21,7 +21,7 @@
                     <el-table-column
                         label="用户组" show-overflow-tooltip>
                         <template slot-scope="scope">
-                            <span v-for="title in scope.row.group">{{title}}</span>
+                            <span v-for="list in scope.row.group_name">{{list.title}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -33,7 +33,7 @@
                         label="最后登录时间" show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
-                        label="操作"  width="200">
+                        label="操作"  width="150">
                         <template slot-scope="scope">
                             <!--<a href="" class="pro">修改权限或密码</a>-->
                             <el-button @click="handleClick(scope.row.id)" type="text" size="small" class="pro">修改权限或密码</el-button>
@@ -192,13 +192,14 @@
 
 <style scoped>
     .ms-doc {
-        width: 100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        /*width: 100%;*/
+        max-width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 40px;
         color: #54667a;
+        margin-bottom: 54px;
     }
 
     .ms-doc_main {

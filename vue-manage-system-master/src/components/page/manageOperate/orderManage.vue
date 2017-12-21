@@ -50,23 +50,23 @@
                     @selection-change="handleSelectionChange">
                     <el-table-column
                         type="selection"
-                        width="50" height="95">
+                        height="95">
                     </el-table-column>
-                    <el-table-column
-                        label="商品" height="95" width="120">
-                        <template slot-scope="scope">
-                            <img :src="scope.row.product_image" alt="" style="width:76px;height:76px;margin-top: 5px;">
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="标题"
-                        width="180"
-                        show-overflow-tooltip>
-                        <template slot-scope="scope">{{ scope.row.product_name }}</template>
-                    </el-table-column>
+                    <!--<el-table-column-->
+                        <!--label="商品" height="95" width="120">-->
+                        <!--<template slot-scope="scope">-->
+                            <!--<img :src="scope.row.product_image" alt="" style="width:76px;height:76px;margin-top: 5px;">-->
+                        <!--</template>-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column-->
+                        <!--label="标题"-->
+                        <!--width="180"-->
+                        <!--show-overflow-tooltip>-->
+                        <!--<template slot-scope="scope">{{ scope.row.product_name }}</template>-->
+                    <!--</el-table-column>-->
                     <el-table-column
                         prop="exchange_num"
-                        label="数量" width="80">
+                        label="数量" >
                     </el-table-column>
                     <el-table-column
                         prop="wechat_nickname"
@@ -79,7 +79,7 @@
                         width="100">
                     </el-table-column>
                     <el-table-column
-                        label="预留信息" width="150">
+                        label="预留信息">
                         <template slot-scope="scope">
                             <!--1-充值，2-提现，3-实物-->
                             <span v-show="scope.row.goods_type==1">{{scope.row.telephone}}</span>
@@ -93,7 +93,7 @@
                     </el-table-column>
                     <el-table-column
                         label="状态"
-                        show-overflow-tooltip width="80">
+                        show-overflow-tooltip >
                         <template slot-scope="scope">
                             <span v-show="scope.row.express_status==1">未发货</span>
                             <span v-show="scope.row.express_status==2">已发货</span>
@@ -101,7 +101,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="操作" width="70">
+                        label="操作" >
                         <template slot-scope="scope">
                             <el-button @click="diliver(scope.row.order_id)" type="text" size="small"
                                        class="pros" v-show="scope.row.express_status==1">发货

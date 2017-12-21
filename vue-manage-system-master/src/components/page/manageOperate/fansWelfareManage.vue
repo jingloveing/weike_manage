@@ -49,7 +49,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="coupon_number"
-                        label="劵额/元"
+                        label="券额/元"
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column

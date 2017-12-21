@@ -4,109 +4,110 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
+    mode:'history',
     routes: [
         {
             path: '/',
-            redirect: '/admin/login'
+            redirect: '/login'
         },
         {
-            path: '/admin/home',
+            path: '/home',
             component: resolve => require(['../components/common/Home.vue'], resolve),
             children:[
                 {
-                    path: '/admin/home',
+                    path: '/home',
                     component: resolve => require(['../components/page/home/HomePage.vue'], resolve)
                 },
                 {
-                    path: '/admin/goodsData',
+                    path: '/goodsData',
                     component: resolve => require(['../components/page/data_analysis/goodsData.vue'], resolve)
                 },
                 {
-                    path: '/admin/userData',
+                    path: '/userData',
                     component: resolve => require(['../components/page/data_analysis/userData.vue'], resolve)
                 },
                 {
-                    path: '/admin/shareListData',
+                    path: '/shareListData',
                     component: resolve => require(['../components/page/data_analysis/shareListData.vue'], resolve)
                 },
                 {
-                    path: '/admin/signData',
+                    path: '/signData',
                     component: resolve => require(['../components/page/data_analysis/signData.vue'], resolve)
                 },
                 {
-                    path: '/admin/searchData',
+                    path: '/searchData',
                     component: resolve => require(['../components/page/data_analysis/searchData.vue'], resolve)
                 },
                 {
-                    path: '/admin/goodsManage',
+                    path: '/goodsManage',
                     component: resolve => require(['../components/page/manageOperate/goodsManage.vue'], resolve)
                 },{
-                    path: '/admin/orderManage',
+                    path: '/orderManage',
                     component: resolve => require(['../components/page/manageOperate/orderManage.vue'], resolve)
                 },{
-                    path: '/admin/shareListManage',
+                    path: '/shareListManage',
                     component: resolve => require(['../components/page/manageOperate/shareListManage.vue'], resolve)
                 },{
-                    path: '/admin/subjectManage',
+                    path: '/subjectManage',
                     component: resolve => require(['../components/page/manageOperate/subjectManage.vue'], resolve)
                 },{
-                    path: '/admin/indexManage',
+                    path: '/indexManage',
                     component: resolve => require(['../components/page/manageOperate/indexManage.vue'], resolve)
                 },{
-                    path: '/admin/exchangeManage',
+                    path: '/exchangeManage',
                     component: resolve => require(['../components/page/manageOperate/exchangeManage.vue'], resolve)
                 },{
-                    path: '/admin/signManage',
+                    path: '/signManage',
                     component: resolve => require(['../components/page/manageOperate/signManage.vue'], resolve)
                 },
                 {
-                    path: '/admin/integralManage',
+                    path: '/integralManage',
                     component: resolve => require(['../components/page/manageOperate/integralManage.vue'], resolve)
                 },
                 {
-                    path: '/admin/fansWelfareManage',
+                    path: '/fansWelfareManage',
                     component: resolve => require(['../components/page/manageOperate/fansWelfareManage.vue'], resolve)
                 },
                 {
-                    path: '/admin/accessManage',
+                    path: '/accessManage',
                     component: resolve => require(['../components/page/accessControl/accessManage.vue'], resolve)
                 },
                 {
-                    path: '/admin/userManage',
+                    path: '/userManage',
                     component: resolve => require(['../components/page/accessControl/userManage.vue'], resolve)
                 },
                 {
-                    path: '/admin/manager',
+                    path: '/manager',
                     component: resolve => require(['../components/page/accessControl/manager.vue'], resolve)
                 },
                 {
-                    path: '/admin/props',
+                    path: '/props',
                     component: resolve => require(['../components/page/props.vue'], resolve)
                 },
                 {
-                    path: '/admin/releaseNotes',
+                    path: '/releaseNotes',
                     component: resolve => require(['../components/page/releaseNotes.vue'], resolve)
                 },
                 {
-                    path: '/admin/userSetting',
+                    path: '/userSetting',
                     component: resolve => require(['../components/page/userSetting.vue'], resolve)
                 },
                 {
-                    path: '/admin/notice',
+                    path: '/notice',
                     component: resolve => require(['../components/page/notice.vue'], resolve)
                 },
                 {
-                    path: '/admin/menuSetting',
+                    path: '/menuSetting',
                     component: resolve => require(['../components/page/menuManage/menuSetting.vue'], resolve)
                 },
                 {
-                    path: '/admin/goodsSetting',
+                    path: '/goodsSetting',
                     component: resolve => require(['../components/page/goodsSetting.vue'], resolve)
                 }
             ]
         },
         {
-            path: '/admin/login',
+            path: '/login',
             component: resolve => require(['../components/page/Login.vue'], resolve)
         },
     ]

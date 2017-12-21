@@ -343,9 +343,9 @@
         display: inline-block;
     }
     .ms-doc, .sort {
-        width: 100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        /*width: 100%;*/
+        max-width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;

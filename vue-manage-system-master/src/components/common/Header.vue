@@ -99,15 +99,15 @@
                 }
             },
             toprops(){
-                    const url = "/admin/props";
+                    const url = "/props";
                     this.$router.push({ path: url })
             },
             toNotice(){
-                const url = "/admin/notice";
+                const url = "/notice";
                 this.$router.push({ path: url })
             },
             goodsSetting(){
-                const url="/admin/goodsSetting";
+                const url="/goodsSetting";
                 this.$router.push({ path: url })
             }
         },

@@ -1,5 +1,5 @@
 <template>
-    <div class="sidebar" style="padding-left: 14px;">
+    <div class="sidebar">
         <!--<el-menu :default-active="onRoutes" class="el-menu-vertical-demo" unique-opened router>-->
             <!--<template v-for="item in items">-->
                 <!--<template v-if="item.subs">-->

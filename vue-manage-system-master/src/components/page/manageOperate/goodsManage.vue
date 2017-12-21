@@ -33,7 +33,7 @@
                             :value="item.id">
                         </el-option>
                     </el-select>
-                    <el-select v-model="data.condition4" placeholder="劵额" style="width: 150px;margin-right: 20px;" >
+                    <el-select v-model="data.condition4" placeholder="券额" style="width: 150px;margin-right: 20px;" >
                         <el-option
                             v-for="item in searchList.condition4"
                             :key="item.id"
@@ -97,7 +97,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="coupon_number"
-                        label="劵额/元"
+                        label="券额/元"
                         show-overflow-tooltip>
                     </el-table-column>
                     <el-table-column
@@ -257,6 +257,7 @@
         background-color: white;
         padding: 0 40px;
         color: #54667a;
+        margin-bottom: 54px;
     }
 
     .m_title {

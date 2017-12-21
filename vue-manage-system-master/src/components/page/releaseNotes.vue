@@ -29,8 +29,7 @@
                     </el-option>
                 </el-select>
                 <div style="text-align: center;">
-                    <el-button type="primary" round
-                               style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;" @click="save()">确认
+                    <el-button type="primary" round @click="save()">确认
                     </el-button>
                 </div>
             </div>
@@ -93,6 +92,7 @@
         background-color: white;
         padding: 40px;
         color: #54667a;
+        margin-bottom: 54px;
     }
 
     .ms-doc_main {

@@ -52,7 +52,7 @@
             </div>
         </div>
         <div class="sort">
-            <p class="m_title">搜索调用同价</p>
+            <p class="m_title">搜索调用统计</p>
             <div class="ms-doc_main">
                 <div class="date_select">
                 <el-date-picker
@@ -278,9 +278,9 @@
         display: inline-block;
     }
     .ms-doc, .sort {
-        width: 100%;
-        /*max-width: 980px;*/
-        max-width: 1300px;
+        /*width: 100%;*/
+        width: 980px;
+        /*max-width: 1300px;*/
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;

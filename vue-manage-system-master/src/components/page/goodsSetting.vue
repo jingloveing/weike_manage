@@ -113,7 +113,7 @@
                         <p style="line-height: 16px;font-size: 12px;color: #848c97;vertical-align: middle;">
                             <img src="/static/img/shop_img.png" alt=""
                                  style="width: 14px;height: 14px;vertical-align: middle;margin-bottom: 3px;"><span
-                            style="width: 140px;overflow: hidden;margin-left: 4px;height: 14px;display: inline-block;">{{list.title}}</span>
+                            style="width: 140px;overflow: hidden;margin-left: 4px;height: 14px;display: inline-block;">{{list.shop_title}}</span>
                             <img src="/static/img/jian.png" alt="" style="width: 14px;height: 14px;float: right;">
                         </p>
                     </div>
@@ -250,7 +250,6 @@
                         this.goodsList = res.data.data.goods_list
                         this.totalPage = res.data.data.total_page
                         this.totalCount = res.data.data.total_count
-                        console.log(this.goodsList)
                     }
                 }, (err) => {
                     console.log(err)
@@ -390,19 +389,19 @@
                     timeTab[this.index].classList.add("time_select");
                     switch (this.index) {
                         case 0:
-                            this.update_time = '1'
+                            self.data.update_time = '1'
                             break;
                         case 1:
-                            this.update_time = '2'
+                            self.data.update_time = '2'
                             break;
                         case 2:
-                            this.update_time = '5'
+                            self.data.update_time = '5'
                             break;
                         case 3:
-                            this.update_time = '3'
+                            self.data.update_time = '3'
                             break;
                         case 4:
-                            this.update_time = '4'
+                            self.data.update_time = '4'
                             break;
                     }
                 }

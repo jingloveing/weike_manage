@@ -37,7 +37,7 @@
         </div>
         <div class="sort">
             <p>数据排序</p>
-            <div style="display: flex;justify-content: space-around;">
+            <div style="display: flex;justify-content: space-around;padding-bottom: 40px;">
                 <div style="width: 30%;">
                     <p style="text-align: center;font-size: 18px;color: #54667a;">热门商品TOP30</p>
                     <el-table
@@ -166,6 +166,118 @@
                     self.getData()
                 }
             }
+            var Broken = echarts.init(document.getElementById('broken'));
+            Broken.setOption({
+                backgroundColor: '#fff',
+                tooltip: {
+                    trigger: 'axis'
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: this.time,
+                        axisLine:{
+                            //横坐标横线样式
+                            lineStyle:{
+//                                type:'dotted',
+                                color:'#bac7cd'
+                            }
+                        },
+                        axisLabel:{
+                            textStyle:{
+                                color:'#bac7cd' //横坐标字体颜色
+                            }
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLine:{
+                            //横坐标横线样式
+                            lineStyle:{
+//                                type:'dotted',
+                                color:'#bac7cd'
+                            }
+                        },
+                        axisLabel:{
+                            formatter: '{value}',
+                            textStyle:{
+                                color:'#bac7cd' //横坐标字体颜色
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        smooth:false,
+                        name: this.title,
+                        type: 'line',
+                        data: this.counts ,
+                        itemStyle:{
+                            normal:{
+                                color:'#55ce63',//图标颜色
+                                lineStyle:{
+                                    color:'#55ce63'//连线颜色
+                                }
+                            }
+                        }
+                    }
+                ]
+            });
+//            if(this.date_type!==1){
+//                            console.log('aaa')
+                var RoundOne = echarts.init(document.getElementById('roundOne'));
+                RoundOne.setOption({
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    color:['#009efb', '#ff5b6d','#ffa55c','#fff45c','#55ce63','#6a5bff','#1badcb'],
+                    graphic:{
+                        type:'text',
+                        left:'center',
+                        top:'center',
+                        style:{
+                            text:"总计\n"+this.total_count,
+                            textAlign:'center',
+                            fill:'#000',
+                            width:30,
+                            height:30,
+                            fontSize:'18'
+                        }
+                    },
+                    calculable: true,
+                    series: [
+                        {
+                            name: '访问来源',
+                            type: 'pie',
+                            radius: ['100', '50',],
+                            itemStyle: {
+                                normal: {
+                                    label: {
+                                        show: false
+                                    },
+                                    labelLine: {
+
+                                        show: false
+                                    }
+                                },
+                                emphasis: {
+                                    label: {
+                                        show: false,
+                                    }
+                                }
+                            },
+                            data: this.arr
+                        }
+                    ]
+                });
+//            }else{
+//
+//            }
             // 自适应
             window.onresize = function () {
                 Broken.resize();
@@ -192,7 +304,7 @@
                         this.total_count=res.data.data.total_count;
                         var arr=[]
                         for(var i= 0;i<this.time.length;i++){
-                            arr.push({value:this.time[i],name:this.counts[i]});
+                            arr.push({value:this.counts[i],name:this.time[i]});
                         }
 //                        this.arr = JSON.stringify(arr)
                         this.arr = arr
@@ -208,7 +320,7 @@
                                 {
                                     type: 'category',
                                     boundaryGap: false,
-                                    data: this.counts,
+                                    data: this.time,
                                     axisLine:{
                                         //横坐标横线样式
                                         lineStyle:{
@@ -246,7 +358,7 @@
                                     smooth:false,
                                     name: this.title,
                                     type: 'line',
-                                    data: this.time,
+                                    data: this.counts ,
                                     itemStyle:{
                                         normal:{
                                             color:'#55ce63',//图标颜色
