@@ -13,11 +13,11 @@
                     <label class="operate" for="file">上传头像</label></p>
                 <p><span class="title">昵称：</span><el-input v-model="nickname" style="width: 300px;margin: 20px 0;"></el-input>
                     <label class="operate">修改昵称</label></p>
-                <div style="text-align: center;">
+                <!--<div style="">-->
                     <el-button type="primary" round
-                               style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;" @click="saveUserInfo()">保存
+                               style="margin:0 0 50px 150px;" @click="saveUserInfo()">保存
                     </el-button>
-                </div>
+                <!--</div>-->
                 <p><span class="title">密码：</span><el-input  style="width: 300px;margin: 20px 0;"  type="password" v-model="password" disabled></el-input>
                     <label class="operate" v-on:click="toShow()">修改密码</label></p>
                 <div v-show="isShow">
@@ -26,12 +26,19 @@
                     <p><span class="title">确认新密码：</span><el-input minlenght="6" maxlenght="14" v-model="data.sure_password" style="width: 300px;margin: 20px 0;" placeholder="请再次输入新密码" type="password"></el-input></p>
 
                 </div>
-            </div>
-            <div style="text-align: center;">
                 <el-button type="primary" round
-                           style="background-color: #0f8edd;border-color: #0f8edd;margin-bottom: 50px;" @click="savePassword()">保存
+                           style="margin:0 0 50px 150px;" @click="savePassword()">保存
+                </el-button>
+                <p><span class="title" style="float: left;margin-top: 20px;">客服二维码：</span><img :src="userPhoto" alt="" class="photo" :onerror="defaultImg" id="photo">
+                    <input id="rq" type="file"  style="display: none" @change="uploadImg($event)" multiple accept="image/*">
+                        <label class="operate" for="file">上传二维码</label>
+                        <span style="font-size: 14px;color: #999999;">(注：该二维码作为在线客服使用)</span>
+                </p>
+                <el-button type="primary" round
+                           style="margin:10px 0 50px 150px;" @click="savePassword()">保存
                 </el-button>
             </div>
+
         </div>
     </div>
 </template>
@@ -173,10 +180,10 @@
         /*width: 100%;*/
         max-width: 980px;
         /*max-width: 1300px;*/
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 40px;
         color: #54667a;
+        margin-bottom: 54px;
     }
 
     .ms-doc_main {

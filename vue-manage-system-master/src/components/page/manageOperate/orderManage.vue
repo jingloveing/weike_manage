@@ -52,18 +52,18 @@
                         type="selection"
                         height="95">
                     </el-table-column>
-                    <!--<el-table-column-->
-                        <!--label="商品" height="95" width="120">-->
-                        <!--<template slot-scope="scope">-->
-                            <!--<img :src="scope.row.product_image" alt="" style="width:76px;height:76px;margin-top: 5px;">-->
-                        <!--</template>-->
-                    <!--</el-table-column>-->
-                    <!--<el-table-column-->
-                        <!--label="标题"-->
-                        <!--width="180"-->
-                        <!--show-overflow-tooltip>-->
-                        <!--<template slot-scope="scope">{{ scope.row.product_name }}</template>-->
-                    <!--</el-table-column>-->
+                    <el-table-column
+                        label="商品" height="95" width="120">
+                        <template slot-scope="scope">
+                            <img :src="scope.row.product_image" alt="" style="width:76px;height:76px;margin-top: 5px;">
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="标题"
+                        width="180"
+                        show-overflow-tooltip>
+                        <template slot-scope="scope">{{ scope.row.product_name }}</template>
+                    </el-table-column>
                     <el-table-column
                         prop="exchange_num"
                         label="数量" >
@@ -154,18 +154,18 @@
                         type="selection"
                         width="50" height="95">
                     </el-table-column>
-                    <el-table-column
-                        label="商品" height="95" width="120">
-                        <template slot-scope="scope">
-                            <img :src="scope.row.pict_url" alt="" style="width:76px;height:76px;margin-top: 5px;">
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="标题"
-                        width="180"
-                        show-overflow-tooltip>
-                        <template slot-scope="scope">{{ scope.row.title }}</template>
-                    </el-table-column>
+                    <!--<el-table-column-->
+                        <!--label="商品" height="95" width="120">-->
+                        <!--<template slot-scope="scope">-->
+                            <!--<img :src="scope.row.pict_url" alt="" style="width:76px;height:76px;margin-top: 5px;">-->
+                        <!--</template>-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column-->
+                        <!--label="标题"-->
+                        <!--width="180"-->
+                        <!--show-overflow-tooltip>-->
+                        <!--<template slot-scope="scope">{{ scope.row.title }}</template>-->
+                    <!--</el-table-column>-->
                     <el-table-column
                         prop="wechat_nickname"
                         label="账号ID" show-overflow-tooltip>
@@ -405,7 +405,6 @@
         width: 100%;
         max-width: 980px;
         /*max-width: 1300px;*/
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;
         color: #54667a;

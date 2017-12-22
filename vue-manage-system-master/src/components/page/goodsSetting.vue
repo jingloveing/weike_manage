@@ -441,7 +441,6 @@
     .ms-doc {
         width: 980px;
         /*max-width: 1300px;*/
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 20px;
         color: #54667a;

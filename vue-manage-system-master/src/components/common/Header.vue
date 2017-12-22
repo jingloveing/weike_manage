@@ -21,12 +21,13 @@
        <div style="float: right;margin-right: 50px;position: relative;cursor: pointer;" @click="toNotice()">
            <img src="/static/img/info_img.png" alt="" style="width: 20px;height: 16px;">
            <span class="info_num" v-show="message.count"></span>
+           <div class="notice" v-show="message.count" id="notice">
+               <img src="/static/img/top_triangle.png" alt="" style="position: absolute;top: -7px;right: 56px;">
+               <p><i class="round"></i> {{message.message.title}}</p>
+               <img src="/static/img/close_btn.png" alt="" style="width: 10px;height: 10px;position: absolute;top:5px;right: 5px;" @click="message.count=!message.count">
+           </div>
        </div>
-        <div class="notice" v-show="message.count" id="notice">
-            <img src="/static/img/top_triangle.png" alt="" style="position: absolute;top: -7px;right: 56px;">
-            <p><i class="round"></i> {{message.message.title}}</p>
-            <img src="/static/img/close_btn.png" alt="" style="width: 10px;height: 10px;position: absolute;top:5px;right: 5px;" @click="message.count=!message.count">
-        </div>
+
     </div>
 </template>
 <script>
@@ -205,8 +206,8 @@
         width: 300px;
         line-height: 60px;
         padding:0px 20px;
-        right: 180px;
-        position: fixed;
+        right: -39px;
+        position: absolute;
         top:72px;
         background-color: white;
         border: 1px solid #e9f1f3;

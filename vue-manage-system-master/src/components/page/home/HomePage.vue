@@ -130,7 +130,8 @@
                 arr:[],
                 total_count:'',
                 time:[],
-                counts:[]
+                counts:[],
+                subtext:'人'
             }
         },
         mounted(){
@@ -168,6 +169,14 @@
             }
             var Broken = echarts.init(document.getElementById('broken'));
             Broken.setOption({
+                title: {
+                    subtext: '单位：'+this.subtext,
+                    subtextStyle:{
+                        color:"#666666",
+                        fontSize:'20px',
+
+                    }
+                },
                 backgroundColor: '#fff',
                 tooltip: {
                     trigger: 'axis'
@@ -289,12 +298,16 @@
             getData:function(){
                 if(this.type=='1'){
                     this.title='访问人数'
+                    this.subtext='人'
                 }else if(this.type=='2'){
+                    this.subtext='人'
                     this.title='新增用户'
                 }else if(this.type=='3'){
                     this.title='搜索次数'
+                    this.subtext='次'
                 }else{
                     this.title='元宝消耗量'
+                    this.subtext='个'
                 }
                 this.$ajax.post('/api/Summarydata/summaryData',{type:this.type,date_type:this.date_type}).then((res) => {
                     if (res.data.code == '200') {
@@ -311,6 +324,9 @@
 //                        console.log(this.arr)
                         var Broken = echarts.init(document.getElementById('broken'));
                         Broken.setOption({
+                            title: {
+                                subtext: '单位：'+this.subtext
+                            },
                             backgroundColor: '#fff',
                             tooltip: {
                                 trigger: 'axis'
@@ -468,7 +484,9 @@
 </script>
 
 <style scoped>
-    .CTwoLeft{width: 100%;height: 335px;background-color: white;overflow: hidden;}
+    .CTwoLeft{width: 100%;height: 335px;background-color: white;overflow: hidden;
+    margin-left: 20px;
+    }
     #roundOne{
         width: 280px;
         /*float: right;*/
@@ -489,7 +507,6 @@
         width:100%;
         max-width: 980px;
         /*max-width: 1300px;*/
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;
         color: #54667a;

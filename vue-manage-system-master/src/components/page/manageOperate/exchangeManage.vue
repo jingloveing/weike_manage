@@ -567,7 +567,6 @@
         /*width: 100%;*/
         width: 980px;
         /*max-width: 1300px;*/
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         background-color: white;
         padding: 0 40px;
         color: #54667a;

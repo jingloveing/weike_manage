@@ -193,7 +193,6 @@ export default {
         /*max-width: 980px;*/
         /*max-width: 1300px;*/
         width: 1300px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         color: #54667a;
         margin-bottom: 54px;
         overflow: hidden;
