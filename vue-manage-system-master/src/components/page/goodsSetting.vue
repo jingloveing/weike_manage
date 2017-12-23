@@ -29,7 +29,7 @@
                 <el-form-item label="类目">
                     <span class="time_tab time_select" id="all" @click="all()">全部</span>
                     <el-checkbox-group v-model="checkedList" @change="handleCheckedCitiesChange"
-                                       style="display: inline-block;margin-left: 14px;">
+                                       style="display: inline-block;margin-left: 14px;" class="checkbox">
                         <el-checkbox v-for="(list,index) in list" :label="index+1" :key="index+1">{{list}}</el-checkbox>
                     </el-checkbox-group>
                     <!--<span class="time_tab time_select">全部</span>-->
@@ -773,6 +773,7 @@
         box-sizing: content-box;
         word-wrap: break-word;
     }
+
 </style>
 <style>
     .el-form-item__content {
@@ -790,5 +791,8 @@
 
     .el-form-item {
         margin-bottom: 0px;
+    }
+    .checkbox .el-checkbox__label{
+        color: #848C97!important;
     }
 </style>

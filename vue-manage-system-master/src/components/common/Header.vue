@@ -45,7 +45,7 @@
                     message:{
                         title:''
                     }
-                }
+                },
             }
         },
         computed:{
