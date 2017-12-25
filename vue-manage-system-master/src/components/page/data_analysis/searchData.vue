@@ -251,11 +251,13 @@
             },
         },
         mounted() {
+            var myChart = echarts.init(document.getElementById('main'));
+            var RoundOne = echarts.init(document.getElementById('roundOne'));
 //            // 自适应
-//            window.onresize = function () {
-//                myChart.resize();
-//                RoundOne.resize();
-//            }
+            window.onresize = function () {
+                myChart.resize();
+                RoundOne.resize();
+            }
         },
         created: function () {
             //            获取当前年月日
@@ -279,7 +281,7 @@
     }
     .ms-doc, .sort {
         /*width: 100%;*/
-        width: 980px;
+        max-width: 980px;
         /*max-width: 1300px;*/
         background-color: white;
         padding: 0 40px;

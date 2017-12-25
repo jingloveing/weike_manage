@@ -274,11 +274,13 @@
 //            }
         },
         mounted() {
+            var myChart = echarts.init(document.getElementById('main'));
+            var RoundOne = echarts.init(document.getElementById('roundOne'));
 //            // 自适应
-//            window.onresize = function () {
-//                myChart.resize();
-//                RoundOne.resize();
-//            }
+            window.onresize = function () {
+                myChart.resize();
+                RoundOne.resize();
+            }
         },
         created: function () {
 //            获取当前年月日

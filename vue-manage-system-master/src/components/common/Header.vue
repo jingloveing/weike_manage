@@ -18,13 +18,13 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
-       <div style="float: right;margin-right: 50px;position: relative;cursor: pointer;" @click="toNotice()">
-           <img src="/static/img/info_img.png" alt="" style="width: 20px;height: 16px;">
+       <div style="float: right;margin-right: 50px;position: relative;cursor: pointer;">
+           <img src="/static/img/info_img.png" alt="" style="width: 20px;height: 16px;"  @click="toNotice()">
            <span class="info_num" v-show="message.count"></span>
            <div class="notice" v-show="message.count" id="notice">
                <img src="/static/img/top_triangle.png" alt="" style="position: absolute;top: -7px;right: 56px;">
-               <p><i class="round"></i> {{message.message.title}}</p>
-               <img src="/static/img/close_btn.png" alt="" style="width: 10px;height: 10px;position: absolute;top:5px;right: 5px;" @click="message.count=!message.count">
+               <p  @click="toNotice()"><i class="round"></i> {{message.message.title}}</p>
+               <img src="/static/img/close_btn.png" alt="" style="width: 10px;height: 10px;position: absolute;top:5px;right: 5px;" @click="toHidden()">
            </div>
        </div>
 
@@ -110,6 +110,9 @@
             goodsSetting(){
                 const url="/goodsSetting";
                 this.$router.push({ path: url })
+            },
+            toHidden(){
+                document.getElementById('notice').style.display='none'
             }
         },
         created:function(){

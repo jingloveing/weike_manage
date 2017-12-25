@@ -242,84 +242,13 @@
             },
         },
         mounted() {
-//            var myChart = echarts.init(document.getElementById('main'));
-//            // 绘制图表
-//            myChart.setOption({
-//                title: {text: ''},
-//                tooltip: {},
-//                xAxis: {
-//                    data: ["七日下单数", "待付款", "待发货", "维权订单", "七日收入", "衣服", "鞋子", "包包", "手机", "玩具用品"]
-//                },
-//                yAxis: {},
-//                series: [{
-//                    name: '',
-//                    type: 'bar',
-//                    data: [5, 20, 36, 10, 11, 30, 30, 23, 45, 345],
-//                    itemStyle: {
-//                        normal: {
-//                            color: '#ff5d6d',
-//                        }
-//                    },
-//                    barWidth: '40',
-//                }]
-//            });
+            var myChart = echarts.init(document.getElementById('main'));
             var RoundOne = echarts.init(document.getElementById('roundOne'));
-            RoundOne.setOption({
-                tooltip: {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                color: ['#009efb', '#ff5b6b', '#ffa55c', '#fff45c', '#55ce63'],
-                graphic: {
-                    type: 'text',
-                    left: 'center',
-                    top: 'center',
-                    style: {
-                        text: "总计/次\n8888",
-                        textAlign: 'center',
-                        fill: '#000',
-                        width: 30,
-                        height: 30,
-                        fontSize: '18'
-                    }
-                },
-                calculable: true,
-                series: [
-                    {
-                        name: '访问来源',
-                        type: 'pie',
-                        radius: ['150', '80',],
-                        itemStyle: {
-                            normal: {
-                                label: {
-                                    show: false
-                                },
-                                labelLine: {
-                                    show: false
-                                }
-                            },
-                            emphasis: {
-                                label: {
-                                    show: false,
-                                }
-                            }
-                        },
-                        data: [
-                            {value: 335, name: '第一周'},
-                            {value: 1310, name: '第二周'},
-                            {value: 1310, name: '第三周'},
-                            {value: 335, name: '第四周'},
-                            {value: 1310, name: '第五周'}
-
-                        ]
-                    }
-                ]
-            });
 //            // 自适应
-//            window.onresize = function () {
-//                myChart.resize();
-//                RoundOne.resize();
-//            }
+            window.onresize = function () {
+                myChart.resize();
+                RoundOne.resize();
+            }
         },
         created: function () {
             //            获取当前年月日

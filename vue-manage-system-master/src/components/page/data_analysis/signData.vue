@@ -529,7 +529,14 @@
             },
         },
         mounted() {
-
+            var Broken1 = echarts.init(document.getElementById('broken1'));
+            var myChart = echarts.init(document.getElementById('main'));
+            var RoundOne = echarts.init(document.getElementById('roundOne'));
+            window.onresize = function () {
+                myChart.resize();
+                RoundOne.resize();
+                Broken1.resize()
+            }
         },
         created: function () {
             //            获取当前年月日

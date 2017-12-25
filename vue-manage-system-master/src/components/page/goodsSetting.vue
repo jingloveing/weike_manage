@@ -28,7 +28,7 @@
                 </el-form-item>
                 <el-form-item label="类目">
                     <span class="time_tab time_select" id="all" @click="all()">全部</span>
-                    <el-checkbox-group v-model="checkedList" @change="handleCheckedCitiesChange"
+                    <el-checkbox-group v-model="checkedList" @change="handleCheckedChange1"
                                        style="display: inline-block;margin-left: 14px;" class="checkbox">
                         <el-checkbox v-for="(list,index) in list" :label="index+1" :key="index+1">{{list}}</el-checkbox>
                     </el-checkbox-group>
@@ -56,6 +56,10 @@
                     <span class="time_tab"><input v-model="data.rate"></span>
                     <span class="time_tab">月销量</span>
                     <span class="time_tab"><input type="number" v-model="data.volume"></span>
+                    <el-checkbox-group v-model="ju_type"
+                                       style="display: inline-block;margin-left: 14px;" class="checkbox">
+                        <el-checkbox label="2" key="2">聚划算</el-checkbox>
+                    </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="领券">
                     <!--<span class="time_tab">折扣力度</span>-->
@@ -189,7 +193,7 @@
                     </ul>
                 </div>
             </div>
-            <div style="line-height: 66px;">
+            <div style="line-height: 66px;height: 66px;">
                  <span class="goods_selected_center">
                      <span class="has_selected" @click="toshow()">
                          已选商品(<span style="color: #ff526d;">{{selectList.length}}</span>)
@@ -232,18 +236,25 @@
                     volume: '',
                     coupon_number_start: '',
                     coupon_number_end: '',
-                    sort: '1'
+                    sort: '1',
+                    ju_type:'',
                 },
                 isShow: false,
                 goodsList: [],
                 totalPage: null,
                 totalCount: '',
                 selectList: [],
+                ju_type:[]
             }
         },
         methods: {
             //      获取商品列表
             getGoodsList: function () {
+                if(this.ju_type.length!==0){
+                    this.data.ju_type=2
+                }else{
+                    this.ju_type=''
+                }
                 this.data.cate = JSON.stringify(this.checkedList)
                 this.$ajax.get('/api/Goods/collectProduct', {params: this.data}).then((res) => {
                     if (res.data.code == '200') {
@@ -282,7 +293,7 @@
                 this.data.end = e
             },
 //            监听类目多选选项
-            handleCheckedCitiesChange(value) {
+            handleCheckedChange1(value) {
                 let checkedCount = value.length;
                 if (checkedCount == 0) {
                     document.getElementById('all').classList.add('time_select')
@@ -503,6 +514,7 @@
 
     .goods_list {
         font-size: 0;
+        overflow: hidden;
     }
 
     .goods_list li {
@@ -510,6 +522,7 @@
         border: 1px solid #e3e3e3;
         margin-top: 26px;
         margin: 26px 17px 0;
+        float: left;
     }
 
     .pic {
@@ -636,6 +649,7 @@
 
     .goods_selected {
         width: 1020px;
+        /*max-width: 1300px;*/
         position: fixed;
         bottom: 0;
         z-index: 999999;
@@ -647,6 +661,7 @@
 
     .goods_selected_center {
         width: calc(1020px - 136px);
+        /*width: calc(100% - 136px);*/
         text-align: center;
         display: inline-block;
         font-size: 14px;

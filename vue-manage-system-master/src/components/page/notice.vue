@@ -47,7 +47,6 @@
         methods: {
             //      获取通知中心消息列表
             getMessageList: function (val) {
-                console.log('aaaa')
                 this.page=val
                 this.$ajax.get('/api/Message/messageList',{params:{page:this.page,per_page:this.per_page}}).then((res) => {
                     if (res.data.code == '200') {

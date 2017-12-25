@@ -191,14 +191,16 @@ export default {
 <style scoped>
     .ms-doc {
         /*max-width: 980px;*/
-        /*max-width: 1300px;*/
-        width: 1300px;
+        max-width: 1300px;
+        min-width: 1190px;
+        /*width: 1300px;*/
         color: #54667a;
         margin-bottom: 54px;
         overflow: hidden;
     }
    .left{
-       width: 604px;
+       /*width: 604px;*/
+       width: 40%;
        float: left;
        background-color: white;
        padding: 0 40px;
@@ -241,7 +243,8 @@ export default {
         padding: 0 20px;
     }
     .upload_img{
-        width: 375px;
+        /*width: 375px;*/
+        width: 300px;
         height: 130px;
         background-image: url("/static/img/upload_img_bd.png");
         background-size: 100% 100%;

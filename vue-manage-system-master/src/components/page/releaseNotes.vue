@@ -85,7 +85,6 @@
 
 <style scoped>
     .ms-doc {
-        width: 100%;
         /*max-width: 980px;*/
         max-width: 1300px;
         background-color: white;
