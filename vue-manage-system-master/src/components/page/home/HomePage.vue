@@ -420,6 +420,7 @@
         list-style: none;
         float: left;
         text-align: center;
+        cursor: pointer;
     }
     .tab li{
         width: 25%;

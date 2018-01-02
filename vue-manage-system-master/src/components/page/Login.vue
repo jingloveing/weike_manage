@@ -3,14 +3,16 @@
         <div>
             <div class="header">
                 <img src="/static/img/logo_img.png" alt="" style="vertical-align: middle;margin-right: 10px;">
-                <span>vke.微客后台管理系统</span>
+                <span>微客后台管理系统</span>
                    <span style="float: right;cursor: pointer;" class="toQR">联系客服</span>
                    <div class="QR">
                        <img src="/static/img/qr.jpg" alt="">
                        <p>扫码关注微信公众号</p>
                    </div>
+                <span style="float: right;cursor: pointer;margin-right: 40px;"><a href="http://web.dxvke.com" style="color: #666;">洞悉官网</a></span>
             </div>
         </div>
+        <img src="/static/img/login_logo.png" alt="" width="405px" height="183px" style="position: absolute;left: 236px;margin: 300px auto;">
         <div class="ms-login">
             <p>账号登录</p>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
@@ -130,12 +132,13 @@
         color: #666;
     }
     .login-wrap{
+        width: 100%;
+        height: 100%;
         position: relative;
-        width:100%;
-        height:100%;
         background-image: url("/static/img/login_bd.png");
         background-size: 100% 100%;
         background-repeat: no-repeat;
+        filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/static/img/login_bd.png',sizingMethod='scale');
     }
     .ms-login{
         position: absolute;

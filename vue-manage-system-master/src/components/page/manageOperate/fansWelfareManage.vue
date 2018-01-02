@@ -145,7 +145,7 @@
                 options2: [
                     {
                     value: '0',
-                    label: '批量处理'
+                    label: '批量返元宝'
                 }, {
                     value: '10',
                     label: '10元宝'

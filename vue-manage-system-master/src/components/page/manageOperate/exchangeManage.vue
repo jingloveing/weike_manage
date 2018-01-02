@@ -136,7 +136,7 @@
             :before-close="handleClose">
             <div>
                 <p class="model_title">1.商城页展示图
-                    <small>尺寸建议：主图300*200像素，详情图680*454像素；类型要求：jpg,png,3M内大小。</small>
+                    <small>尺寸建议：主图300*200像素，详情图680*358像素；类型要求：jpg,png,3M内大小。</small>
                 </p>
                 <div class="imgList">
                     <div class="tab">
@@ -222,7 +222,7 @@
                 options1: [
                     {
                         value: '0',
-                        label: '全部'
+                        label: '全部商品'
                     },
                     {
                         value: '1',
@@ -236,7 +236,7 @@
                 options2: [
                     {
                         value: '0',
-                        label: '全部'
+                        label: '全部状态'
                     }, {
                         value: '1',
                         label: '上架'

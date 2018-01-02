@@ -120,6 +120,9 @@
             this.nickname = localStorage.getItem('ms_nickname');
             this.getNum()
             this.getMessage()
+            setInterval(()=>{
+                this.getMessage()
+            },120000)
         }
     }
 </script>

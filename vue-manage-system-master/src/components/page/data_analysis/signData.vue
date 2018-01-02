@@ -5,7 +5,7 @@
                 <el-breadcrumb-item style="font-size: 24px;margin-left: 20px;">签到数据</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <div class="ms-doc">
+        <div class="ms-doc sort">
             <p class="m_title">签到次数</p>
             <div class="ms-doc_main">
                 <div class="date_select">

@@ -22,7 +22,7 @@
                         placeholder="结束日期"
                         :picker-options="pickerOptions1" @change="changeDate2" value-format="yyyy-MM-dd">
                     </el-date-picker>
-                    <el-select v-model="goods_type" placeholder="类型" style="width: 160px;margin-right: 20px;">
+                    <el-select v-model="goods_type" placeholder="类型" style="width: 160px;">
                         <el-option
                             v-for="item in options1"
                             :key="item.value"
@@ -97,7 +97,6 @@
                         <template slot-scope="scope">
                             <span v-show="scope.row.express_status==1">未发货</span>
                             <span v-show="scope.row.express_status==2">已发货</span>
-                            <span v-show="scope.row.express_status==3">成交</span>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -140,7 +139,7 @@
                             :value="item.value">
                         </el-option>
                     </el-select>
-                    <el-button type="primary" style="background-color: #0f8edd;border-color: #0f8edd;margin-left: 20px;" @click=" getList()">筛选</el-button>
+                    <el-button type="primary" @click=" getList()">筛选</el-button>
                 </div>
                 <el-table
                     ref="multipleTable"
@@ -250,7 +249,7 @@
                 options1: [
                     {
                         value: '0',
-                        label: '全部'
+                        label: '全部商品'
                     },
                     {
                         value: '1',
@@ -264,23 +263,20 @@
                 options2: [
                     {
                         value: '0',
-                        label: '全部'
+                        label: '全部状态'
                     }, {
                         value: '1',
                         label: '未发货'
                     }, {
                         value: '2',
                         label: '已发货'
-                    }, {
-                        value: '3',
-                        label: '已成交'
                     }
                 ],
                 express_type: '0',
                 options3: [
                     {
                         value: '0',
-                        label: '全部'
+                        label: '全部状态'
                     }, {
                         value: '1',
                         label: '已返'
@@ -292,7 +288,7 @@
                         label: '未通过'
                     }
                 ],
-                status:'',
+                status:'0',
                 order_id:[],
                 list:[],
                 order_num:[]

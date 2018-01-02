@@ -7,7 +7,7 @@
         </div>
         <div class="ms-doc">
             <div class="left">
-                <p class="m_title">专场页主图展示 <small>尺寸建议：750*296像素;类型要求：jpg.png,3M内大小</small></p>
+                <p class="m_title">专场页主图展示 <small>尺寸建议：750*260像素;类型要求：jpg.png,3M内大小</small></p>
                 <div class="left_main">
                     <div style="margin-bottom: 20px;">
                         <p class="title"><i class="num">1</i>专区 <small>(建议展示领劵特惠类商品，例：9.9特惠)</small></p>

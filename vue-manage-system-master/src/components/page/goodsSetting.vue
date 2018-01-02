@@ -47,10 +47,10 @@
                 </el-form-item>
                 <el-form-item label="商品">
                     <span class="time_tab">价格</span>
-                    <span class="time_tab"><input type="number" v-model="data.price_start">-<input type="number"
+                    <span class="time_tab"><input type="number" v-model="data.price_start"> - <input type="number"
                                                                                                    v-model="data.price_end"></span>
                     <span class="time_tab">佣金</span>
-                    <span class="time_tab"><input type="number" v-model="data.commission_start">-<input type="number"
+                    <span class="time_tab"><input type="number" v-model="data.commission_start"> - <input type="number"
                                                                                                         v-model="data.commission_end"></span>
                     <span class="time_tab">佣金比</span>
                     <span class="time_tab"><input v-model="data.rate"></span>
@@ -65,7 +65,7 @@
                     <!--<span class="time_tab">折扣力度</span>-->
                     <!--<span class="time_tab"><input type="number"></span>-->
                     <span class="time_tab">券价值</span>
-                    <span class="time_tab"><input type="number" v-model="data.coupon_number_start">-<input type="number"
+                    <span class="time_tab"><input type="number" v-model="data.coupon_number_start"> - <input type="number"
                                                                                                            v-model="data.coupon_number_end"></span>
                 </el-form-item>
             </el-form>
@@ -97,8 +97,7 @@
                         </div>
                         <p class="price">
                             <small>￥</small>
-                            <span class="new_price" v-text="list.zk_final_price.rmb">88</span>
-                            <small v-show="list.zk_final_price.corner!=='00'">.{{list.zk_final_price.corner}}</small>
+                            <span class="new_price" v-text="list.zk_final_price.rmb">88</span><small v-show="list.zk_final_price.corner!=='00'">.{{list.zk_final_price.corner}}</small>
                             <del>￥{{list.reserve_price}}</del>
                             <span class="num">月销 <span v-text="list.volume">111</span></span></p>
                         <p>
@@ -156,7 +155,8 @@
                 <span class="clearAll" v-show="selectList.length!==0" @click="clearAll()">清空所选商品</span>
                 <div class="selected_goods">
                     <div style="width: 100%;text-align: center;" v-show="selectList.length==0">
-                        <img src="/static/img/empty.png" alt="" style="width: 200px;height: 200px;">
+                        <img src="/static/img/empty.png" alt="" style="width: 100px;height: 100px;">
+                        <p style="font-size: 14px;color: #848c9e;margin-top: 20px;">您还没有选取任何商品~</p>
                     </div>
                     <ul class="selected_goods_list">
                         <li v-for="(list,index) in selectList" :key="index">
@@ -178,12 +178,11 @@
                                         class="juan_2">{{list.coupon_number}}元</span></span>
                                 </p>
                                 <p style="font-size: 12px;">
-                                    <span style="color: #c0c0c0;">佣金￥{{list.commission.rmb}}</span><span
+                                    <span style="color: #848c9e;">佣金￥{{list.commission.rmb}}</span><span
                                     style="color: #848c9e;"
                                     v-show="list.commission.corner!==''">.{{list.commission.corner}}</span>
                                     <span style="float: right;color: #ffa55c;">
-                                         比率<span v-text="list.commission_rate.rmb">20</span>
-                                         <span v-show="list.commission_rate.corner!==''">.{{list.commission_rate.corner}}</span><span>%</span>
+                                         比率<span v-text="list.commission_rate.rmb">20</span><span v-show="list.commission_rate.corner!==''">.{{list.commission_rate.corner}}</span><span>%</span>
                                      </span>
                                 </p>
                             </div>
@@ -256,7 +255,7 @@
                     this.ju_type=''
                 }
                 this.data.cate = JSON.stringify(this.checkedList)
-                this.$ajax.get('/api/Goods/collectProduct', {params: this.data}).then((res) => {
+                this.$ajax.get('/api/Collectproduct/collectProduct', {params: this.data}).then((res) => {
                     if (res.data.code == '200') {
                         this.goodsList = res.data.data.goods_list
                         this.totalPage = res.data.data.total_page
@@ -445,8 +444,8 @@
 
 <style scoped>
     ul li {
-        display: inline-block;
         list-style: none;
+        display: inline-block;
     }
 
     .ms-doc {
@@ -458,7 +457,7 @@
     }
 
     .sort {
-        margin: 20px 0 54px;
+        margin: 20px 0 100px;
     }
 
     .crumbs {
@@ -479,7 +478,7 @@
     .time_tab {
         text-align: center;
         display: inline-block;
-        padding-left: 18px;
+        padding-left: 10px;
         cursor: pointer;
     }
 
@@ -505,6 +504,7 @@
         font-size: 14px;
         margin: 0 5px;
         cursor: pointer;
+        display: inline-block;
     }
 
     .tab .active {
@@ -520,7 +520,6 @@
     .goods_list li {
         width: 208px;
         border: 1px solid #e3e3e3;
-        margin-top: 26px;
         margin: 26px 17px 0;
         float: left;
     }
@@ -630,7 +629,7 @@
 
     .btn span {
         width: 50%;
-        line-height: 28px;
+        line-height: 34px;
         text-align: center;
         display: inline-block;
         cursor: pointer;
@@ -809,5 +808,8 @@
     }
     .checkbox .el-checkbox__label{
         color: #848C97!important;
+    }
+    .el-form-item__label{
+        font-weight: bold;
     }
 </style>

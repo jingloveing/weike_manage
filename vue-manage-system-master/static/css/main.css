@@ -6,7 +6,8 @@ html,body,#app,.wrapper{
     overflow: hidden;
 }
 body{
-    font-family:"Helvetica Neue",Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
+    /*font-family:"Helvetica Neue",Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;*/
+    font-family: 微软雅黑 !important;
 }
 a{text-decoration: none}
 .content{

@@ -192,7 +192,7 @@
                 options1: [
                     {
                     value: '',
-                    label: '全部'
+                    label: '全部晒单状态'
                 },
                     {
                         value: '1',
@@ -206,7 +206,7 @@
                 options2: [
                     {
                     value: '',
-                    label: '全部'
+                    label: '全部审核状态'
                 },{
                     value: '1',
                     label: '已奖励'
@@ -382,7 +382,7 @@
         width: 100%;
         max-width: 980px;
         /*max-width: 1300px;*/
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;*/
         background-color: white;
         padding: 0 40px;
         color: #54667a;

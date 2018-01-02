@@ -37,8 +37,9 @@
                     </div>
                 </div>
                 <div class="left_2">
-                    <p class="m_title">首页分类图标</p>
-                    <div class="left_main">
+                    <p class="m_title">首页分类图标
+                        <small>点击图片更改分类图标</small></p>
+                    <div class="left_main" style="border: none;">
                         <div style="width: 100%;height: 318px;">
                             <ul class="nav-small">
                                 <li v-for="(type,index) in index_cate" style="margin-bottom: 40px;">

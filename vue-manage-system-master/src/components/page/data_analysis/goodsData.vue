@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="sort">
-            <p class="m_title">商品取调量统计</p>
+            <p class="m_title">商品取调量统计 <small style="font-size: 12px;color: #a6afbb;margin-left: 10px;">商品点击量占比</small></p>
             <div class="ms-doc_main">
                 <div class="date_select">
                 <el-date-picker
