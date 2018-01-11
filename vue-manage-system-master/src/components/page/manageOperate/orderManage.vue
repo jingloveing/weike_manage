@@ -79,7 +79,7 @@
                         width="100">
                     </el-table-column>
                     <el-table-column
-                        label="预留信息">
+                        label="预留信息" width="150" show-overflow-tooltip>
                         <template slot-scope="scope">
                             <!--1-充值，2-提现，3-实物-->
                             <span v-show="scope.row.goods_type==1">{{scope.row.telephone}}</span>
@@ -87,20 +87,20 @@
                             <span v-show="scope.row.goods_type==3">
                             <p style="text-align: left;">收件人:{{scope.row.address.person_name}} </p>
                              <p style="text-align: left;"> 电话:{{scope.row.address.telephone}}</p>
-                        <p style=" text-align: left;white-space:nowrap;overflow: hidden;text-overflow:ellipsis;width: 130px;">{{scope.row.address.province}}{{scope.row.address.country}}{{scope.row.address.district}}{{scope.row.address.address}}</p>
+                        <p style=" text-align: left;white-space:nowrap;text-overflow:ellipsis;width: 130px;">{{scope.row.address.province}}{{scope.row.address.country}}{{scope.row.address.district}}{{scope.row.address.address}}</p>
                         </span>
                         </template>
                     </el-table-column>
                     <el-table-column
                         label="状态"
-                        show-overflow-tooltip >
+                        show-overflow-tooltip width="70">
                         <template slot-scope="scope">
                             <span v-show="scope.row.express_status==1">未发货</span>
                             <span v-show="scope.row.express_status==2">已发货</span>
                         </template>
                     </el-table-column>
                     <el-table-column
-                        label="操作" >
+                        label="操作" width="70">
                         <template slot-scope="scope">
                             <el-button @click="diliver(scope.row.order_id)" type="text" size="small"
                                        class="pros" v-show="scope.row.express_status==1">发货
@@ -109,6 +109,12 @@
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
+                    <el-pagination
+                        @current-change="handleCurrentChange1"
+                        :page-size=limit
+                        layout="prev, pager, next, jumper"
+                        :page-count="totalPage1" style="margin-bottom: 30px;">
+                    </el-pagination>
                     <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;" @click="diliver(order_id)">一键发货
                     </el-button>
                 </div>
@@ -211,6 +217,12 @@
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
+                    <el-pagination
+                        @current-change="handleCurrentChange2"
+                        :page-size=limit
+                        layout="prev, pager, next, jumper"
+                        :page-count="totalPage2" style="margin-bottom: 30px;">
+                    </el-pagination>
                     <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;" @click="orderOperate(order_num,1)">一键奖励
                     </el-button>
                     <el-button type="danger" round style="background-color: #ff5b6b;border-color: #ff5b6b;" @click="orderOperate(order_num,2)">不通过
@@ -226,6 +238,11 @@
         components: {},
         data() {
             return {
+                page1: 1,
+                page2:1,
+                limit:15,
+                totalPage1:1,
+                totalPage2:1,
                 start: '',
                 end: '',
                 start2: '',
@@ -297,11 +314,12 @@
         methods: {
             //      获取商品列表列表
             getOrderList: function () {
-                this.$ajax.post('/api/Order/orderList', {start:this.start,end:this.end,goods_type:this.goods_type,express_type:this.express_type}).then((res) => {
+                this.$ajax.post('/api/Order/orderList', {start:this.start,end:this.end,goods_type:this.goods_type,express_type:this.express_type,page:this.page1,limit:this.limit}).then((res) => {
                     if (res.data.code == '200') {
                         this.orderList = res.data.data.order_list
                         this.start = res.data.data.start
                         this.end = res.data.data.end
+                        this.totalPage1=res.data.data.total_page
                     }
                 }, (err) => {
                     console.log(err)
@@ -309,11 +327,12 @@
             },
             //      获取返利订单审核订单列表
             getList: function () {
-                this.$ajax.post('/api/Order/backOrderList', {start:this.start2,end:this.end2,status:this.status}).then((res) => {
+                this.$ajax.post('/api/Order/backOrderList', {start:this.start2,end:this.end2,status:this.status,page:this.page2,limit:this.limit}).then((res) => {
                     if (res.data.code == '200') {
                         this.list = res.data.data.order_list
                         this.start2 = res.data.data.start
                         this.end2 = res.data.data.end
+                        this.totalPage2=res.data.data.total_page
                     }
                 }, (err) => {
                     console.log(err)
@@ -383,6 +402,18 @@
             },
             changeDate4(e) {
                 this.end2 = e
+            },
+            //            页码改变
+            handleCurrentChange1(val) {
+//                获取当前页数的消息
+                this.page1 = val
+                this.getOrderList()
+            },
+            //            页码改变
+            handleCurrentChange2(val) {
+//                获取当前页数的消息
+                this.page2 = val
+                this.getList()
             },
         },
         mounted() {

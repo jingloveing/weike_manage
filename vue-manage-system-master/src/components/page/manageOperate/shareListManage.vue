@@ -109,6 +109,12 @@
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        :page-size=limit
+                        layout="prev, pager, next, jumper"
+                        :page-count="totalPage" style="margin-bottom: 30px;">
+                    </el-pagination>
                     <el-select v-model="value3" placeholder="晒单状态"  style="width: 160px;margin-right: 20px;" >
                         <el-option
                             v-for="item in options3"
@@ -170,6 +176,9 @@
         components: {},
         data() {
             return {
+                page: 1,
+                limit:15,
+                totalPage:1,
                 start: '',
                 end: '',
                 orderList:[],
@@ -261,11 +270,12 @@
         methods: {
             //      获取晒单审核列表
             getOrderList: function () {
-                this.$ajax.post('/api/Shareorder/getOrderList',{start:this.start,end:this.end,is_square:this.is_square,status:this.status}).then((res) => {
+                this.$ajax.post('/api/Shareorder/getOrderList',{start:this.start,end:this.end,is_square:this.is_square,status:this.status,page:this.page,limit:this.limit}).then((res) => {
                     if (res.data.code == '200') {
                         this.orderList=res.data.data.order_list
                         this.start = res.data.data.start
                         this.end = res.data.data.end
+                        this.totalPage = res.data.data.total_page
                     }
                 }, (err) => {
                     console.log(err)
@@ -364,7 +374,13 @@
                 }, (err) => {
                     console.log(err)
                 })
-            }
+            },
+            //            页码改变
+            handleCurrentChange(val) {
+//                获取当前页数的消息
+                this.page = val
+                this.getOrderList()
+            },
         },
         mounted() {
 

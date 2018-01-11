@@ -66,7 +66,7 @@
                     <el-table-column
                         label="商品" height="95">
                         <template slot-scope="scope">
-                            <img :src="scope.row.pict_url" alt="" style="width:76px;height:76px;margin-top: 5px;">
+                            <img :src="scope.row.pict_url" alt="" style="width:90px;height:76px;margin-top: 5px;">
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -112,6 +112,12 @@
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        :page-size=data.limit
+                        layout="prev, pager, next, jumper"
+                        :page-count="totalPage" style="margin-bottom: 30px;">
+                    </el-pagination>
                     <el-select v-model="cate_id" placeholder="选择分类"  style="width: 160px;margin-right: 20px;" >
                         <el-option
                             v-for="item in cateList"
@@ -142,6 +148,7 @@
         components: {},
         data() {
             return {
+                totalPage:1,
                 searchList:{},
                 goodsList:[],
                 data:{
@@ -150,6 +157,8 @@
                     condition3:'',
                     condition4:'',
                     condition5:'',
+                    page: 1,
+                    limit:10,
                 },
                 cate_id:'',
                 goods_id:[],
@@ -162,9 +171,7 @@
             getSearchList: function () {
                 this.$ajax.post('/api/goods/goodsSearchList',).then((res) => {
                     if (res.data.code == '200') {
-
                         this.searchList = res.data.data
-
                     }
                 }, (err) => {
                     console.log(err)
@@ -184,7 +191,8 @@
             getGoodsList: function () {
                 this.$ajax.post('/api/Goods/goodslist',this.data).then((res) => {
                     if (res.data.code == '200') {
-                        this.goodsList = res.data.data
+                        this.goodsList = res.data.data.goods_list
+                        this.totalPage = res.data.data.total_page
                     }
                 }, (err) => {
                     console.log(err)
@@ -215,7 +223,6 @@
                     data.push(val[i].id);
                 }
                 this.goods_id = data;
-                console.log(this.goods_id)
             },
             del(){
                 this.$ajax.get('/api/Goods/delProduct',{params:{id:this.goods_id}}).then((res) => {
@@ -234,7 +241,13 @@
                 }, (err) => {
                     console.log(err)
                 })
-            }
+            },
+            //            页码改变
+            handleCurrentChange(val) {
+//                获取当前页数的消息
+                this.data.page = val
+                this.getGoodsList()
+            },
         },
         mounted() {
 

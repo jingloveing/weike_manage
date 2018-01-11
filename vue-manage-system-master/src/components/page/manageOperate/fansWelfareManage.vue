@@ -80,6 +80,12 @@
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        :page-size=limit
+                        layout="prev, pager, next, jumper"
+                        :page-count="totalPage" style="margin-bottom: 30px;">
+                    </el-pagination>
                     <el-select v-model="value2" placeholder="全部商品" style="width: 160px;margin-right:20px;">
                         <el-option
                             v-for="item in options2"
@@ -130,6 +136,9 @@
         components: {},
         data() {
             return {
+                page: 1,
+                limit:15,
+                totalPage:1,
                 input: '',
                 options1: [
                     {
@@ -178,9 +187,10 @@
         methods: {
             //      获取粉丝福利商品 is_new==1 最新
             getGoodsList: function () {
-                this.$ajax.post('/api/Fanswelfare/productList',{is_new:this.value1}).then((res) => {
+                this.$ajax.post('/api/Fanswelfare/productList',{is_new:this.value1,page:this.page,limit:this.limit}).then((res) => {
                     if (res.data.code == '200') {
                         this.product_list=res.data.data.product_list
+                        this.totalPage=res.data.data.total_page
                     }else{
 
                     }
@@ -335,7 +345,15 @@
                     data.push(val[i].id);
                 }
                 this.product_id = data;
-            }
+            },
+//            页码改变
+            handleCurrentChange(val) {
+//                获取当前页数的消息
+                this.page = val
+//                document.getElementsByClassName('content')[0].scrollTop = 0
+//                document.documentElement.scrollTop = 0
+                this.getGoodsList()
+            },
         },
         mounted() {
 

@@ -142,11 +142,12 @@
                 </li>
             </ul>
             <div class="block">
+                <el-button type="primary" @click="addAll()">选取本页所有商品</el-button>
                 <el-pagination
                     @current-change="handleCurrentChange"
-                    :page-size=per_page
+                    :page-size=data.limit
                     layout="prev, pager, next, jumper"
-                    :total="totalPage">
+                    :page-count="totalPage">
                 </el-pagination>
             </div>
         </div>
@@ -220,7 +221,7 @@
                 checkedList: [],
                 list: Options,
                 isIndeterminate: true,
-                per_page: 15,
+//                per_page: 15,
                 data: {
                     page: 1,
                     limit: 40,
@@ -243,7 +244,7 @@
                 totalPage: null,
                 totalCount: '',
                 selectList: [],
-                ju_type:[]
+                ju_type:[],
             }
         },
         methods: {
@@ -271,6 +272,7 @@
             handleCurrentChange(val) {
 //                获取当前页数的消息
                 this.data.page = val
+                console.log(this.data.page)
                 document.getElementsByClassName('content')[0].scrollTop = 0
                 document.documentElement.scrollTop = 0
                 this.getGoodsList()
@@ -369,6 +371,13 @@
                     console.log(err)
                 })
             },
+            addAll(){
+                this.selectList=this.selectList.concat(this.goodsList)
+                this.$message({
+                    message: "选取成功",
+                });
+                localStorage.setItem('selectList',JSON.stringify(this.selectList))
+            }
         },
         mounted() {
             const clipboard = new Clipboard('.copy');
@@ -679,6 +688,7 @@
         background-color: #ff526d;
         font-size: 14px;
         color: white;
+        cursor: pointer;
     }
 
     .has_selected {
@@ -811,5 +821,8 @@
     }
     .el-form-item__label{
         font-weight: bold;
+    }
+    .el-pagination{
+        display: inline-block;
     }
 </style>

@@ -6,6 +6,7 @@
              <span v-on:click="toprops()"><img src="/static/img/prop_img.png" alt="">参数设置</span>
              <span style="margin-left: 20px;">库存：{{num}}</span>
          </div>
+        <div style="float: right;margin-right: 50px;position: relative;cursor: pointer;font-size: 14px;" @click="toLogin()">登录</div>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">
@@ -113,6 +114,10 @@
             },
             toHidden(){
                 document.getElementById('notice').style.display='none'
+            },
+            toLogin(){
+                localStorage.clear()
+                this.$router.push('/login');
             }
         },
         created:function(){

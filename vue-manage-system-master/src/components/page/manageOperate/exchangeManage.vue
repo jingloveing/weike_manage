@@ -98,6 +98,12 @@
                     </el-table-column>
                 </el-table>
                 <div style="text-align: center;">
+                    <el-pagination
+                        @current-change="handleCurrentChange"
+                        :page-size=limit
+                        layout="prev, pager, next, jumper"
+                        :page-count="totalPage" style="margin-bottom: 30px;">
+                    </el-pagination>
                     <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;"
                                @click="changeAll(1)">一键上架
                     </el-button>
@@ -213,6 +219,9 @@
         components: {},
         data() {
             return {
+                page: 1,
+                limit:15,
+                totalPage:1,
                 small_images:[],
                 upload: '/api/Index/upload',
                 goodsList: [],
@@ -283,10 +292,13 @@
             getGoodsList: function () {
                 this.$ajax.post('/api/Acerstore/acerList', {
                     product_type: this.value1,
-                    is_sale: this.value2
+                    is_sale: this.value2,
+                    page:this.page,
+                    limit:this.limit
                 }).then((res) => {
                     if (res.data.code == '200') {
                         this.goodsList = res.data.data.acer_list
+                        this.totalPage = res.data.data.total_page
                     }
                 }, (err) => {
                     console.log(err)
@@ -549,7 +561,15 @@
                 }, (err) => {
                     console.log(err)
                 })
-            }
+            },
+            //            页码改变
+            handleCurrentChange(val) {
+//                获取当前页数的消息
+                this.page = val
+                document.getElementsByClassName('content')[0].scrollTop = 0
+                document.documentElement.scrollTop = 0
+                this.getGoodsList()
+            },
         },
         mounted() {
 
