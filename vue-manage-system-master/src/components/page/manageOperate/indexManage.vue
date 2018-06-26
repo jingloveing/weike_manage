@@ -22,7 +22,7 @@
                             </div>
                             <span style="font-size: 14px;">跳转链接：</span>
                             <el-input placeholder="请输入链接" v-model="i.banner_url" style="width: 300px;margin:0 20px;">
-                                <template slot="prepend">http://</template>
+                                <!--<template slot="prepend">http://</template>-->
                             </el-input>
                             <el-button type="danger" @click="del1(index)">删除组</el-button>
                         </div>

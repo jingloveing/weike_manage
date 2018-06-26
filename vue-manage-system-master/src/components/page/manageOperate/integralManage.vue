@@ -12,7 +12,7 @@
                 积分=1元
                 <p>获取积分途径</p>
                 <el-input placeholder="请输入链接" v-model="config.url" style="width: 300px;margin:20px 20px 20px 0;">
-                    <template slot="prepend">http://</template>
+                    <!--<template slot="prepend">http://</template>-->
                 </el-input>
                 积分=1元
                 <p style="margin-bottom: 30px;">注：选填项，当用户积分不足时，可跳转至此链接页面，不填则无配置</p>

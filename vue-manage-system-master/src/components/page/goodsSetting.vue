@@ -251,9 +251,11 @@
             //      获取商品列表
             getGoodsList: function () {
                 if(this.ju_type.length!==0){
+                    console.log('AAA')
                     this.data.ju_type=2
                 }else{
-                    this.ju_type=''
+                    console.log('bbb')
+                    this.data.ju_type=''
                 }
                 this.data.cate = JSON.stringify(this.checkedList)
                 this.$ajax.get('/api/Collectproduct/collectProduct', {params: this.data}).then((res) => {

@@ -120,7 +120,7 @@
                     <div style="float: right;">
                         <p>banner跳转链接：</p>
                         <el-input placeholder="请输入链接" v-model="url" style="width: 300px;margin:20px 20px 20px 0;">
-                            <template slot="prepend">http://</template>
+                            <!--<template slot="prepend">http://</template>-->
                         </el-input>
                         <el-button type="primary" round style="background-color: #0f8edd;border-color: #0f8edd;" @click="saveBanner()">确认
                         </el-button>

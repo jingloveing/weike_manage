@@ -10,7 +10,7 @@
                 <p class="m_title">专场页主图展示 <small>尺寸建议：750*260像素;类型要求：jpg.png,3M内大小</small></p>
                 <div class="left_main">
                     <div style="margin-bottom: 20px;">
-                        <p class="title"><i class="num">1</i>专区 <small>(建议展示领劵特惠类商品，例：9.9特惠)</small></p>
+                        <p class="title"><i class="num">1</i>专区 <small>(建议展示领券特惠类商品，例：9.9特惠)</small></p>
                         <div style="position: relative;">
                             <div class="upload_img" id="upload_img1">
                                 <img :src="store_list[0].image" alt="" style="width: 100%;height: 100%;">
@@ -21,7 +21,7 @@
                         <span style="font-size: 14px;">专区名称自定义：</span><el-input v-model="store_list[0].store_name" style="width: 200px;margin:0 20px;" placeholder="限制6个中文字以内"></el-input>
                     </div>
                     <div style="margin-bottom: 20px;">
-                        <p class="title"><i class="num">2</i>专区 <small>(建议展示领劵特惠类商品，例：19.9包邮)</small></p>
+                        <p class="title"><i class="num">2</i>专区 <small>(建议展示领券特惠类商品，例：19.9包邮)</small></p>
                         <div style="position: relative;">
                             <div class="upload_img" id="upload_img2">
                                 <img :src="store_list[1].image" alt="" style="width: 100%;height: 100%;">
